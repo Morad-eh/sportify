@@ -1,0 +1,361 @@
+{% extends 'gestion/base.html' %}
+
+{% block title %}Sportify — Réserve ton terrain de football{% endblock %}
+
+{% block extra_css %}
+.hero {
+    background: linear-gradient(145deg, #061a0c 0%, #0D2E1A 40%, #1a4a2e 100%);
+    color: var(--blanc);
+    padding: 7rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: var(--gris-clair);
+    clip-path: ellipse(60% 100% at 50% 100%);
+}
+
+.hero-content {
+    position: relative;
+    max-width: 720px;
+    margin: 0 auto;
+    z-index: 1;
+}
+
+.hero-badge {
+    display: inline-block;
+    background: rgba(245,166,35,0.15);
+    color: var(--or);
+    border: 1px solid rgba(245,166,35,0.4);
+    border-radius: 999px;
+    padding: 0.4rem 1.2rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.5px;
+}
+
+.hero h1 {
+    font-size: 3.8rem;
+    font-weight: 800;
+    line-height: 1.08;
+    margin-bottom: 1.5rem;
+    letter-spacing: -1.5px;
+}
+
+.hero h1 .highlight { color: var(--or); }
+
+.hero p {
+    font-size: 1.15rem;
+    color: #8ab89a;
+    margin-bottom: 2.5rem;
+    line-height: 1.7;
+}
+
+.hero-cta {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.features {
+    padding: 5rem 2rem;
+    background: var(--blanc);
+}
+
+.features-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 3.5rem;
+}
+
+.section-tag {
+    display: inline-block;
+    background: #e8f5ed;
+    color: var(--vert-gazon);
+    border-radius: 999px;
+    padding: 0.3rem 1rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-bottom: 1rem;
+}
+
+.section-header h2 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--vert-nuit);
+    margin-bottom: 0.75rem;
+}
+
+.section-header p {
+    color: var(--gris);
+    font-size: 1.05rem;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+}
+
+.feature-card {
+    background: var(--gris-clair);
+    border-radius: 16px;
+    padding: 2rem;
+    text-align: center;
+}
+
+.feature-icon {
+    width: 64px;
+    height: 64px;
+    background: #e8f5ed;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.25rem;
+    font-size: 1.8rem;
+}
+
+.feature-card h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--vert-nuit);
+    margin-bottom: 0.6rem;
+}
+
+.feature-card p {
+    color: var(--gris);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.terrains-section {
+    padding: 5rem 2rem;
+    background: var(--gris-clair);
+}
+
+.terrains-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.section-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 2rem;
+}
+
+.section-topbar h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--vert-nuit);
+}
+
+.section-topbar p {
+    color: var(--gris);
+    font-size: 0.95rem;
+    margin-top: 0.3rem;
+}
+
+.terrains-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+}
+
+.terrain-card {
+    background: var(--blanc);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    transition: transform 0.22s, box-shadow 0.22s;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.terrain-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.13);
+}
+
+.terrain-thumb {
+    height: 160px;
+    background: linear-gradient(135deg, #0D2E1A 0%, #1A8C4E 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+}
+
+.terrain-body {
+    padding: 1.25rem;
+}
+
+.terrain-body h3 {
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--vert-nuit);
+    margin-bottom: 0.4rem;
+}
+
+.terrain-loc {
+    color: var(--gris);
+    font-size: 0.88rem;
+    margin-bottom: 1rem;
+}
+
+.terrain-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.price-label {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--vert-gazon);
+}
+
+.price-label small {
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: var(--gris);
+}
+
+.empty-terrains {
+    text-align: center;
+    padding: 4rem;
+    color: var(--gris);
+}
+
+.cta-band {
+    background: linear-gradient(135deg, var(--vert-gazon) 0%, #157a42 100%);
+    color: var(--blanc);
+    text-align: center;
+    padding: 5rem 2rem;
+}
+
+.cta-band h2 {
+    font-size: 2.4rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+}
+
+.cta-band p {
+    font-size: 1.1rem;
+    opacity: 0.85;
+    margin-bottom: 2rem;
+}
+
+@media (max-width: 900px) {
+    .hero h1 { font-size: 2.6rem; }
+    .features-grid, .terrains-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 600px) {
+    .hero h1 { font-size: 2rem; }
+    .features-grid, .terrains-grid { grid-template-columns: 1fr; }
+    .section-topbar { flex-direction: column; align-items: flex-start; gap: 1rem; }
+}
+{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-content">
+        <span class="hero-badge">⚽ Football Indoor · Belgique</span>
+        <h1>Réserve ton terrain.<br><span class="highlight">Joue. Profite.</span></h1>
+        <p>Trouve et réserve le terrain de football indoor idéal<br>près de chez toi en quelques clics, 24h/24.</p>
+        <div class="hero-cta">
+            <a href="{% url 'terrains' %}" class="btn btn-gold btn-lg">Voir les terrains</a>
+            {% if not user.is_authenticated %}
+                <a href="{% url 'inscription' %}" class="btn btn-secondary btn-lg">Créer un compte</a>
+            {% else %}
+                <a href="{% url 'dashboard' %}" class="btn btn-secondary btn-lg">Mon espace</a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<section class="features">
+    <div class="features-inner">
+        <div class="section-header">
+            <span class="section-tag">POURQUOI SPORTIFY ?</span>
+            <h2>Simple, rapide et fiable</h2>
+            <p>La plateforme pensée pour les joueurs de football indoor</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Réservation en 2 minutes</h3>
+                <p>Choisis ton créneau, confirme et c'est réservé. Disponible 24h/24 et 7j/7.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🏟️</div>
+                <h3>Terrains de qualité</h3>
+                <p>Gazon synthétique dernière génération, éclairage LED, vestiaires et douches.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔒</div>
+                <h3>Paiement sécurisé</h3>
+                <p>Paye via Stripe, la référence mondiale du paiement en ligne. 100% sécurisé.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% if terrains %}
+<section class="terrains-section">
+    <div class="terrains-inner">
+        <div class="section-topbar">
+            <div>
+                <h2>Nos terrains disponibles</h2>
+                <p>Réserve dès maintenant un créneau</p>
+            </div>
+            <a href="{% url 'terrains' %}" class="btn btn-primary">Voir tous les terrains</a>
+        </div>
+        <div class="terrains-grid">
+            {% for terrain in terrains %}
+            <a href="{% url 'terrain_detail' terrain.pk %}" class="terrain-card">
+                <div class="terrain-thumb">⚽</div>
+                <div class="terrain-body">
+                    <h3>{{ terrain.nom }}</h3>
+                    <p class="terrain-loc">📍 {{ terrain.localisation }}</p>
+                    <div class="terrain-footer">
+                        <span class="price-label">{{ terrain.prix_heure }}€ <small>/ heure</small></span>
+                        <span class="badge badge-green">Disponible</span>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<section class="cta-band">
+    <h2>Prêt à jouer ?</h2>
+    <p>Rejoins la communauté Sportify et réserve ton prochain match dès aujourd'hui.</p>
+    {% if user.is_authenticated %}
+        <a href="{% url 'terrains' %}" class="btn btn-gold btn-lg">Réserver maintenant</a>
+    {% else %}
+        <a href="{% url 'inscription' %}" class="btn btn-gold btn-lg">Créer un compte gratuit</a>
+    {% endif %}
+</section>
+{% endblock %}

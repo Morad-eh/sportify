@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Sportify{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --vert-gazon: #1A8C4E;
+            --or: #F5A623;
+            --vert-nuit: #0D2E1A;
+            --blanc: #FFFFFF;
+            --gris-clair: #F4F6F4;
+            --gris: #6B7280;
+            --rouge: #E53E3E;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--gris-clair);
+            color: #1a1a1a;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        nav {
+            background: var(--vert-nuit);
+            padding: 0 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.4);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 68px;
+        }
+
+        .nav-logo {
+            text-decoration: none;
+        }
+
+        .logo-text {
+            font-size: 1.6rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-sport { color: var(--vert-gazon); }
+        .logo-ify { color: var(--or); }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #b0c4b8;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover { color: var(--blanc); }
+
+        .btn {
+            display: inline-block;
+            padding: 0.6rem 1.4rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-primary { background: var(--vert-gazon); color: var(--blanc); }
+        .btn-primary:hover { background: #157a42; }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--or);
+            border: 2px solid var(--or);
+        }
+        .btn-secondary:hover { background: var(--or); color: var(--vert-nuit); }
+
+        .btn-gold { background: var(--or); color: var(--vert-nuit); }
+        .btn-gold:hover { background: #e09515; }
+
+        .btn-danger { background: #dc3545; color: var(--blanc); }
+        .btn-danger:hover { background: #bd2130; }
+
+        .btn-lg { padding: 0.9rem 2.2rem; font-size: 1rem; }
+
+        .messages-container {
+            max-width: 1200px;
+            margin: 1.2rem auto 0;
+            padding: 0 2rem;
+        }
+
+        .alert {
+            padding: 0.9rem 1.2rem;
+            border-radius: 8px;
+            margin-bottom: 0.6rem;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .alert-success { background: #d4edda; color: #155724; border-left: 4px solid #28a745; }
+        .alert-error { background: #f8d7da; color: #721c24; border-left: 4px solid #dc3545; }
+        .alert-info { background: #d1ecf1; color: #0c5460; border-left: 4px solid #17a2b8; }
+        .alert-warning { background: #fff3cd; color: #856404; border-left: 4px solid #ffc107; }
+
+        main { flex: 1; }
+
+        footer {
+            background: var(--vert-nuit);
+            color: #7a9a85;
+            text-align: center;
+            padding: 2rem;
+            font-size: 0.9rem;
+            margin-top: auto;
+        }
+
+        footer strong { color: var(--or); }
+        footer a { color: var(--or); text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            font-weight: 600;
+        }
+
+        .badge-green { background: #d4edda; color: #155724; }
+        .badge-yellow { background: #fff3cd; color: #856404; }
+        .badge-red { background: #f8d7da; color: #721c24; }
+        .badge-blue { background: #cce5ff; color: #004085; }
+
+        {% block extra_css %}{% endblock %}
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="{% url 'home' %}" class="nav-logo">
+                <span class="logo-text">
+                    <span class="logo-sport">Sport</span><span class="logo-ify">ify</span>
+                </span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="{% url 'terrains' %}">Terrains</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'dashboard' %}">Mon espace</a></li>
+                    {% if user.is_staff %}
+                        <li><a href="/admin/">Administration</a></li>
+                    {% endif %}
+                    <li>
+                        <a href="{% url 'deconnexion' %}" class="btn btn-secondary" style="padding:0.45rem 1.1rem;">
+                            Déconnexion
+                        </a>
+                    </li>
+                {% else %}
+                    <li><a href="{% url 'connexion' %}">Connexion</a></li>
+                    <li>
+                        <a href="{% url 'inscription' %}" class="btn btn-primary" style="padding:0.45rem 1.1rem;">
+                            S'inscrire
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    {% if messages %}
+    <div class="messages-container">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <p><strong>Sportify</strong> &mdash; Réserve ton match. Joue. Profite.</p>
+        <p style="margin-top:0.6rem">
+            <a href="{% url 'terrains' %}">Terrains</a> &middot;
+            <a href="{% url 'inscription' %}">Inscription</a> &middot;
+            <a href="{% url 'connexion' %}">Connexion</a>
+        </p>
+        <p style="margin-top:0.8rem; font-size:0.8rem; color:#4a6a54;">&copy; 2026 Sportify. Tous droits réservés.</p>
+    </footer>
+</body>
+</html>

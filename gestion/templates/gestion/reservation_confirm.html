@@ -1,0 +1,146 @@
+{% extends 'gestion/base.html' %}
+
+{% block title %}Confirmer la réservation — Sportify{% endblock %}
+
+{% block extra_css %}
+.confirm-page {
+    min-height: calc(100vh - 68px - 120px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1rem;
+}
+
+.confirm-card {
+    background: var(--blanc);
+    border-radius: 20px;
+    box-shadow: 0 4px 30px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 520px;
+    overflow: hidden;
+}
+
+.confirm-header {
+    background: linear-gradient(135deg, var(--vert-nuit), #1a4a2e);
+    padding: 2.5rem;
+    text-align: center;
+    color: var(--blanc);
+}
+
+.confirm-icon { font-size: 3.5rem; margin-bottom: 0.8rem; }
+
+.confirm-header h1 {
+    font-size: 1.6rem;
+    font-weight: 800;
+    margin-bottom: 0.4rem;
+}
+
+.confirm-header p { color: #8ab89a; }
+
+.confirm-body { padding: 2rem 2.5rem; }
+
+.recap-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--gris);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 1rem;
+}
+
+.recap-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 0.95rem;
+}
+
+.recap-item:last-of-type { border-bottom: none; }
+
+.recap-item .label { color: var(--gris); }
+.recap-item .value { font-weight: 700; color: var(--vert-nuit); }
+
+.price-total {
+    background: #e8f5ed;
+    border-radius: 12px;
+    padding: 1.2rem;
+    margin: 1.5rem 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.price-total .label { font-weight: 700; color: var(--vert-nuit); font-size: 1.05rem; }
+.price-total .amount { font-size: 1.8rem; font-weight: 800; color: var(--vert-gazon); }
+
+.confirm-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.confirm-actions .btn { flex: 1; text-align: center; }
+
+.btn-outline-cancel {
+    background: transparent;
+    color: var(--gris);
+    border: 2px solid #e2e8f0;
+    text-decoration: none;
+}
+.btn-outline-cancel:hover { background: var(--gris-clair); }
+{% endblock %}
+
+{% block content %}
+<div class="confirm-page">
+    <div class="confirm-card">
+        <div class="confirm-header">
+            <div class="confirm-icon">📋</div>
+            <h1>Confirmer la réservation</h1>
+            <p>Vérifie les détails avant de confirmer</p>
+        </div>
+
+        <div class="confirm-body">
+            <p class="recap-title">Récapitulatif</p>
+
+            <div class="recap-item">
+                <span class="label">Terrain</span>
+                <span class="value">{{ creneau.terrain.nom }}</span>
+            </div>
+            <div class="recap-item">
+                <span class="label">Localisation</span>
+                <span class="value">{{ creneau.terrain.localisation }}</span>
+            </div>
+            <div class="recap-item">
+                <span class="label">Date</span>
+                <span class="value">{{ creneau.date|date:"l j F Y" }}</span>
+            </div>
+            <div class="recap-item">
+                <span class="label">Horaire</span>
+                <span class="value">{{ creneau.heure_debut|time:"H:i" }} – {{ creneau.heure_fin|time:"H:i" }}</span>
+            </div>
+            <div class="recap-item">
+                <span class="label">Réservé par</span>
+                <span class="value">{{ user.get_full_name|default:user.username }}</span>
+            </div>
+
+            <div class="price-total">
+                <span class="label">Total à payer</span>
+                <span class="amount">{{ creneau.terrain.prix_heure }}€</span>
+            </div>
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="confirm-actions">
+                    <a href="{% url 'terrain_detail' creneau.terrain.pk %}" class="btn btn-outline-cancel">
+                        Annuler
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        Confirmer la réservation
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

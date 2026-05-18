@@ -1,0 +1,155 @@
+{% extends 'gestion/base.html' %}
+
+{% block title %}Connexion — Sportify{% endblock %}
+
+{% block extra_css %}
+.auth-page {
+    min-height: calc(100vh - 68px - 120px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1rem;
+}
+
+.auth-card {
+    background: var(--blanc);
+    border-radius: 20px;
+    box-shadow: 0 4px 30px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 440px;
+    overflow: hidden;
+}
+
+.auth-header {
+    background: linear-gradient(135deg, var(--vert-nuit), #1a4a2e);
+    padding: 2.5rem 2.5rem 2rem;
+    text-align: center;
+}
+
+.auth-header .logo {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+}
+
+.auth-header h1 {
+    color: var(--blanc);
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+
+.auth-header p {
+    color: #8ab89a;
+    font-size: 0.9rem;
+    margin-top: 0.4rem;
+}
+
+.auth-body {
+    padding: 2.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.25rem;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--vert-nuit);
+    margin-bottom: 0.5rem;
+}
+
+.form-input {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-family: 'Inter', sans-serif;
+    transition: border-color 0.2s;
+    outline: none;
+    color: #1a1a1a;
+}
+
+.form-input:focus { border-color: var(--vert-gazon); }
+
+.form-errors {
+    margin-top: 0.4rem;
+}
+
+.form-error {
+    color: var(--rouge);
+    font-size: 0.83rem;
+}
+
+.auth-footer {
+    text-align: center;
+    margin-top: 1.5rem;
+    color: var(--gris);
+    font-size: 0.9rem;
+}
+
+.auth-footer a {
+    color: var(--vert-gazon);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.auth-footer a:hover { text-decoration: underline; }
+
+.btn-block {
+    width: 100%;
+    padding: 0.9rem;
+    font-size: 1rem;
+}
+{% endblock %}
+
+{% block content %}
+<div class="auth-page">
+    <div class="auth-card">
+        <div class="auth-header">
+            <div class="logo">
+                <span class="logo-sport">Sport</span><span class="logo-ify">ify</span>
+            </div>
+            <h1>Connexion</h1>
+            <p>Connecte-toi pour réserver tes créneaux</p>
+        </div>
+        <div class="auth-body">
+            <form method="post" novalidate>
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label for="id_username">{{ form.username.label }}</label>
+                    {{ form.username }}
+                    {% if form.username.errors %}
+                        <div class="form-errors">
+                            {% for err in form.username.errors %}
+                                <p class="form-error">{{ err }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_password">{{ form.password.label }}</label>
+                    {{ form.password }}
+                    {% if form.password.errors %}
+                        <div class="form-errors">
+                            {% for err in form.password.errors %}
+                                <p class="form-error">{{ err }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">Se connecter</button>
+            </form>
+
+            <p class="auth-footer">
+                Pas encore de compte ? <a href="{% url 'inscription' %}">S'inscrire gratuitement</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

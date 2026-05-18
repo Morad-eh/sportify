@@ -1,0 +1,201 @@
+{% extends 'gestion/base.html' %}
+
+{% block title %}Mon espace — Sportify{% endblock %}
+
+{% block extra_css %}
+.dashboard-header {
+    background: linear-gradient(135deg, var(--vert-nuit), #1a4a2e);
+    color: var(--blanc);
+    padding: 3rem 2rem;
+}
+
+.dashboard-header-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.welcome-text h1 {
+    font-size: 2rem;
+    font-weight: 800;
+}
+
+.welcome-text p {
+    color: #8ab89a;
+    margin-top: 0.4rem;
+}
+
+.dashboard-body {
+    max-width: 1100px;
+    margin: 2.5rem auto;
+    padding: 0 2rem;
+}
+
+.stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.2rem;
+    margin-bottom: 2.5rem;
+}
+
+.stat-card {
+    background: var(--blanc);
+    border-radius: 14px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    text-align: center;
+}
+
+.stat-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+.stat-value { font-size: 2rem; font-weight: 800; color: var(--vert-nuit); }
+.stat-label { color: var(--gris); font-size: 0.9rem; margin-top: 0.3rem; }
+
+.section-card {
+    background: var(--blanc);
+    border-radius: 14px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    overflow: hidden;
+}
+
+.section-card-header {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 2px solid var(--gris-clair);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.section-card-header h2 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--vert-nuit);
+}
+
+.reservations-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.reservations-table th {
+    background: var(--gris-clair);
+    padding: 0.85rem 1.25rem;
+    text-align: left;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--gris);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.reservations-table td {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid #f0f4f0;
+    font-size: 0.95rem;
+    color: #2d3748;
+}
+
+.reservations-table tr:last-child td { border-bottom: none; }
+.reservations-table tr:hover td { background: #f9fbf9; }
+
+.terrain-name { font-weight: 600; color: var(--vert-nuit); }
+
+.empty-res {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--gris);
+}
+
+.empty-res .icon { font-size: 3.5rem; margin-bottom: 1rem; }
+.empty-res h3 { font-size: 1.2rem; color: var(--vert-nuit); margin-bottom: 0.5rem; }
+
+@media (max-width: 700px) {
+    .stats-row { grid-template-columns: 1fr 1fr; }
+    .dashboard-header-inner { flex-direction: column; gap: 1rem; align-items: flex-start; }
+    .reservations-table { display: block; overflow-x: auto; }
+}
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-header">
+    <div class="dashboard-header-inner">
+        <div class="welcome-text">
+            <h1>Bonjour, {{ user.first_name|default:user.username }} 👋</h1>
+            <p>Bienvenue dans ton espace membre Sportify</p>
+        </div>
+        <a href="{% url 'terrains' %}" class="btn btn-gold">Réserver un terrain</a>
+    </div>
+</div>
+
+<div class="dashboard-body">
+    <div class="stats-row">
+        <div class="stat-card">
+            <div class="stat-icon">📅</div>
+            <div class="stat-value">{{ reservations.count }}</div>
+            <div class="stat-label">Réservation{{ reservations.count|pluralize }} au total</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">✅</div>
+            <div class="stat-value">{{ reservations|length }}</div>
+            <div class="stat-label">Réservation{{ reservations|length|pluralize }} confirmée{{ reservations|length|pluralize }}</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">⚽</div>
+            <div class="stat-value">{{ user.date_joined|date:"Y" }}</div>
+            <div class="stat-label">Membre depuis</div>
+        </div>
+    </div>
+
+    <div class="section-card">
+        <div class="section-card-header">
+            <h2>Mes réservations</h2>
+            <a href="{% url 'terrains' %}" class="btn btn-primary" style="padding:0.5rem 1.1rem; font-size:0.85rem;">
+                Nouvelle réservation
+            </a>
+        </div>
+
+        {% if reservations %}
+            <table class="reservations-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Terrain</th>
+                        <th>Date</th>
+                        <th>Horaire</th>
+                        <th>Montant</th>
+                        <th>Statut</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for res in reservations %}
+                    <tr>
+                        <td style="color:var(--gris); font-size:0.85rem;">#{{ res.id }}</td>
+                        <td class="terrain-name">{{ res.creneau.terrain.nom }}</td>
+                        <td>{{ res.creneau.date|date:"d/m/Y" }}</td>
+                        <td>{{ res.creneau.heure_debut|time:"H:i" }} – {{ res.creneau.heure_fin|time:"H:i" }}</td>
+                        <td style="font-weight:700; color:var(--vert-gazon);">{{ res.montant_total }}€</td>
+                        <td>
+                            {% if res.statut == 'confirmee' %}
+                                <span class="badge badge-green">Confirmée</span>
+                            {% elif res.statut == 'en_attente' %}
+                                <span class="badge badge-yellow">En attente</span>
+                            {% else %}
+                                <span class="badge badge-red">Annulée</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="empty-res">
+                <div class="icon">📋</div>
+                <h3>Aucune réservation pour l'instant</h3>
+                <p style="margin-bottom:1.5rem;">Réserve ton premier terrain et profite du jeu !</p>
+                <a href="{% url 'terrains' %}" class="btn btn-primary">Voir les terrains</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

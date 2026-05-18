@@ -1,0 +1,163 @@
+{% extends 'gestion/base.html' %}
+
+{% block title %}Inscription — Sportify{% endblock %}
+
+{% block extra_css %}
+.auth-page {
+    min-height: calc(100vh - 68px - 120px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1rem;
+}
+
+.auth-card {
+    background: var(--blanc);
+    border-radius: 20px;
+    box-shadow: 0 4px 30px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 520px;
+    overflow: hidden;
+}
+
+.auth-header {
+    background: linear-gradient(135deg, var(--vert-nuit), #1a4a2e);
+    padding: 2.5rem 2.5rem 2rem;
+    text-align: center;
+}
+
+.auth-header .logo {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+}
+
+.auth-header h1 {
+    color: var(--blanc);
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+
+.auth-header p { color: #8ab89a; font-size: 0.9rem; margin-top: 0.4rem; }
+
+.auth-body { padding: 2.5rem; }
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.form-group { margin-bottom: 1.1rem; }
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    font-size: 0.88rem;
+    color: var(--vert-nuit);
+    margin-bottom: 0.4rem;
+}
+
+.form-input {
+    width: 100%;
+    padding: 0.75rem 0.9rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 0.92rem;
+    font-family: 'Inter', sans-serif;
+    transition: border-color 0.2s;
+    outline: none;
+    color: #1a1a1a;
+}
+
+.form-input:focus { border-color: var(--vert-gazon); }
+
+.form-help { color: var(--gris); font-size: 0.78rem; margin-top: 0.3rem; }
+.form-error { color: var(--rouge); font-size: 0.78rem; }
+
+.btn-block { width: 100%; padding: 0.9rem; font-size: 1rem; }
+
+.auth-footer {
+    text-align: center;
+    margin-top: 1.5rem;
+    color: var(--gris);
+    font-size: 0.9rem;
+}
+
+.auth-footer a { color: var(--vert-gazon); font-weight: 600; text-decoration: none; }
+.auth-footer a:hover { text-decoration: underline; }
+
+@media (max-width: 500px) { .form-row { grid-template-columns: 1fr; } }
+{% endblock %}
+
+{% block content %}
+<div class="auth-page">
+    <div class="auth-card">
+        <div class="auth-header">
+            <div class="logo">
+                <span class="logo-sport">Sport</span><span class="logo-ify">ify</span>
+            </div>
+            <h1>Créer un compte</h1>
+            <p>Inscription gratuite, réservation instantanée</p>
+        </div>
+        <div class="auth-body">
+            <form method="post" novalidate>
+                {% csrf_token %}
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>{{ form.first_name.label }}</label>
+                        {{ form.first_name }}
+                        {% for err in form.first_name.errors %}<p class="form-error">{{ err }}</p>{% endfor %}
+                    </div>
+                    <div class="form-group">
+                        <label>{{ form.last_name.label }}</label>
+                        {{ form.last_name }}
+                        {% for err in form.last_name.errors %}<p class="form-error">{{ err }}</p>{% endfor %}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>{{ form.email.label }}</label>
+                    {{ form.email }}
+                    {% for err in form.email.errors %}<p class="form-error">{{ err }}</p>{% endfor %}
+                </div>
+
+                <div class="form-group">
+                    <label>{{ form.telephone.label }}</label>
+                    {{ form.telephone }}
+                    {% for err in form.telephone.errors %}<p class="form-error">{{ err }}</p>{% endfor %}
+                </div>
+
+                <div class="form-group">
+                    <label>{{ form.username.label }}</label>
+                    {{ form.username }}
+                    {% for err in form.username.errors %}<p class="form-error">{{ err }}</p>{% endfor %}
+                    {% if form.username.help_text %}
+                        <p class="form-help">{{ form.username.help_text }}</p>
+                    {% endif %}
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>{{ form.password1.label }}</label>
+                        {{ form.password1 }}
+                        {% for err in form.password1.errors %}<p class="form-error">{{ err }}</p>{% endfor %}
+                    </div>
+                    <div class="form-group">
+                        <label>{{ form.password2.label }}</label>
+                        {{ form.password2 }}
+                        {% for err in form.password2.errors %}<p class="form-error">{{ err }}</p>{% endfor %}
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">Créer mon compte</button>
+            </form>
+
+            <p class="auth-footer">
+                Déjà un compte ? <a href="{% url 'connexion' %}">Se connecter</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,160 @@
+{% extends 'gestion/base.html' %}
+
+{% block title %}Terrains — Sportify{% endblock %}
+
+{% block extra_css %}
+.page-header {
+    background: linear-gradient(135deg, var(--vert-nuit), #1a4a2e);
+    color: var(--blanc);
+    padding: 3rem 2rem;
+}
+
+.page-header h1 {
+    font-size: 2.4rem;
+    font-weight: 800;
+}
+
+.page-header p {
+    color: #8ab89a;
+    margin-top: 0.5rem;
+    font-size: 1.05rem;
+}
+
+.terrains-wrapper {
+    max-width: 1200px;
+    margin: 3rem auto;
+    padding: 0 2rem;
+}
+
+.terrains-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+}
+
+.terrain-card {
+    background: var(--blanc);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    transition: transform 0.22s, box-shadow 0.22s;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+}
+
+.terrain-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.13);
+}
+
+.terrain-thumb {
+    height: 170px;
+    background: linear-gradient(135deg, #0D2E1A 0%, #1A8C4E 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+}
+
+.terrain-body {
+    padding: 1.4rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.terrain-body h3 {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--vert-nuit);
+    margin-bottom: 0.4rem;
+}
+
+.terrain-loc {
+    color: var(--gris);
+    font-size: 0.88rem;
+    margin-bottom: 0.75rem;
+}
+
+.terrain-desc {
+    color: #4a5568;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    flex: 1;
+    margin-bottom: 1.2rem;
+}
+
+.terrain-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 1rem;
+    border-top: 1px solid #f0f0f0;
+}
+
+.price-label {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--vert-gazon);
+}
+
+.price-label small {
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: var(--gris);
+}
+
+.empty-state {
+    text-align: center;
+    padding: 5rem 2rem;
+    color: var(--gris);
+}
+
+.empty-state .icon { font-size: 4rem; margin-bottom: 1rem; }
+.empty-state h3 { font-size: 1.4rem; color: var(--vert-nuit); margin-bottom: 0.5rem; }
+
+@media (max-width: 900px) { .terrains-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 600px) { .terrains-grid { grid-template-columns: 1fr; } }
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div style="max-width:1200px; margin:0 auto;">
+        <h1>⚽ Nos terrains</h1>
+        <p>Retrouvez tous les terrains disponibles et réservez votre créneau.</p>
+    </div>
+</div>
+
+<div class="terrains-wrapper">
+    {% if terrains %}
+        <div class="terrains-grid">
+            {% for terrain in terrains %}
+            <a href="{% url 'terrain_detail' terrain.pk %}" class="terrain-card">
+                <div class="terrain-thumb">⚽</div>
+                <div class="terrain-body">
+                    <h3>{{ terrain.nom }}</h3>
+                    <p class="terrain-loc">📍 {{ terrain.localisation }}</p>
+                    {% if terrain.description %}
+                        <p class="terrain-desc">{{ terrain.description|truncatechars:100 }}</p>
+                    {% else %}
+                        <p class="terrain-desc" style="color:#bbb;">Terrain de football indoor de qualité, éclairage LED et vestiaires.</p>
+                    {% endif %}
+                    <div class="terrain-footer">
+                        <span class="price-label">{{ terrain.prix_heure }}€ <small>/ heure</small></span>
+                        <span class="badge badge-green">Disponible</span>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <div class="icon">🏟️</div>
+            <h3>Aucun terrain disponible</h3>
+            <p>Revenez prochainement, de nouveaux terrains arrivent bientôt.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
