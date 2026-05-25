@@ -177,6 +177,7 @@
                 <li><a href="{% url 'terrains' %}">Terrains</a></li>
                 {% if user.is_authenticated %}
                     <li><a href="{% url 'dashboard' %}">Mon espace</a></li>
+                    <li><a href="{% url 'profil' %}">Mon profil</a></li>
                     {% if user.is_staff %}
                         <li><a href="/admin/">Administration</a></li>
                     {% endif %}

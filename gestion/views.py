@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils import timezone
 from .models import Terrain, Creneau, Reservation
-from .forms import InscriptionForm, ConnexionForm
+from .forms import InscriptionForm, ConnexionForm, ProfilForm
 
 
 def home(request):
@@ -78,6 +78,29 @@ def dashboard(request):
         utilisateur=request.user
     ).select_related('creneau__terrain').order_by('-date_reservation')
     return render(request, 'gestion/dashboard.html', {'reservations': reservations})
+
+
+@login_required
+def profil(request):
+    if request.method == 'POST':
+        form = ProfilForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Profil mis à jour avec succès.')
+            return redirect('profil')
+    else:
+        form = ProfilForm(instance=request.user)
+    return render(request, 'gestion/profil.html', {'form': form})
+
+
+@login_required
+def supprimer_compte(request):
+    if request.method == 'POST':
+        request.user.delete()
+        logout(request)
+        messages.info(request, 'Votre compte a été supprimé.')
+        return redirect('home')
+    return render(request, 'gestion/supprimer_compte.html')
 
 
 @login_required

@@ -1,0 +1,123 @@
+{% extends 'gestion/base.html' %}
+
+{% block title %}Mon profil — Sportify{% endblock %}
+
+{% block extra_css %}
+.page-header {
+    background: var(--blanc);
+    color: var(--vert-nuit);
+    padding: 2rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.page-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.profil-wrapper {
+    max-width: 600px;
+    margin: 3rem auto;
+    padding: 0 2rem;
+}
+
+.profil-card {
+    background: var(--blanc);
+    border-radius: 14px;
+    padding: 2rem;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    margin-bottom: 2rem;
+}
+
+.profil-card h2 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--vert-nuit);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.form-group {
+    margin-bottom: 1.2rem;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--vert-nuit);
+    margin-bottom: 0.4rem;
+}
+
+.form-input {
+    width: 100%;
+    padding: 0.7rem 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-family: 'Inter', sans-serif;
+    transition: border-color 0.2s;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--vert-gazon);
+}
+
+.danger-zone {
+    background: #fff5f5;
+    border: 1px solid #fed7d7;
+    border-radius: 14px;
+    padding: 1.5rem 2rem;
+}
+
+.danger-zone h2 {
+    color: var(--rouge);
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.danger-zone p {
+    color: var(--gris);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div style="max-width:1200px; margin:0 auto;">
+        <h1>Mon profil</h1>
+        <p style="color:var(--gris); margin-top:0.4rem;">Gérez vos informations personnelles</p>
+    </div>
+</div>
+
+<div class="profil-wrapper">
+    <div class="profil-card">
+        <h2>Informations personnelles</h2>
+        <form method="post">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                    <p style="color:var(--rouge); font-size:0.85rem; margin-top:0.3rem;">{{ field.errors.0 }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-primary" style="width:100%; margin-top:0.5rem;">
+                Enregistrer les modifications
+            </button>
+        </form>
+    </div>
+
+    <div class="danger-zone">
+        <h2>Zone dangereuse</h2>
+        <p>La suppression de votre compte est irréversible. Toutes vos données seront perdues.</p>
+        <a href="{% url 'supprimer_compte' %}" class="btn btn-danger">Supprimer mon compte</a>
+    </div>
+</div>
+{% endblock %}

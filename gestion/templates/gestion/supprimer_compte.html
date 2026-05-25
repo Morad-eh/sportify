@@ -1,0 +1,22 @@
+{% extends 'gestion/base.html' %}
+
+{% block title %}Supprimer mon compte — Sportify{% endblock %}
+
+{% block content %}
+<div style="max-width:500px; margin:4rem auto; padding:0 2rem; text-align:center;">
+    <div style="background:var(--blanc); border-radius:14px; padding:2.5rem; box-shadow:0 2px 12px rgba(0,0,0,0.07);">
+        <div style="font-size:3rem; margin-bottom:1rem;">⚠️</div>
+        <h1 style="font-size:1.5rem; font-weight:700; color:var(--vert-nuit); margin-bottom:1rem;">
+            Supprimer mon compte
+        </h1>
+        <p style="color:var(--gris); margin-bottom:2rem;">
+            Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible et toutes vos données seront perdues.
+        </p>
+        <form method="post" style="display:flex; gap:1rem; justify-content:center;">
+            {% csrf_token %}
+            <a href="{% url 'profil' %}" class="btn btn-secondary">Annuler</a>
+            <button type="submit" class="btn btn-danger">Oui, supprimer</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

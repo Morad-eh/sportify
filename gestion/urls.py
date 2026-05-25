@@ -10,4 +10,6 @@ urlpatterns = [
     path('deconnexion/', views.deconnexion, name='deconnexion'),
     path('tableau-de-bord/', views.dashboard, name='dashboard'),
     path('reserver/<int:creneau_id>/', views.reserver, name='reserver'),
+    path('profil/', views.profil, name='profil'),
+    path('supprimer-compte/', views.supprimer_compte, name='supprimer_compte'),
 ]

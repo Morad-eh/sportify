@@ -19,6 +19,23 @@ class InscriptionForm(UserCreationForm):
             field.widget.attrs['class'] = 'form-input'
 
 
+class ProfilForm(forms.ModelForm):
+    class Meta:
+        model = Utilisateur
+        fields = ('first_name', 'last_name', 'email', 'telephone')
+        labels = {
+            'first_name': 'Prénom',
+            'last_name': 'Nom',
+            'email': 'Adresse e-mail',
+            'telephone': 'Téléphone',
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-input'
+
+
 class ConnexionForm(forms.Form):
     username = forms.CharField(label="Nom d'utilisateur")
     password = forms.CharField(widget=forms.PasswordInput, label='Mot de passe')
