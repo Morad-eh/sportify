@@ -1,0 +1,171 @@
+# English translations for Sportify
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+
+msgid "Terrains"
+msgstr "Fields"
+
+msgid "Mon espace"
+msgstr "My space"
+
+msgid "Mon profil"
+msgstr "My profile"
+
+msgid "Administration"
+msgstr "Administration"
+
+msgid "Déconnexion"
+msgstr "Logout"
+
+msgid "Connexion"
+msgstr "Login"
+
+msgid "S'inscrire"
+msgstr "Sign up"
+
+msgid "Réserve ton match. Joue. Profite."
+msgstr "Book your game. Play. Enjoy."
+
+msgid "Terrains disponibles"
+msgstr "Available fields"
+
+msgid "Voir les détails"
+msgstr "View details"
+
+msgid "Réserver"
+msgstr "Book"
+
+msgid "Créneaux disponibles"
+msgstr "Available slots"
+
+msgid "Bonjour"
+msgstr "Hello"
+
+msgid "Bienvenue dans ton espace membre Sportify"
+msgstr "Welcome to your Sportify member space"
+
+msgid "Réserver un terrain"
+msgstr "Book a field"
+
+msgid "Mes réservations"
+msgstr "My reservations"
+
+msgid "Nouvelle réservation"
+msgstr "New booking"
+
+msgid "Terrain"
+msgstr "Field"
+
+msgid "Date"
+msgstr "Date"
+
+msgid "Horaire"
+msgstr "Schedule"
+
+msgid "Montant"
+msgstr "Amount"
+
+msgid "Statut"
+msgstr "Status"
+
+msgid "Actions"
+msgstr "Actions"
+
+msgid "Confirmée"
+msgstr "Confirmed"
+
+msgid "En attente"
+msgstr "Pending"
+
+msgid "Annulée"
+msgstr "Cancelled"
+
+msgid "Modifier"
+msgstr "Edit"
+
+msgid "Annuler"
+msgstr "Cancel"
+
+msgid "Aucune réservation pour l'instant"
+msgstr "No bookings yet"
+
+msgid "Réserve ton premier terrain et profite du jeu !"
+msgstr "Book your first field and enjoy the game!"
+
+msgid "Voir les terrains"
+msgstr "View fields"
+
+msgid "Inscription"
+msgstr "Registration"
+
+msgid "Nom d'utilisateur"
+msgstr "Username"
+
+msgid "Mot de passe"
+msgstr "Password"
+
+msgid "Confirmer le mot de passe"
+msgstr "Confirm password"
+
+msgid "Email"
+msgstr "Email"
+
+msgid "Prénom"
+msgstr "First name"
+
+msgid "Nom"
+msgstr "Last name"
+
+msgid "Téléphone"
+msgstr "Phone"
+
+msgid "Annuler cette réservation ?"
+msgstr "Cancel this booking?"
+
+msgid "Cette action est irréversible. Le créneau sera remis en ligne."
+msgstr "This action is irreversible. The slot will be made available again."
+
+msgid "Retour"
+msgstr "Back"
+
+msgid "Confirmer l'annulation"
+msgstr "Confirm cancellation"
+
+msgid "Modifier ma réservation"
+msgstr "Modify my booking"
+
+msgid "Choisissez un nouveau créneau disponible pour le même terrain."
+msgstr "Choose a new available slot for the same field."
+
+msgid "Réservation actuelle"
+msgstr "Current booking"
+
+msgid "Confirmer la modification"
+msgstr "Confirm modification"
+
+msgid "Paiement confirmé"
+msgstr "Payment confirmed"
+
+msgid "Votre réservation est confirmée !"
+msgstr "Your booking is confirmed!"
+
+msgid "Retour au tableau de bord"
+msgstr "Back to dashboard"
+
+msgid "Membre depuis"
+msgstr "Member since"
+
+msgid "Réservation(s) au total"
+msgstr "booking(s) in total"
+
+msgid "Français"
+msgstr "French"
+
+msgid "English"
+msgstr "English"
+
+msgid "Nederlands"
+msgstr "Dutch"

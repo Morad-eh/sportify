@@ -1,0 +1,171 @@
+# Dutch translations for Sportify
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: nl\n"
+
+msgid "Terrains"
+msgstr "Velden"
+
+msgid "Mon espace"
+msgstr "Mijn ruimte"
+
+msgid "Mon profil"
+msgstr "Mijn profiel"
+
+msgid "Administration"
+msgstr "Beheer"
+
+msgid "Déconnexion"
+msgstr "Afmelden"
+
+msgid "Connexion"
+msgstr "Inloggen"
+
+msgid "S'inscrire"
+msgstr "Inschrijven"
+
+msgid "Réserve ton match. Joue. Profite."
+msgstr "Reserveer je wedstrijd. Speel. Geniet."
+
+msgid "Terrains disponibles"
+msgstr "Beschikbare velden"
+
+msgid "Voir les détails"
+msgstr "Details bekijken"
+
+msgid "Réserver"
+msgstr "Reserveren"
+
+msgid "Créneaux disponibles"
+msgstr "Beschikbare tijdsloten"
+
+msgid "Bonjour"
+msgstr "Hallo"
+
+msgid "Bienvenue dans ton espace membre Sportify"
+msgstr "Welkom in je Sportify ledenruimte"
+
+msgid "Réserver un terrain"
+msgstr "Een veld reserveren"
+
+msgid "Mes réservations"
+msgstr "Mijn reserveringen"
+
+msgid "Nouvelle réservation"
+msgstr "Nieuwe reservering"
+
+msgid "Terrain"
+msgstr "Veld"
+
+msgid "Date"
+msgstr "Datum"
+
+msgid "Horaire"
+msgstr "Tijdschema"
+
+msgid "Montant"
+msgstr "Bedrag"
+
+msgid "Statut"
+msgstr "Status"
+
+msgid "Actions"
+msgstr "Acties"
+
+msgid "Confirmée"
+msgstr "Bevestigd"
+
+msgid "En attente"
+msgstr "In afwachting"
+
+msgid "Annulée"
+msgstr "Geannuleerd"
+
+msgid "Modifier"
+msgstr "Wijzigen"
+
+msgid "Annuler"
+msgstr "Annuleren"
+
+msgid "Aucune réservation pour l'instant"
+msgstr "Nog geen reserveringen"
+
+msgid "Réserve ton premier terrain et profite du jeu !"
+msgstr "Reserveer je eerste veld en geniet van het spel!"
+
+msgid "Voir les terrains"
+msgstr "Velden bekijken"
+
+msgid "Inscription"
+msgstr "Registratie"
+
+msgid "Nom d'utilisateur"
+msgstr "Gebruikersnaam"
+
+msgid "Mot de passe"
+msgstr "Wachtwoord"
+
+msgid "Confirmer le mot de passe"
+msgstr "Wachtwoord bevestigen"
+
+msgid "Email"
+msgstr "E-mail"
+
+msgid "Prénom"
+msgstr "Voornaam"
+
+msgid "Nom"
+msgstr "Achternaam"
+
+msgid "Téléphone"
+msgstr "Telefoon"
+
+msgid "Annuler cette réservation ?"
+msgstr "Deze reservering annuleren?"
+
+msgid "Cette action est irréversible. Le créneau sera remis en ligne."
+msgstr "Deze actie is onomkeerbaar. Het tijdslot wordt opnieuw beschikbaar gesteld."
+
+msgid "Retour"
+msgstr "Terug"
+
+msgid "Confirmer l'annulation"
+msgstr "Annulering bevestigen"
+
+msgid "Modifier ma réservation"
+msgstr "Mijn reservering wijzigen"
+
+msgid "Choisissez un nouveau créneau disponible pour le même terrain."
+msgstr "Kies een nieuw beschikbaar tijdslot voor hetzelfde veld."
+
+msgid "Réservation actuelle"
+msgstr "Huidige reservering"
+
+msgid "Confirmer la modification"
+msgstr "Wijziging bevestigen"
+
+msgid "Paiement confirmé"
+msgstr "Betaling bevestigd"
+
+msgid "Votre réservation est confirmée !"
+msgstr "Uw reservering is bevestigd!"
+
+msgid "Retour au tableau de bord"
+msgstr "Terug naar het dashboard"
+
+msgid "Membre depuis"
+msgstr "Lid sinds"
+
+msgid "Réservation(s) au total"
+msgstr "reservering(en) in totaal"
+
+msgid "Français"
+msgstr "Frans"
+
+msgid "English"
+msgstr "Engels"
+
+msgid "Nederlands"
+msgstr "Nederlands"

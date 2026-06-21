@@ -1,5 +1,6 @@
+{% load i18n %}
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -174,26 +175,37 @@
                 </span>
             </a>
             <ul class="nav-links">
-                <li><a href="{% url 'terrains' %}">Terrains</a></li>
+                <li><a href="{% url 'terrains' %}">{% trans "Terrains" %}</a></li>
                 {% if user.is_authenticated %}
-                    <li><a href="{% url 'dashboard' %}">Mon espace</a></li>
-                    <li><a href="{% url 'profil' %}">Mon profil</a></li>
+                    <li><a href="{% url 'dashboard' %}">{% trans "Mon espace" %}</a></li>
+                    <li><a href="{% url 'profil' %}">{% trans "Mon profil" %}</a></li>
                     {% if user.is_staff %}
-                        <li><a href="/admin/">Administration</a></li>
+                        <li><a href="/admin/">{% trans "Administration" %}</a></li>
                     {% endif %}
                     <li>
                         <a href="{% url 'deconnexion' %}" class="btn btn-secondary" style="padding:0.45rem 1.1rem;">
-                            Déconnexion
+                            {% trans "Déconnexion" %}
                         </a>
                     </li>
                 {% else %}
-                    <li><a href="{% url 'connexion' %}">Connexion</a></li>
+                    <li><a href="{% url 'connexion' %}">{% trans "Connexion" %}</a></li>
                     <li>
                         <a href="{% url 'inscription' %}" class="btn btn-primary" style="padding:0.45rem 1.1rem;">
-                            S'inscrire
+                            {% trans "S'inscrire" %}
                         </a>
                     </li>
                 {% endif %}
+                <li>
+                    <form action="{% url 'set_language' %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <input name="next" type="hidden" value="{{ request.path }}">
+                        <select name="language" onchange="this.form.submit()" style="background:transparent; border:1px solid #3a6a4a; color:#b0c4b8; border-radius:6px; padding:0.3rem 0.5rem; font-size:0.85rem; cursor:pointer; font-family:inherit;">
+                            <option value="fr" {% if LANGUAGE_CODE == 'fr' %}selected{% endif %}>FR</option>
+                            <option value="en" {% if LANGUAGE_CODE == 'en' %}selected{% endif %}>EN</option>
+                            <option value="nl" {% if LANGUAGE_CODE == 'nl' %}selected{% endif %}>NL</option>
+                        </select>
+                    </form>
+                </li>
             </ul>
         </div>
     </nav>
@@ -211,7 +223,7 @@
     </main>
 
     <footer>
-        <p><strong>Sportify</strong> &mdash; Réserve ton match. Joue. Profite.</p>
+        <p><strong>Sportify</strong> &mdash; {% trans "Réserve ton match. Joue. Profite." %}</p>
         <p style="margin-top:0.6rem">
             <a href="{% url 'terrains' %}">Terrains</a> &middot;
             <a href="{% url 'inscription' %}">Inscription</a> &middot;
