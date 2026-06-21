@@ -1,0 +1,59 @@
+{% extends 'gestion/base.html' %}
+
+{% block title %}Annuler la réservation — Sportify{% endblock %}
+
+{% block extra_css %}
+.confirm-page {
+    max-width: 560px;
+    margin: 4rem auto;
+    padding: 0 1.5rem;
+}
+.confirm-card {
+    background: var(--blanc);
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    padding: 2.5rem;
+    text-align: center;
+}
+.confirm-icon { font-size: 3.5rem; margin-bottom: 1rem; }
+.confirm-card h1 { font-size: 1.6rem; font-weight: 800; color: var(--vert-nuit); margin-bottom: 0.5rem; }
+.confirm-card p { color: var(--gris); margin-bottom: 0.4rem; }
+.res-detail {
+    background: #fff8f0;
+    border: 1.5px solid #f5a623;
+    border-radius: 10px;
+    padding: 1.2rem 1.5rem;
+    margin: 1.5rem 0;
+    text-align: left;
+}
+.res-detail p { margin: 0.3rem 0; color: var(--vert-nuit); font-size: 0.95rem; }
+.res-detail strong { color: var(--vert-gazon); }
+.btn-row { display: flex; gap: 1rem; justify-content: center; margin-top: 1.5rem; }
+{% endblock %}
+
+{% block content %}
+<div class="confirm-page">
+    <div class="confirm-card">
+        <div class="confirm-icon">⚠️</div>
+        <h1>Annuler cette réservation ?</h1>
+        <p>Cette action est irréversible. Le créneau sera remis en ligne.</p>
+
+        <div class="res-detail">
+            <p>🏟️ Terrain : <strong>{{ reservation.creneau.terrain.nom }}</strong></p>
+            <p>📅 Date : <strong>{{ reservation.creneau.date|date:"d/m/Y" }}</strong></p>
+            <p>🕐 Horaire : <strong>{{ reservation.creneau.heure_debut|time:"H:i" }} – {{ reservation.creneau.heure_fin|time:"H:i" }}</strong></p>
+            <p>💶 Montant : <strong>{{ reservation.montant_total }}€</strong></p>
+        </div>
+
+        <p style="font-size:0.85rem; color:#e53e3e;">Note : le remboursement se fait sur demande par email à l'équipe Sportify.</p>
+
+        <div class="btn-row">
+            <a href="{% url 'dashboard' %}" class="btn" style="background:var(--gris-clair); color:var(--vert-nuit);">Retour</a>
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn" style="background:#e53e3e; color:#fff;">Confirmer l'annulation</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

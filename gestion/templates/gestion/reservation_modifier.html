@@ -1,0 +1,95 @@
+{% extends 'gestion/base.html' %}
+
+{% block title %}Modifier la réservation — Sportify{% endblock %}
+
+{% block extra_css %}
+.modifier-page {
+    max-width: 720px;
+    margin: 3rem auto;
+    padding: 0 1.5rem;
+}
+.modifier-page h1 { font-size: 1.7rem; font-weight: 800; color: var(--vert-nuit); margin-bottom: 0.4rem; }
+.modifier-page .subtitle { color: var(--gris); margin-bottom: 2rem; }
+
+.current-res {
+    background: #f0f7f3;
+    border: 1.5px solid var(--vert-gazon);
+    border-radius: 12px;
+    padding: 1.2rem 1.5rem;
+    margin-bottom: 2rem;
+}
+.current-res h3 { font-size: 0.85rem; font-weight: 700; color: var(--vert-gazon); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.6rem; }
+.current-res p { margin: 0.25rem 0; color: var(--vert-nuit); font-size: 0.95rem; }
+
+.creneaux-list { display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 2rem; }
+.creneau-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: var(--blanc);
+    border: 1.5px solid var(--gris-clair);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+.creneau-item:has(input:checked) {
+    border-color: var(--vert-gazon);
+    background: #f0f7f3;
+}
+.creneau-item input[type="radio"] { accent-color: var(--vert-gazon); width: 18px; height: 18px; flex-shrink: 0; }
+.creneau-info { flex: 1; }
+.creneau-date { font-weight: 700; color: var(--vert-nuit); }
+.creneau-horaire { color: var(--gris); font-size: 0.9rem; }
+
+.empty-creneaux {
+    text-align: center;
+    padding: 3rem;
+    color: var(--gris);
+    background: var(--blanc);
+    border-radius: 12px;
+    border: 1.5px dashed var(--gris-clair);
+}
+
+.btn-row { display: flex; gap: 1rem; }
+{% endblock %}
+
+{% block content %}
+<div class="modifier-page">
+    <h1>Modifier ma réservation</h1>
+    <p class="subtitle">Choisissez un nouveau créneau disponible pour le même terrain.</p>
+
+    <div class="current-res">
+        <h3>Réservation actuelle</h3>
+        <p>🏟️ <strong>{{ terrain.nom }}</strong></p>
+        <p>📅 {{ reservation.creneau.date|date:"d/m/Y" }} — {{ reservation.creneau.heure_debut|time:"H:i" }} à {{ reservation.creneau.heure_fin|time:"H:i" }}</p>
+    </div>
+
+    {% if creneaux %}
+        <form method="post">
+            {% csrf_token %}
+            <div class="creneaux-list">
+                {% for c in creneaux %}
+                <label class="creneau-item">
+                    <input type="radio" name="creneau_id" value="{{ c.pk }}" required>
+                    <div class="creneau-info">
+                        <div class="creneau-date">{{ c.date|date:"l d/m/Y" }}</div>
+                        <div class="creneau-horaire">{{ c.heure_debut|time:"H:i" }} – {{ c.heure_fin|time:"H:i" }}</div>
+                    </div>
+                </label>
+                {% endfor %}
+            </div>
+            <div class="btn-row">
+                <a href="{% url 'dashboard' %}" class="btn" style="background:var(--gris-clair); color:var(--vert-nuit);">Annuler</a>
+                <button type="submit" class="btn btn-primary">Confirmer la modification</button>
+            </div>
+        </form>
+    {% else %}
+        <div class="empty-creneaux">
+            <p style="font-size:1.5rem; margin-bottom:0.5rem;">😔</p>
+            <p>Aucun autre créneau disponible pour ce terrain pour le moment.</p>
+            <a href="{% url 'dashboard' %}" class="btn btn-primary" style="margin-top:1rem; display:inline-block;">Retour au tableau de bord</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

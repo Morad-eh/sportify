@@ -165,6 +165,7 @@
                         <th>Horaire</th>
                         <th>Montant</th>
                         <th>Statut</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -182,6 +183,14 @@
                                 <span class="badge badge-yellow">En attente</span>
                             {% else %}
                                 <span class="badge badge-red">Annulée</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if res.statut == 'confirmee' and res.creneau.date >= today %}
+                                <a href="{% url 'modifier_reservation' res.id %}" class="btn" style="padding:0.3rem 0.7rem; font-size:0.8rem; background:var(--vert-gazon); color:#fff; margin-right:0.3rem;">Modifier</a>
+                                <a href="{% url 'annuler_reservation' res.id %}" class="btn" style="padding:0.3rem 0.7rem; font-size:0.8rem; background:#e53e3e; color:#fff;">Annuler</a>
+                            {% else %}
+                                <span style="color:var(--gris); font-size:0.85rem;">—</span>
                             {% endif %}
                         </td>
                     </tr>

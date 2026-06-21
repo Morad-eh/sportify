@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils import timezone
+from django.core.mail import send_mail
 from .models import Terrain, Creneau, Reservation, Paiement
 from .forms import InscriptionForm, ConnexionForm, ProfilForm
 
@@ -79,7 +80,10 @@ def dashboard(request):
     reservations = Reservation.objects.filter(
         utilisateur=request.user
     ).select_related('creneau__terrain').order_by('-date_reservation')
-    return render(request, 'gestion/dashboard.html', {'reservations': reservations})
+    return render(request, 'gestion/dashboard.html', {
+        'reservations': reservations,
+        'today': timezone.now().date(),
+    })
 
 
 @login_required
@@ -141,6 +145,54 @@ def creer_paiement(request, creneau_id):
 
 
 @login_required
+def annuler_reservation(request, reservation_id):
+    reservation = get_object_or_404(Reservation, pk=reservation_id, utilisateur=request.user)
+    if reservation.statut != 'confirmee' or reservation.creneau.date < timezone.now().date():
+        messages.error(request, 'Cette réservation ne peut pas être annulée.')
+        return redirect('dashboard')
+    if request.method == 'POST':
+        creneau = reservation.creneau
+        reservation.statut = 'annulee'
+        reservation.save()
+        creneau.disponible = True
+        creneau.save()
+        messages.success(request, 'Votre réservation a été annulée.')
+        return redirect('dashboard')
+    return render(request, 'gestion/annuler_reservation.html', {'reservation': reservation})
+
+
+@login_required
+def modifier_reservation(request, reservation_id):
+    reservation = get_object_or_404(Reservation, pk=reservation_id, utilisateur=request.user)
+    if reservation.statut != 'confirmee' or reservation.creneau.date < timezone.now().date():
+        messages.error(request, 'Cette réservation ne peut pas être modifiée.')
+        return redirect('dashboard')
+    terrain = reservation.creneau.terrain
+    creneaux = Creneau.objects.filter(
+        terrain=terrain,
+        disponible=True,
+        date__gte=timezone.now().date(),
+    ).exclude(pk=reservation.creneau.pk).order_by('date', 'heure_debut')
+    if request.method == 'POST':
+        nouveau_id = request.POST.get('creneau_id')
+        nouveau_creneau = get_object_or_404(Creneau, pk=nouveau_id, terrain=terrain, disponible=True)
+        ancien_creneau = reservation.creneau
+        ancien_creneau.disponible = True
+        ancien_creneau.save()
+        nouveau_creneau.disponible = False
+        nouveau_creneau.save()
+        reservation.creneau = nouveau_creneau
+        reservation.save()
+        messages.success(request, f'Réservation modifiée : {nouveau_creneau.date} de {nouveau_creneau.heure_debut} à {nouveau_creneau.heure_fin}.')
+        return redirect('dashboard')
+    return render(request, 'gestion/reservation_modifier.html', {
+        'reservation': reservation,
+        'creneaux': creneaux,
+        'terrain': terrain,
+    })
+
+
+@login_required
 def paiement_succes(request):
     session_id = request.GET.get('session_id')
     creneau_id = request.GET.get('creneau_id')
@@ -170,6 +222,13 @@ def paiement_succes(request):
             creneau.disponible = False
             creneau.save()
             messages.success(request, f'Paiement confirmé ! Terrain : {creneau.terrain.nom}, le {creneau.date}.')
+            send_mail(
+                subject='Confirmation de réservation — Sportify',
+                message=f'Bonjour {request.user.get_full_name() or request.user.username},\n\nVotre réservation est confirmée !\n\nTerrain : {creneau.terrain.nom}\nDate : {creneau.date}\nHoraire : {creneau.heure_debut} – {creneau.heure_fin}\nMontant payé : {creneau.terrain.prix_heure}€\n\nMerci de votre confiance.\nL\'équipe Sportify',
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[request.user.email],
+                fail_silently=False,
+            )
         return render(request, 'gestion/paiement_succes.html', {'creneau': get_object_or_404(Creneau, pk=creneau_id)})
 
     return redirect('dashboard')
