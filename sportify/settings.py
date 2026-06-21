@@ -137,6 +137,9 @@ LOGIN_URL = '/connexion/'
 LOGIN_REDIRECT_URL = '/tableau-de-bord/'
 LOGOUT_REDIRECT_URL = '/'
 
+STRIPE_PUBLIC_KEY = 'pk_test_51TkmeK2EjtV1WyOKowkhGKinhyuDpWD7qI64pN8HKUXFPLbciIFkr6OKh8hBk4bUeuqVF3tBZDeWRQlml8v0D8WA00VXjhxYjE'
+STRIPE_SECRET_KEY = 'sk_test_51TkmeK2EjtV1WyOK2EY47UETlScIgfn7WT2RHhNCQjqNX10N8lRMqDjYtVhRvLYE68zwVIOshCfaIl8tqSaLSF6Z00GTdQB9qy'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 

@@ -12,4 +12,6 @@ urlpatterns = [
     path('reserver/<int:creneau_id>/', views.reserver, name='reserver'),
     path('profil/', views.profil, name='profil'),
     path('supprimer-compte/', views.supprimer_compte, name='supprimer_compte'),
+    path('paiement/creer/<int:creneau_id>/', views.creer_paiement, name='creer_paiement'),
+    path('paiement/succes/', views.paiement_succes, name='paiement_succes'),
 ]

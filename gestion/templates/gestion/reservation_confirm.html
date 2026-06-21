@@ -129,17 +129,14 @@
                 <span class="amount">{{ creneau.terrain.prix_heure }}€</span>
             </div>
 
-            <form method="post">
-                {% csrf_token %}
-                <div class="confirm-actions">
-                    <a href="{% url 'terrain_detail' creneau.terrain.pk %}" class="btn btn-outline-cancel">
-                        Annuler
-                    </a>
-                    <button type="submit" class="btn btn-primary">
-                        Confirmer la réservation
-                    </button>
-                </div>
-            </form>
+            <div class="confirm-actions">
+                <a href="{% url 'terrain_detail' creneau.terrain.pk %}" class="btn btn-outline-cancel">
+                    Annuler
+                </a>
+                <a href="{% url 'creer_paiement' creneau.pk %}" class="btn btn-gold">
+                    💳 Payer avec Stripe
+                </a>
+            </div>
         </div>
     </div>
 </div>

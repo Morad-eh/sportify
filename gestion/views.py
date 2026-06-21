@@ -1,9 +1,11 @@
+import stripe
+from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils import timezone
-from .models import Terrain, Creneau, Reservation
+from .models import Terrain, Creneau, Reservation, Paiement
 from .forms import InscriptionForm, ConnexionForm, ProfilForm
 
 
@@ -106,15 +108,68 @@ def supprimer_compte(request):
 @login_required
 def reserver(request, creneau_id):
     creneau = get_object_or_404(Creneau, pk=creneau_id, disponible=True)
-    if request.method == 'POST':
-        Reservation.objects.create(
-            utilisateur=request.user,
-            creneau=creneau,
-            statut='confirmee',
-            montant_total=creneau.terrain.prix_heure,
-        )
-        creneau.disponible = False
-        creneau.save()
-        messages.success(request, f'Réservation confirmée ! Terrain : {creneau.terrain.nom}, le {creneau.date} à {creneau.heure_debut}.')
-        return redirect('dashboard')
-    return render(request, 'gestion/reservation_confirm.html', {'creneau': creneau})
+    return render(request, 'gestion/reservation_confirm.html', {
+        'creneau': creneau,
+        'stripe_public_key': settings.STRIPE_PUBLIC_KEY,
+    })
+
+
+@login_required
+def creer_paiement(request, creneau_id):
+    creneau = get_object_or_404(Creneau, pk=creneau_id, disponible=True)
+    stripe.api_key = settings.STRIPE_SECRET_KEY
+
+    session = stripe.checkout.Session.create(
+        payment_method_types=['card'],
+        line_items=[{
+            'price_data': {
+                'currency': 'eur',
+                'product_data': {
+                    'name': f'Réservation — {creneau.terrain.nom}',
+                    'description': f'{creneau.date} de {creneau.heure_debut} à {creneau.heure_fin}',
+                },
+                'unit_amount': int(creneau.terrain.prix_heure * 100),
+            },
+            'quantity': 1,
+        }],
+        mode='payment',
+        success_url=request.scheme + '://' + request.get_host() + f'/paiement/succes/?session_id={{CHECKOUT_SESSION_ID}}&creneau_id={creneau_id}',
+        cancel_url=request.scheme + '://' + request.get_host() + f'/reserver/{creneau_id}/',
+        metadata={'creneau_id': creneau_id, 'user_id': request.user.id},
+    )
+    return redirect(session.url)
+
+
+@login_required
+def paiement_succes(request):
+    session_id = request.GET.get('session_id')
+    creneau_id = request.GET.get('creneau_id')
+
+    if not session_id or not creneau_id:
+        return redirect('home')
+
+    stripe.api_key = settings.STRIPE_SECRET_KEY
+    session = stripe.checkout.Session.retrieve(session_id)
+
+    if session.payment_status == 'paid':
+        creneau = get_object_or_404(Creneau, pk=creneau_id)
+        if creneau.disponible:
+            reservation = Reservation.objects.create(
+                utilisateur=request.user,
+                creneau=creneau,
+                statut='confirmee',
+                montant_total=creneau.terrain.prix_heure,
+            )
+            Paiement.objects.create(
+                reservation=reservation,
+                montant=creneau.terrain.prix_heure,
+                mode_paiement='stripe',
+                statut='paye',
+                stripe_payment_id=session.payment_intent or '',
+            )
+            creneau.disponible = False
+            creneau.save()
+            messages.success(request, f'Paiement confirmé ! Terrain : {creneau.terrain.nom}, le {creneau.date}.')
+        return render(request, 'gestion/paiement_succes.html', {'creneau': get_object_or_404(Creneau, pk=creneau_id)})
+
+    return redirect('dashboard')
