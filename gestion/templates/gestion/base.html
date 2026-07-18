@@ -163,6 +163,42 @@
         .badge-red { background: #f8d7da; color: #721c24; }
         .badge-blue { background: #cce5ff; color: #004085; }
 
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+        }
+        .hamburger span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: #b0c4b8;
+            border-radius: 2px;
+            transition: all 0.3s;
+        }
+        @media (max-width: 768px) {
+            .hamburger { display: flex; }
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 68px;
+                left: 0;
+                right: 0;
+                background: var(--vert-nuit);
+                padding: 1rem 1.5rem 1.5rem;
+                gap: 0.8rem;
+                box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+            }
+            .nav-links.open { display: flex; }
+            .nav-links a { font-size: 1rem; padding: 0.4rem 0; }
+            .nav-links select { width: 100%; }
+        }
+
         {% block extra_css %}{% endblock %}
     </style>
 </head>
@@ -174,7 +210,10 @@
                     <span class="logo-sport">Sport</span><span class="logo-ify">ify</span>
                 </span>
             </a>
-            <ul class="nav-links">
+            <button class="hamburger" id="hamburger-btn" aria-label="Menu" onclick="document.getElementById('nav-links').classList.toggle('open')">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="nav-links" id="nav-links">
                 <li><a href="{% url 'terrains' %}">{% trans "Terrains" %}</a></li>
                 {% if user.is_authenticated %}
                     <li><a href="{% url 'dashboard' %}">{% trans "Mon espace" %}</a></li>
