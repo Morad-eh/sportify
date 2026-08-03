@@ -169,3 +169,174 @@ msgstr "English"
 
 msgid "Nederlands"
 msgstr "Dutch"
+
+msgid "Réserve ton terrain."
+msgstr "Book your field."
+
+msgid "Joue quand tu veux."
+msgstr "Play when you want."
+
+msgid "Trouve un terrain de sport indoor disponible près de chez toi et réserve en ligne."
+msgstr "Find an available indoor sports field near you and book online."
+
+msgid "Créer un compte"
+msgstr "Create an account"
+
+msgid "Voir tout"
+msgstr "View all"
+
+msgid "/ heure"
+msgstr "/ hour"
+
+msgid "Disponible"
+msgstr "Available"
+
+msgid "Nos terrains"
+msgstr "Our fields"
+
+msgid "Retrouvez tous les terrains disponibles et réservez votre créneau."
+msgstr "Find all available fields and book your slot."
+
+msgid "Terrain de football indoor de qualité, éclairage LED et vestiaires."
+msgstr "Quality indoor football field, LED lighting and changing rooms."
+
+msgid "Aucun terrain disponible"
+msgstr "No fields available"
+
+msgid "Revenez prochainement, de nouveaux terrains arrivent bientôt."
+msgstr "Check back soon, new fields are coming."
+
+msgid "Connexion requise"
+msgstr "Login required"
+
+msgid "Aucun créneau disponible"
+msgstr "No slots available"
+
+msgid "Revenez prochainement, de nouveaux créneaux seront ajoutés."
+msgstr "Check back soon, new slots will be added."
+
+msgid "Infos terrain"
+msgstr "Field info"
+
+msgid "Localisation"
+msgstr "Location"
+
+msgid "Prix"
+msgstr "Price"
+
+msgid "Disponibilité"
+msgstr "Availability"
+
+msgid "✅ Réservation instantanée · Confirmation par e-mail · Annulation possible"
+msgstr "✅ Instant booking · Email confirmation · Cancellation possible"
+
+msgid "Gérez vos informations personnelles"
+msgstr "Manage your personal information"
+
+msgid "Informations personnelles"
+msgstr "Personal information"
+
+msgid "Enregistrer les modifications"
+msgstr "Save changes"
+
+msgid "Zone dangereuse"
+msgstr "Danger zone"
+
+msgid "La suppression de votre compte est irréversible. Toutes vos données seront perdues."
+msgstr "Account deletion is irreversible. All your data will be lost."
+
+msgid "Supprimer mon compte"
+msgstr "Delete my account"
+
+msgid "Connecte-toi pour réserver tes créneaux"
+msgstr "Log in to book your slots"
+
+msgid "Se connecter"
+msgstr "Log in"
+
+msgid "Pas encore de compte ?"
+msgstr "No account yet?"
+
+msgid "S'inscrire gratuitement"
+msgstr "Sign up for free"
+
+msgid "Inscription gratuite, réservation instantanée"
+msgstr "Free registration, instant booking"
+
+msgid "Créer mon compte"
+msgstr "Create my account"
+
+msgid "Déjà un compte ?"
+msgstr "Already have an account?"
+
+msgid "Note : le remboursement se fait sur demande par email à l'équipe Sportify."
+msgstr "Note: refunds are available upon request by email to the Sportify team."
+
+msgid "Aucun autre créneau disponible pour ce terrain pour le moment."
+msgstr "No other slots available for this field at the moment."
+
+msgid "Paiement confirmé !"
+msgstr "Payment confirmed!"
+
+msgid "Voir mes réservations"
+msgstr "View my bookings"
+
+msgid "Confirmer la réservation"
+msgstr "Confirm booking"
+
+msgid "Vérifie les détails avant de confirmer"
+msgstr "Check the details before confirming"
+
+msgid "Récapitulatif"
+msgstr "Summary"
+
+msgid "Réservé par"
+msgstr "Booked by"
+
+msgid "Total à payer"
+msgstr "Total to pay"
+
+msgid "Payer avec Stripe"
+msgstr "Pay with Stripe"
+
+msgid "Bonjour, %(name)s 👋"
+msgstr "Hello, %(name)s 👋"
+
+msgid "Réservations au total"
+msgstr "Total bookings"
+
+msgid "Réservations confirmées"
+msgstr "Confirmed bookings"
+
+msgid "Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible et toutes vos données seront perdues."
+msgstr "Are you sure you want to delete your account? This action is irreversible and all your data will be lost."
+
+msgid "Oui, supprimer"
+msgstr "Yes, delete"
+
+msgid "Type de sport"
+msgstr "Sport type"
+
+msgid "Tous les sports"
+msgstr "All sports"
+
+msgid "Ville / Commune"
+msgstr "City / Municipality"
+
+msgid "Ex : Bruxelles, Liège..."
+msgstr "E.g.: Brussels, Liège..."
+
+msgid "Rechercher"
+msgstr "Search"
+
+msgid "Réinitialiser"
+msgstr "Reset"
+
+msgid "résultat(s) pour votre recherche"
+msgstr "result(s) for your search"
+
+msgid "Aucun terrain ne correspond à votre recherche."
+msgstr "No field matches your search."
+
+msgid "Réinitialiser la recherche"
+msgstr "Reset search"

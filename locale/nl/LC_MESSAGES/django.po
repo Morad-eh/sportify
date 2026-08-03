@@ -169,3 +169,174 @@ msgstr "Engels"
 
 msgid "Nederlands"
 msgstr "Nederlands"
+
+msgid "Réserve ton terrain."
+msgstr "Boek jouw terrein."
+
+msgid "Joue quand tu veux."
+msgstr "Speel wanneer je wilt."
+
+msgid "Trouve un terrain de sport indoor disponible près de chez toi et réserve en ligne."
+msgstr "Vind een beschikbaar indoor sportveld bij jou in de buurt en reserveer online."
+
+msgid "Créer un compte"
+msgstr "Account aanmaken"
+
+msgid "Voir tout"
+msgstr "Alles bekijken"
+
+msgid "/ heure"
+msgstr "/ uur"
+
+msgid "Disponible"
+msgstr "Beschikbaar"
+
+msgid "Nos terrains"
+msgstr "Onze terreinen"
+
+msgid "Retrouvez tous les terrains disponibles et réservez votre créneau."
+msgstr "Vind alle beschikbare terreinen en reserveer uw tijdslot."
+
+msgid "Terrain de football indoor de qualité, éclairage LED et vestiaires."
+msgstr "Kwaliteit indoor voetbalveld, LED-verlichting en kleedkamers."
+
+msgid "Aucun terrain disponible"
+msgstr "Geen terreinen beschikbaar"
+
+msgid "Revenez prochainement, de nouveaux terrains arrivent bientôt."
+msgstr "Kom binnenkort terug, nieuwe terreinen komen er aan."
+
+msgid "Connexion requise"
+msgstr "Aanmelden vereist"
+
+msgid "Aucun créneau disponible"
+msgstr "Geen tijdsloten beschikbaar"
+
+msgid "Revenez prochainement, de nouveaux créneaux seront ajoutés."
+msgstr "Kom binnenkort terug, nieuwe tijdsloten worden toegevoegd."
+
+msgid "Infos terrain"
+msgstr "Terrein info"
+
+msgid "Localisation"
+msgstr "Locatie"
+
+msgid "Prix"
+msgstr "Prijs"
+
+msgid "Disponibilité"
+msgstr "Beschikbaarheid"
+
+msgid "✅ Réservation instantanée · Confirmation par e-mail · Annulation possible"
+msgstr "✅ Directe reservering · Bevestiging per e-mail · Annulering mogelijk"
+
+msgid "Gérez vos informations personnelles"
+msgstr "Beheer uw persoonlijke gegevens"
+
+msgid "Informations personnelles"
+msgstr "Persoonlijke gegevens"
+
+msgid "Enregistrer les modifications"
+msgstr "Wijzigingen opslaan"
+
+msgid "Zone dangereuse"
+msgstr "Gevaarlijke zone"
+
+msgid "La suppression de votre compte est irréversible. Toutes vos données seront perdues."
+msgstr "Het verwijderen van uw account is onomkeerbaar. Al uw gegevens gaan verloren."
+
+msgid "Supprimer mon compte"
+msgstr "Mijn account verwijderen"
+
+msgid "Connecte-toi pour réserver tes créneaux"
+msgstr "Log in om uw tijdsloten te reserveren"
+
+msgid "Se connecter"
+msgstr "Inloggen"
+
+msgid "Pas encore de compte ?"
+msgstr "Nog geen account?"
+
+msgid "S'inscrire gratuitement"
+msgstr "Gratis registreren"
+
+msgid "Inscription gratuite, réservation instantanée"
+msgstr "Gratis registratie, directe reservering"
+
+msgid "Créer mon compte"
+msgstr "Mijn account aanmaken"
+
+msgid "Déjà un compte ?"
+msgstr "Al een account?"
+
+msgid "Note : le remboursement se fait sur demande par email à l'équipe Sportify."
+msgstr "Opmerking: terugbetalingen zijn beschikbaar op verzoek per e-mail aan het Sportify-team."
+
+msgid "Aucun autre créneau disponible pour ce terrain pour le moment."
+msgstr "Geen andere tijdsloten beschikbaar voor dit terrein op dit moment."
+
+msgid "Paiement confirmé !"
+msgstr "Betaling bevestigd!"
+
+msgid "Voir mes réservations"
+msgstr "Mijn reserveringen bekijken"
+
+msgid "Confirmer la réservation"
+msgstr "Reservering bevestigen"
+
+msgid "Vérifie les détails avant de confirmer"
+msgstr "Controleer de details voor bevestiging"
+
+msgid "Récapitulatif"
+msgstr "Samenvatting"
+
+msgid "Réservé par"
+msgstr "Gereserveerd door"
+
+msgid "Total à payer"
+msgstr "Totaal te betalen"
+
+msgid "Payer avec Stripe"
+msgstr "Betalen met Stripe"
+
+msgid "Bonjour, %(name)s 👋"
+msgstr "Hallo, %(name)s 👋"
+
+msgid "Réservations au total"
+msgstr "Totaal reserveringen"
+
+msgid "Réservations confirmées"
+msgstr "Bevestigde reserveringen"
+
+msgid "Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible et toutes vos données seront perdues."
+msgstr "Weet u zeker dat u uw account wilt verwijderen? Deze actie is onomkeerbaar en al uw gegevens gaan verloren."
+
+msgid "Oui, supprimer"
+msgstr "Ja, verwijderen"
+
+msgid "Type de sport"
+msgstr "Sporttype"
+
+msgid "Tous les sports"
+msgstr "Alle sporten"
+
+msgid "Ville / Commune"
+msgstr "Stad / Gemeente"
+
+msgid "Ex : Bruxelles, Liège..."
+msgstr "Bijv.: Brussel, Luik..."
+
+msgid "Rechercher"
+msgstr "Zoeken"
+
+msgid "Réinitialiser"
+msgstr "Herstellen"
+
+msgid "résultat(s) pour votre recherche"
+msgstr "resultaat/resultaten voor uw zoekopdracht"
+
+msgid "Aucun terrain ne correspond à votre recherche."
+msgstr "Geen terrein komt overeen met uw zoekopdracht."
+
+msgid "Réinitialiser la recherche"
+msgstr "Zoekopdracht herstellen"
