@@ -1,4 +1,5 @@
 {% extends 'gestion/base.html' %}
+{% load i18n %}
 
 {% block title %}Annuler la réservation — Sportify{% endblock %}
 
@@ -35,23 +36,23 @@
 <div class="confirm-page">
     <div class="confirm-card">
         <div class="confirm-icon">⚠️</div>
-        <h1>Annuler cette réservation ?</h1>
-        <p>Cette action est irréversible. Le créneau sera remis en ligne.</p>
+        <h1>{% trans "Annuler cette réservation ?" %}</h1>
+        <p>{% trans "Cette action est irréversible. Le créneau sera remis en ligne." %}</p>
 
         <div class="res-detail">
-            <p>🏟️ Terrain : <strong>{{ reservation.creneau.terrain.nom }}</strong></p>
-            <p>📅 Date : <strong>{{ reservation.creneau.date|date:"d/m/Y" }}</strong></p>
-            <p>🕐 Horaire : <strong>{{ reservation.creneau.heure_debut|time:"H:i" }} – {{ reservation.creneau.heure_fin|time:"H:i" }}</strong></p>
-            <p>💶 Montant : <strong>{{ reservation.montant_total }}€</strong></p>
+            <p>🏟️ {% trans "Terrain" %} : <strong>{{ reservation.creneau.terrain.nom }}</strong></p>
+            <p>📅 {% trans "Date" %} : <strong>{{ reservation.creneau.date|date:"d/m/Y" }}</strong></p>
+            <p>🕐 {% trans "Horaire" %} : <strong>{{ reservation.creneau.heure_debut|time:"H:i" }} – {{ reservation.creneau.heure_fin|time:"H:i" }}</strong></p>
+            <p>💶 {% trans "Montant" %} : <strong>{{ reservation.montant_total }}€</strong></p>
         </div>
 
-        <p style="font-size:0.85rem; color:#e53e3e;">Note : le remboursement se fait sur demande par email à l'équipe Sportify.</p>
+        <p style="font-size:0.85rem; color:#e53e3e;">{% trans "Note : le remboursement se fait sur demande par email à l'équipe Sportify." %}</p>
 
         <div class="btn-row">
-            <a href="{% url 'dashboard' %}" class="btn" style="background:var(--gris-clair); color:var(--vert-nuit);">Retour</a>
+            <a href="{% url 'dashboard' %}" class="btn" style="background:var(--gris-clair); color:var(--vert-nuit);">{% trans "Retour" %}</a>
             <form method="post">
                 {% csrf_token %}
-                <button type="submit" class="btn" style="background:#e53e3e; color:#fff;">Confirmer l'annulation</button>
+                <button type="submit" class="btn" style="background:#e53e3e; color:#fff;">{% trans "Confirmer l'annulation" %}</button>
             </form>
         </div>
     </div>

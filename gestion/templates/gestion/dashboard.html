@@ -1,4 +1,5 @@
 {% extends 'gestion/base.html' %}
+{% load i18n %}
 
 {% block title %}Mon espace — Sportify{% endblock %}
 
@@ -121,10 +122,10 @@
 <div class="dashboard-header">
     <div class="dashboard-header-inner">
         <div class="welcome-text">
-            <h1>Bonjour, {{ user.first_name|default:user.username }} 👋</h1>
-            <p>Bienvenue dans ton espace membre Sportify</p>
+            <h1>{% blocktrans with name=user.first_name|default:user.username %}Bonjour, {{ name }} 👋{% endblocktrans %}</h1>
+            <p>{% trans "Bienvenue dans ton espace membre Sportify" %}</p>
         </div>
-        <a href="{% url 'terrains' %}" class="btn btn-gold">Réserver un terrain</a>
+        <a href="{% url 'terrains' %}" class="btn btn-gold">{% trans "Réserver un terrain" %}</a>
     </div>
 </div>
 
@@ -133,25 +134,25 @@
         <div class="stat-card">
             <div class="stat-icon">📅</div>
             <div class="stat-value">{{ reservations.count }}</div>
-            <div class="stat-label">Réservation{{ reservations.count|pluralize }} au total</div>
+            <div class="stat-label">{% trans "Réservations au total" %}</div>
         </div>
         <div class="stat-card">
             <div class="stat-icon">✅</div>
             <div class="stat-value">{{ reservations|length }}</div>
-            <div class="stat-label">Réservation{{ reservations|length|pluralize }} confirmée{{ reservations|length|pluralize }}</div>
+            <div class="stat-label">{% trans "Réservations confirmées" %}</div>
         </div>
         <div class="stat-card">
             <div class="stat-icon">⚽</div>
             <div class="stat-value">{{ user.date_joined|date:"Y" }}</div>
-            <div class="stat-label">Membre depuis</div>
+            <div class="stat-label">{% trans "Membre depuis" %}</div>
         </div>
     </div>
 
     <div class="section-card">
         <div class="section-card-header">
-            <h2>Mes réservations</h2>
+            <h2>{% trans "Mes réservations" %}</h2>
             <a href="{% url 'terrains' %}" class="btn btn-primary" style="padding:0.5rem 1.1rem; font-size:0.85rem;">
-                Nouvelle réservation
+                {% trans "Nouvelle réservation" %}
             </a>
         </div>
 
@@ -160,12 +161,12 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Terrain</th>
-                        <th>Date</th>
-                        <th>Horaire</th>
-                        <th>Montant</th>
-                        <th>Statut</th>
-                        <th>Actions</th>
+                        <th>{% trans "Terrain" %}</th>
+                        <th>{% trans "Date" %}</th>
+                        <th>{% trans "Horaire" %}</th>
+                        <th>{% trans "Montant" %}</th>
+                        <th>{% trans "Statut" %}</th>
+                        <th>{% trans "Actions" %}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -178,17 +179,17 @@
                         <td style="font-weight:700; color:var(--vert-gazon);">{{ res.montant_total }}€</td>
                         <td>
                             {% if res.statut == 'confirmee' %}
-                                <span class="badge badge-green">Confirmée</span>
+                                <span class="badge badge-green">{% trans "Confirmée" %}</span>
                             {% elif res.statut == 'en_attente' %}
-                                <span class="badge badge-yellow">En attente</span>
+                                <span class="badge badge-yellow">{% trans "En attente" %}</span>
                             {% else %}
-                                <span class="badge badge-red">Annulée</span>
+                                <span class="badge badge-red">{% trans "Annulée" %}</span>
                             {% endif %}
                         </td>
                         <td>
                             {% if res.statut == 'confirmee' and res.creneau.date >= today %}
-                                <a href="{% url 'modifier_reservation' res.id %}" class="btn" style="padding:0.3rem 0.7rem; font-size:0.8rem; background:var(--vert-gazon); color:#fff; margin-right:0.3rem;">Modifier</a>
-                                <a href="{% url 'annuler_reservation' res.id %}" class="btn" style="padding:0.3rem 0.7rem; font-size:0.8rem; background:#e53e3e; color:#fff;">Annuler</a>
+                                <a href="{% url 'modifier_reservation' res.id %}" class="btn" style="padding:0.3rem 0.7rem; font-size:0.8rem; background:var(--vert-gazon); color:#fff; margin-right:0.3rem;">{% trans "Modifier" %}</a>
+                                <a href="{% url 'annuler_reservation' res.id %}" class="btn" style="padding:0.3rem 0.7rem; font-size:0.8rem; background:#e53e3e; color:#fff;">{% trans "Annuler" %}</a>
                             {% else %}
                                 <span style="color:var(--gris); font-size:0.85rem;">—</span>
                             {% endif %}
@@ -200,9 +201,9 @@
         {% else %}
             <div class="empty-res">
                 <div class="icon">📋</div>
-                <h3>Aucune réservation pour l'instant</h3>
-                <p style="margin-bottom:1.5rem;">Réserve ton premier terrain et profite du jeu !</p>
-                <a href="{% url 'terrains' %}" class="btn btn-primary">Voir les terrains</a>
+                <h3>{% trans "Aucune réservation pour l'instant" %}</h3>
+                <p style="margin-bottom:1.5rem;">{% trans "Réserve ton premier terrain et profite du jeu !" %}</p>
+                <a href="{% url 'terrains' %}" class="btn btn-primary">{% trans "Voir les terrains" %}</a>
             </div>
         {% endif %}
     </div>

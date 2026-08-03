@@ -1,4 +1,5 @@
 {% extends 'gestion/base.html' %}
+{% load i18n %}
 
 {% block title %}Paiement confirmé — Sportify{% endblock %}
 
@@ -7,13 +8,14 @@
     <div style="background:var(--blanc); border-radius:14px; padding:2.5rem; box-shadow:0 2px 12px rgba(0,0,0,0.07);">
         <div style="font-size:3.5rem; margin-bottom:1rem;">✅</div>
         <h1 style="font-size:1.6rem; font-weight:800; color:var(--vert-nuit); margin-bottom:0.5rem;">
-            Paiement confirmé !
+            {% trans "Paiement confirmé !" %}
         </h1>
         <p style="color:var(--gris); margin-bottom:2rem;">
-            Votre réservation pour <strong>{{ creneau.terrain.nom }}</strong><br>
-            le <strong>{{ creneau.date|date:"l j F Y" }}</strong> de <strong>{{ creneau.heure_debut|time:"H:i" }}</strong> à <strong>{{ creneau.heure_fin|time:"H:i" }}</strong> est confirmée.
+            {% trans "Votre réservation est confirmée !" %}<br>
+            <strong>{{ creneau.terrain.nom }}</strong><br>
+            {{ creneau.date|date:"l j F Y" }} — {{ creneau.heure_debut|time:"H:i" }} – {{ creneau.heure_fin|time:"H:i" }}
         </p>
-        <a href="{% url 'dashboard' %}" class="btn btn-primary btn-lg">Voir mes réservations</a>
+        <a href="{% url 'dashboard' %}" class="btn btn-primary btn-lg">{% trans "Voir mes réservations" %}</a>
     </div>
 </div>
 {% endblock %}

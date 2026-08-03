@@ -1,4 +1,5 @@
 {% extends 'gestion/base.html' %}
+{% load i18n %}
 
 {% block title %}Inscription — Sportify{% endblock %}
 
@@ -97,8 +98,8 @@
             <div class="logo">
                 <span class="logo-sport">Sport</span><span class="logo-ify">ify</span>
             </div>
-            <h1>Créer un compte</h1>
-            <p>Inscription gratuite, réservation instantanée</p>
+            <h1>{% trans "Créer un compte" %}</h1>
+            <p>{% trans "Inscription gratuite, réservation instantanée" %}</p>
         </div>
         <div class="auth-body">
             <form method="post" novalidate>
@@ -151,11 +152,11 @@
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-primary btn-block">Créer mon compte</button>
+                <button type="submit" class="btn btn-primary btn-block">{% trans "Créer mon compte" %}</button>
             </form>
 
             <p class="auth-footer">
-                Déjà un compte ? <a href="{% url 'connexion' %}">Se connecter</a>
+                {% trans "Déjà un compte ?" %} <a href="{% url 'connexion' %}">{% trans "Se connecter" %}</a>
             </p>
         </div>
     </div>

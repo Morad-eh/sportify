@@ -1,4 +1,5 @@
 {% extends 'gestion/base.html' %}
+{% load i18n %}
 
 {% block title %}Modifier la réservation — Sportify{% endblock %}
 
@@ -56,11 +57,11 @@
 
 {% block content %}
 <div class="modifier-page">
-    <h1>Modifier ma réservation</h1>
-    <p class="subtitle">Choisissez un nouveau créneau disponible pour le même terrain.</p>
+    <h1>{% trans "Modifier ma réservation" %}</h1>
+    <p class="subtitle">{% trans "Choisissez un nouveau créneau disponible pour le même terrain." %}</p>
 
     <div class="current-res">
-        <h3>Réservation actuelle</h3>
+        <h3>{% trans "Réservation actuelle" %}</h3>
         <p>🏟️ <strong>{{ terrain.nom }}</strong></p>
         <p>📅 {{ reservation.creneau.date|date:"d/m/Y" }} — {{ reservation.creneau.heure_debut|time:"H:i" }} à {{ reservation.creneau.heure_fin|time:"H:i" }}</p>
     </div>
@@ -80,15 +81,15 @@
                 {% endfor %}
             </div>
             <div class="btn-row">
-                <a href="{% url 'dashboard' %}" class="btn" style="background:var(--gris-clair); color:var(--vert-nuit);">Annuler</a>
-                <button type="submit" class="btn btn-primary">Confirmer la modification</button>
+                <a href="{% url 'dashboard' %}" class="btn" style="background:var(--gris-clair); color:var(--vert-nuit);">{% trans "Annuler" %}</a>
+                <button type="submit" class="btn btn-primary">{% trans "Confirmer la modification" %}</button>
             </div>
         </form>
     {% else %}
         <div class="empty-creneaux">
             <p style="font-size:1.5rem; margin-bottom:0.5rem;">😔</p>
-            <p>Aucun autre créneau disponible pour ce terrain pour le moment.</p>
-            <a href="{% url 'dashboard' %}" class="btn btn-primary" style="margin-top:1rem; display:inline-block;">Retour au tableau de bord</a>
+            <p>{% trans "Aucun autre créneau disponible pour ce terrain pour le moment." %}</p>
+            <a href="{% url 'dashboard' %}" class="btn btn-primary" style="margin-top:1rem; display:inline-block;">{% trans "Retour au tableau de bord" %}</a>
         </div>
     {% endif %}
 </div>

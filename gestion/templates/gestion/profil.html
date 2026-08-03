@@ -1,4 +1,5 @@
 {% extends 'gestion/base.html' %}
+{% load i18n %}
 
 {% block title %}Mon profil — Sportify{% endblock %}
 
@@ -89,14 +90,14 @@
 {% block content %}
 <div class="page-header">
     <div style="max-width:1200px; margin:0 auto;">
-        <h1>Mon profil</h1>
-        <p style="color:var(--gris); margin-top:0.4rem;">Gérez vos informations personnelles</p>
+        <h1>{% trans "Mon profil" %}</h1>
+        <p style="color:var(--gris); margin-top:0.4rem;">{% trans "Gérez vos informations personnelles" %}</p>
     </div>
 </div>
 
 <div class="profil-wrapper">
     <div class="profil-card">
-        <h2>Informations personnelles</h2>
+        <h2>{% trans "Informations personnelles" %}</h2>
         <form method="post">
             {% csrf_token %}
             {% for field in form %}
@@ -109,15 +110,15 @@
             </div>
             {% endfor %}
             <button type="submit" class="btn btn-primary" style="width:100%; margin-top:0.5rem;">
-                Enregistrer les modifications
+                {% trans "Enregistrer les modifications" %}
             </button>
         </form>
     </div>
 
     <div class="danger-zone">
-        <h2>Zone dangereuse</h2>
-        <p>La suppression de votre compte est irréversible. Toutes vos données seront perdues.</p>
-        <a href="{% url 'supprimer_compte' %}" class="btn btn-danger">Supprimer mon compte</a>
+        <h2>{% trans "Zone dangereuse" %}</h2>
+        <p>{% trans "La suppression de votre compte est irréversible. Toutes vos données seront perdues." %}</p>
+        <a href="{% url 'supprimer_compte' %}" class="btn btn-danger">{% trans "Supprimer mon compte" %}</a>
     </div>
 </div>
 {% endblock %}

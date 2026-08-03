@@ -1,4 +1,5 @@
 {% extends 'gestion/base.html' %}
+{% load i18n %}
 
 {% block title %}{{ terrain.nom }} — Sportify{% endblock %}
 
@@ -168,7 +169,7 @@
         <div>
             <h1>{{ terrain.nom }}</h1>
             <p class="loc">📍 {{ terrain.localisation }}</p>
-            <span class="price-big">{{ terrain.prix_heure }}€ <small>/ heure</small></span>
+            <span class="price-big">{{ terrain.prix_heure }}€ <small>{% trans "/ heure" %}</small></span>
         </div>
     </div>
 </div>
@@ -176,7 +177,7 @@
 <div class="detail-body">
     <div>
         <div class="creneaux-section">
-            <h2>Créneaux disponibles</h2>
+            <h2>{% trans "Créneaux disponibles" %}</h2>
 
             {% if creneaux %}
                 <div class="creneaux-list">
@@ -187,9 +188,9 @@
                             <div class="creneau-heure">🕐 {{ creneau.heure_debut|time:"H:i" }} – {{ creneau.heure_fin|time:"H:i" }}</div>
                         </div>
                         {% if user.is_authenticated %}
-                            <a href="{% url 'reserver' creneau.pk %}" class="btn btn-primary">Réserver</a>
+                            <a href="{% url 'reserver' creneau.pk %}" class="btn btn-primary">{% trans "Réserver" %}</a>
                         {% else %}
-                            <a href="{% url 'connexion' %}?next={% url 'terrain_detail' terrain.pk %}" class="btn btn-secondary">Connexion requise</a>
+                            <a href="{% url 'connexion' %}?next={% url 'terrain_detail' terrain.pk %}" class="btn btn-secondary">{% trans "Connexion requise" %}</a>
                         {% endif %}
                     </div>
                     {% endfor %}
@@ -197,8 +198,8 @@
             {% else %}
                 <div class="empty-creneaux">
                     <div class="icon">📅</div>
-                    <h3>Aucun créneau disponible</h3>
-                    <p>Revenez prochainement, de nouveaux créneaux seront ajoutés.</p>
+                    <h3>{% trans "Aucun créneau disponible" %}</h3>
+                    <p>{% trans "Revenez prochainement, de nouveaux créneaux seront ajoutés." %}</p>
                 </div>
             {% endif %}
         </div>
@@ -206,22 +207,22 @@
 
     <div>
         <div class="info-card">
-            <h3>Infos terrain</h3>
+            <h3>{% trans "Infos terrain" %}</h3>
             <div class="info-row">
-                <span class="label">Nom</span>
+                <span class="label">{% trans "Terrain" %}</span>
                 <span class="value">{{ terrain.nom }}</span>
             </div>
             <div class="info-row">
-                <span class="label">Localisation</span>
+                <span class="label">{% trans "Localisation" %}</span>
                 <span class="value">{{ terrain.localisation }}</span>
             </div>
             <div class="info-row">
-                <span class="label">Prix</span>
+                <span class="label">{% trans "Prix" %}</span>
                 <span class="price-val">{{ terrain.prix_heure }}€/h</span>
             </div>
             <div class="info-row">
-                <span class="label">Disponibilité</span>
-                <span class="badge badge-green">Disponible</span>
+                <span class="label">{% trans "Disponibilité" %}</span>
+                <span class="badge badge-green">{% trans "Disponible" %}</span>
             </div>
 
             {% if terrain.description %}
@@ -229,7 +230,7 @@
             {% endif %}
 
             <div class="cta-note">
-                ✅ Réservation instantanée &bull; Confirmation par e-mail &bull; Annulation possible
+                {% trans "✅ Réservation instantanée · Confirmation par e-mail · Annulation possible" %}
             </div>
         </div>
     </div>

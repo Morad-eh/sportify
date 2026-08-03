@@ -1,4 +1,5 @@
 {% extends 'gestion/base.html' %}
+{% load i18n %}
 
 {% block title %}Confirmer la réservation — Sportify{% endblock %}
 
@@ -96,45 +97,45 @@
     <div class="confirm-card">
         <div class="confirm-header">
             <div class="confirm-icon">📋</div>
-            <h1>Confirmer la réservation</h1>
-            <p>Vérifie les détails avant de confirmer</p>
+            <h1>{% trans "Confirmer la réservation" %}</h1>
+            <p>{% trans "Vérifie les détails avant de confirmer" %}</p>
         </div>
 
         <div class="confirm-body">
-            <p class="recap-title">Récapitulatif</p>
+            <p class="recap-title">{% trans "Récapitulatif" %}</p>
 
             <div class="recap-item">
-                <span class="label">Terrain</span>
+                <span class="label">{% trans "Terrain" %}</span>
                 <span class="value">{{ creneau.terrain.nom }}</span>
             </div>
             <div class="recap-item">
-                <span class="label">Localisation</span>
+                <span class="label">{% trans "Localisation" %}</span>
                 <span class="value">{{ creneau.terrain.localisation }}</span>
             </div>
             <div class="recap-item">
-                <span class="label">Date</span>
+                <span class="label">{% trans "Date" %}</span>
                 <span class="value">{{ creneau.date|date:"l j F Y" }}</span>
             </div>
             <div class="recap-item">
-                <span class="label">Horaire</span>
+                <span class="label">{% trans "Horaire" %}</span>
                 <span class="value">{{ creneau.heure_debut|time:"H:i" }} – {{ creneau.heure_fin|time:"H:i" }}</span>
             </div>
             <div class="recap-item">
-                <span class="label">Réservé par</span>
+                <span class="label">{% trans "Réservé par" %}</span>
                 <span class="value">{{ user.get_full_name|default:user.username }}</span>
             </div>
 
             <div class="price-total">
-                <span class="label">Total à payer</span>
+                <span class="label">{% trans "Total à payer" %}</span>
                 <span class="amount">{{ creneau.terrain.prix_heure }}€</span>
             </div>
 
             <div class="confirm-actions">
                 <a href="{% url 'terrain_detail' creneau.terrain.pk %}" class="btn btn-outline-cancel">
-                    Annuler
+                    {% trans "Annuler" %}
                 </a>
                 <a href="{% url 'creer_paiement' creneau.pk %}" class="btn btn-gold">
-                    💳 Payer avec Stripe
+                    💳 {% trans "Payer avec Stripe" %}
                 </a>
             </div>
         </div>

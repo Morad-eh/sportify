@@ -1,4 +1,5 @@
 {% extends 'gestion/base.html' %}
+{% load i18n %}
 
 {% block title %}Sportify — Réservation de terrains sportifs indoor{% endblock %}
 
@@ -132,14 +133,14 @@
 
 {% block content %}
 <section class="hero">
-    <h1>Réserve ton terrain.<br><span>Joue quand tu veux.</span></h1>
-    <p>Trouve un terrain de sport indoor disponible près de chez toi et réserve en ligne.</p>
+    <h1>{% trans "Réserve ton terrain." %}<br><span>{% trans "Joue quand tu veux." %}</span></h1>
+    <p>{% trans "Trouve un terrain de sport indoor disponible près de chez toi et réserve en ligne." %}</p>
     <div class="hero-cta">
-        <a href="{% url 'terrains' %}" class="btn btn-gold btn-lg">Voir les terrains</a>
+        <a href="{% url 'terrains' %}" class="btn btn-gold btn-lg">{% trans "Voir les terrains" %}</a>
         {% if not user.is_authenticated %}
-            <a href="{% url 'inscription' %}" class="btn btn-secondary btn-lg">Créer un compte</a>
+            <a href="{% url 'inscription' %}" class="btn btn-secondary btn-lg">{% trans "Créer un compte" %}</a>
         {% else %}
-            <a href="{% url 'dashboard' %}" class="btn btn-secondary btn-lg">Mon espace</a>
+            <a href="{% url 'dashboard' %}" class="btn btn-secondary btn-lg">{% trans "Mon espace" %}</a>
         {% endif %}
     </div>
 </section>
@@ -148,8 +149,8 @@
 <section class="terrains-section">
     <div class="terrains-inner">
         <div class="section-topbar">
-            <h2>Terrains disponibles</h2>
-            <a href="{% url 'terrains' %}" class="btn btn-primary">Voir tout</a>
+            <h2>{% trans "Terrains disponibles" %}</h2>
+            <a href="{% url 'terrains' %}" class="btn btn-primary">{% trans "Voir tout" %}</a>
         </div>
         <div class="terrains-grid">
             {% for terrain in terrains %}
@@ -159,8 +160,8 @@
                     <h3>{{ terrain.nom }}</h3>
                     <p class="terrain-loc">📍 {{ terrain.localisation }}</p>
                     <div class="terrain-footer">
-                        <span class="price-label">{{ terrain.prix_heure }}€ <small>/ heure</small></span>
-                        <span class="badge badge-green">Disponible</span>
+                        <span class="price-label">{{ terrain.prix_heure }}€ <small>{% trans "/ heure" %}</small></span>
+                        <span class="badge badge-green">{% trans "Disponible" %}</span>
                     </div>
                 </div>
             </a>
