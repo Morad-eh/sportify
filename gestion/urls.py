@@ -16,4 +16,7 @@ urlpatterns = [
     path('paiement/succes/', views.paiement_succes, name='paiement_succes'),
     path('reservations/<int:reservation_id>/annuler/', views.annuler_reservation, name='annuler_reservation'),
     path('reservations/<int:reservation_id>/modifier/', views.modifier_reservation, name='modifier_reservation'),
+    path('calendrier/', views.calendrier, name='calendrier'),
+    path('admin-sportify/', views.admin_dashboard, name='admin_dashboard'),
+    path('api/creneaux/', views.api_creneaux, name='api_creneaux'),
 ]
