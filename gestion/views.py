@@ -17,7 +17,17 @@ def home(request):
 
 def liste_terrains(request):
     terrains = Terrain.objects.filter(disponible=True)
-    return render(request, 'gestion/terrains.html', {'terrains': terrains})
+    sport = request.GET.get('sport', '').strip()
+    commune = request.GET.get('commune', '').strip()
+    if sport:
+        terrains = terrains.filter(nom__icontains=sport)
+    if commune:
+        terrains = terrains.filter(localisation__icontains=commune)
+    return render(request, 'gestion/terrains.html', {
+        'terrains': terrains,
+        'sport_filtre': sport,
+        'commune_filtre': commune,
+    })
 
 
 def detail_terrain(request, pk):

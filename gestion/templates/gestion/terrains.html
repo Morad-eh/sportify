@@ -1,4 +1,5 @@
 {% extends 'gestion/base.html' %}
+{% load i18n %}
 
 {% block title %}Terrains — Sportify{% endblock %}
 
@@ -116,16 +117,113 @@
 .empty-state .icon { font-size: 4rem; margin-bottom: 1rem; }
 .empty-state h3 { font-size: 1.4rem; color: var(--vert-nuit); margin-bottom: 0.5rem; }
 
+.search-bar-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1.5rem 2rem 0;
+}
+
+.search-form {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-end;
+    background: var(--blanc);
+    border-radius: 14px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    flex-wrap: wrap;
+}
+
+.search-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    flex: 1;
+    min-width: 180px;
+}
+
+.search-field label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--vert-nuit);
+}
+
+.search-field input,
+.search-field select {
+    padding: 0.7rem 1rem;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-family: 'Inter', sans-serif;
+    color: #1a1a1a;
+    transition: border-color 0.2s;
+    outline: none;
+    background: var(--blanc);
+}
+
+.search-field input:focus,
+.search-field select:focus { border-color: var(--vert-gazon); }
+
+.search-actions {
+    display: flex;
+    gap: 0.6rem;
+    align-items: flex-end;
+}
+
+.search-results-info {
+    margin-top: 0.8rem;
+    color: var(--gris);
+    font-size: 0.9rem;
+    font-style: italic;
+}
+
 @media (max-width: 900px) { .terrains-grid { grid-template-columns: 1fr 1fr; } }
-@media (max-width: 600px) { .terrains-grid { grid-template-columns: 1fr; } }
+@media (max-width: 600px) {
+    .terrains-grid { grid-template-columns: 1fr; }
+    .search-form { flex-direction: column; }
+    .search-actions { flex-direction: column; width: 100%; }
+    .search-actions .btn { width: 100%; text-align: center; }
+}
 {% endblock %}
 
 {% block content %}
 <div class="page-header">
     <div style="max-width:1200px; margin:0 auto;">
-        <h1>⚽ Nos terrains</h1>
-        <p>Retrouvez tous les terrains disponibles et réservez votre créneau.</p>
+        <h1>⚽ {% trans "Nos terrains" %}</h1>
+        <p>{% trans "Retrouvez tous les terrains disponibles et réservez votre créneau." %}</p>
     </div>
+</div>
+
+<div class="search-bar-wrapper">
+    <form method="get" action="{% url 'terrains' %}" class="search-form">
+        <div class="search-field">
+            <label for="sport">{% trans "Type de sport" %}</label>
+            <select name="sport" id="sport">
+                <option value="">{% trans "Tous les sports" %}</option>
+                <option value="Football" {% if sport_filtre == 'Football' %}selected{% endif %}>⚽ Football</option>
+                <option value="Padel" {% if sport_filtre == 'Padel' %}selected{% endif %}>🎾 Padel</option>
+                <option value="Tennis" {% if sport_filtre == 'Tennis' %}selected{% endif %}>🎾 Tennis</option>
+                <option value="Basketball" {% if sport_filtre == 'Basketball' %}selected{% endif %}>🏀 Basketball</option>
+                <option value="Volleyball" {% if sport_filtre == 'Volleyball' %}selected{% endif %}>🏐 Volleyball</option>
+                <option value="Badminton" {% if sport_filtre == 'Badminton' %}selected{% endif %}>🏸 Badminton</option>
+            </select>
+        </div>
+        <div class="search-field">
+            <label for="commune">{% trans "Ville / Commune" %}</label>
+            <input type="text" name="commune" id="commune" value="{{ commune_filtre }}" placeholder="{% trans 'Ex : Bruxelles, Liège...' %}">
+        </div>
+        <div class="search-actions">
+            <button type="submit" class="btn btn-primary">🔍 {% trans "Rechercher" %}</button>
+            {% if sport_filtre or commune_filtre %}
+                <a href="{% url 'terrains' %}" class="btn btn-secondary">{% trans "Réinitialiser" %}</a>
+            {% endif %}
+        </div>
+    </form>
+    {% if sport_filtre or commune_filtre %}
+        <p class="search-results-info">
+            {{ terrains|length }} {% trans "résultat(s) pour votre recherche" %}
+        </p>
+    {% endif %}
 </div>
 
 <div class="terrains-wrapper">
@@ -140,11 +238,11 @@
                     {% if terrain.description %}
                         <p class="terrain-desc">{{ terrain.description|truncatechars:100 }}</p>
                     {% else %}
-                        <p class="terrain-desc" style="color:#bbb;">Terrain de football indoor de qualité, éclairage LED et vestiaires.</p>
+                        <p class="terrain-desc" style="color:#bbb;">{% trans "Terrain de football indoor de qualité, éclairage LED et vestiaires." %}</p>
                     {% endif %}
                     <div class="terrain-footer">
-                        <span class="price-label">{{ terrain.prix_heure }}€ <small>/ heure</small></span>
-                        <span class="badge badge-green">Disponible</span>
+                        <span class="price-label">{{ terrain.prix_heure }}€ <small>{% trans "/ heure" %}</small></span>
+                        <span class="badge badge-green">{% trans "Disponible" %}</span>
                     </div>
                 </div>
             </a>
@@ -152,9 +250,14 @@
         </div>
     {% else %}
         <div class="empty-state">
-            <div class="icon">🏟️</div>
-            <h3>Aucun terrain disponible</h3>
-            <p>Revenez prochainement, de nouveaux terrains arrivent bientôt.</p>
+            <div class="icon">🔍</div>
+            {% if sport_filtre or commune_filtre %}
+                <h3>{% trans "Aucun terrain ne correspond à votre recherche." %}</h3>
+                <p><a href="{% url 'terrains' %}" class="btn btn-primary" style="margin-top:1rem; display:inline-block;">{% trans "Réinitialiser la recherche" %}</a></p>
+            {% else %}
+                <h3>{% trans "Aucun terrain disponible" %}</h3>
+                <p>{% trans "Revenez prochainement, de nouveaux terrains arrivent bientôt." %}</p>
+            {% endif %}
         </div>
     {% endif %}
 </div>
