@@ -1,0 +1,410 @@
+{% extends 'gestion/base.html' %}
+{% load i18n %}
+
+{% block title %}Dashboard Admin — Sportify{% endblock %}
+
+{% block extra_css %}
+.admin-header {
+    background: linear-gradient(135deg, var(--vert-nuit), #1a4a2e);
+    color: var(--blanc);
+    padding: 2.5rem 2rem;
+}
+.admin-header-inner {
+    max-width: 1300px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.admin-header h1 { font-size: 1.8rem; font-weight: 800; }
+.admin-header p { color: #8ab89a; margin-top: 0.3rem; font-size: 0.95rem; }
+
+.admin-body {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* Stats cards */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+.stat-card {
+    background: var(--blanc);
+    border-radius: 14px;
+    padding: 1.4rem 1.5rem;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+.stat-icon { font-size: 1.6rem; }
+.stat-value { font-size: 2rem; font-weight: 800; color: var(--vert-nuit); line-height: 1.1; }
+.stat-label { font-size: 0.82rem; color: var(--gris); font-weight: 500; }
+.stat-card.highlight { background: var(--vert-gazon); }
+.stat-card.highlight .stat-value,
+.stat-card.highlight .stat-label { color: white; }
+.stat-card.highlight .stat-icon { filter: brightness(2); }
+
+/* Main two-column grid */
+.main-grid {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Card */
+.admin-card {
+    background: var(--blanc);
+    border-radius: 14px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+.admin-card h2 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--vert-nuit);
+    margin-bottom: 1.1rem;
+    padding-bottom: 0.7rem;
+    border-bottom: 2px solid var(--gris-clair);
+}
+
+/* Table */
+.admin-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+.admin-table th {
+    text-align: left;
+    padding: 0.5rem 0.75rem;
+    font-weight: 600;
+    color: var(--gris);
+    border-bottom: 2px solid var(--gris-clair);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+.admin-table td {
+    padding: 0.6rem 0.75rem;
+    border-bottom: 1px solid #f5f5f5;
+    color: var(--vert-nuit);
+}
+.admin-table tr:last-child td { border-bottom: none; }
+.admin-table tr:hover td { background: #fafafa; }
+
+/* Progress bar */
+.progress-track {
+    background: #f0f0f0;
+    border-radius: 99px;
+    height: 10px;
+    overflow: hidden;
+    margin: 0.4rem 0;
+}
+.progress-fill {
+    height: 100%;
+    border-radius: 99px;
+    background: var(--vert-gazon);
+    transition: width 0.5s ease;
+}
+.progress-fill.padel { background: #7c3aed; }
+
+.occ-number {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--vert-gazon);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+}
+.occ-detail { font-size: 0.8rem; color: var(--gris); margin-top: 0.4rem; }
+
+/* Top terrains */
+.top-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #f5f5f5;
+    font-size: 0.87rem;
+}
+.top-item:last-child { border-bottom: none; }
+.top-rank {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--gris-clair);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.75rem;
+    color: var(--vert-nuit);
+    flex-shrink: 0;
+}
+.top-rank.gold { background: var(--or); color: white; }
+.top-name { flex: 1; color: var(--vert-nuit); font-weight: 500; }
+.top-count { font-weight: 700; color: var(--vert-gazon); font-size: 0.82rem; }
+
+/* Sport split */
+.sport-row { margin-bottom: 0.8rem; }
+.sport-header { display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 600; color: var(--vert-nuit); margin-bottom: 0.3rem; }
+
+/* Bottom grid */
+.bottom-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1.5rem;
+}
+
+/* Commune bars */
+.commune-item { margin-bottom: 0.9rem; }
+.commune-item:last-child { margin-bottom: 0; }
+.commune-header { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 0.3rem; }
+.commune-name { font-weight: 600; color: var(--vert-nuit); }
+.commune-total { font-weight: 700; color: var(--vert-gazon); }
+
+/* Recent users */
+.user-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #f5f5f5;
+}
+.user-item:last-child { border-bottom: none; }
+.user-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--vert-gazon);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+}
+.user-name { font-weight: 600; font-size: 0.88rem; color: var(--vert-nuit); }
+.user-date { font-size: 0.78rem; color: var(--gris); }
+
+/* Bar chart */
+.bar-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.5rem;
+    height: 110px;
+}
+.bar-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    height: 100%;
+}
+.bar-wrap {
+    flex: 1;
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+}
+.bar {
+    width: 100%;
+    background: var(--vert-gazon);
+    border-radius: 4px 4px 0 0;
+    min-height: 3px;
+}
+.bar-label { font-size: 0.68rem; color: var(--gris); margin-top: 0.3rem; text-transform: capitalize; }
+
+.empty-sm { color: var(--gris); font-size: 0.9rem; text-align: center; padding: 2rem 0; }
+
+@media (max-width: 1100px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .main-grid { grid-template-columns: 1fr; }
+    .bottom-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 650px) {
+    .stats-grid { grid-template-columns: 1fr 1fr; }
+    .bottom-grid { grid-template-columns: 1fr; }
+}
+{% endblock %}
+
+{% block content %}
+<div class="admin-header">
+    <div class="admin-header-inner">
+        <div>
+            <h1>📊 Dashboard Admin</h1>
+            <p>Sportify — {{ today|date:"l j F Y" }}</p>
+        </div>
+        <a href="/admin/" class="btn btn-secondary" style="border-color:rgba(255,255,255,0.3); color:white;">⚙️ Django Admin</a>
+    </div>
+</div>
+
+<div class="admin-body">
+
+    <!-- Stats -->
+    <div class="stats-grid">
+        <div class="stat-card highlight">
+            <div class="stat-icon">📅</div>
+            <div class="stat-value">{{ reservations_aujourd_hui }}</div>
+            <div class="stat-label">Réservations aujourd'hui</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">💰</div>
+            <div class="stat-value">{{ revenue_today }}€</div>
+            <div class="stat-label">CA du jour</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">📈</div>
+            <div class="stat-value">{{ revenue_month }}€</div>
+            <div class="stat-label">CA du mois</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">👥</div>
+            <div class="stat-value">{{ total_users }}</div>
+            <div class="stat-label">Membres inscrits</div>
+        </div>
+    </div>
+
+    <!-- Main grid -->
+    <div class="main-grid">
+
+        <!-- Today's reservations -->
+        <div class="admin-card">
+            <h2>📅 Réservations du jour</h2>
+            {% if reservations_du_jour %}
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Terrain</th>
+                        <th>Horaire</th>
+                        <th>Membre</th>
+                        <th>Montant</th>
+                        <th>Statut</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in reservations_du_jour %}
+                    <tr>
+                        <td>{{ r.creneau.terrain.nom }}</td>
+                        <td>{{ r.creneau.heure_debut|time:"H:i" }} → {{ r.creneau.heure_fin|time:"H:i" }}</td>
+                        <td>{{ r.utilisateur.username }}</td>
+                        <td><strong>{{ r.montant_total }}€</strong></td>
+                        <td>
+                            <span class="badge {% if r.statut == 'confirmee' %}badge-green{% elif r.statut == 'annulee' %}badge-red{% else %}badge-yellow{% endif %}">
+                                {{ r.get_statut_display }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="empty-sm">Aucune réservation pour aujourd'hui.</div>
+            {% endif %}
+        </div>
+
+        <!-- Right column -->
+        <div style="display:flex; flex-direction:column; gap:1.5rem;">
+
+            <!-- Occupation -->
+            <div class="admin-card">
+                <h2>🏟️ Taux d'occupation</h2>
+                <div class="occ-number">{{ taux_occupation }}%</div>
+                <div class="progress-track">
+                    <div class="progress-fill" style="width: {{ taux_occupation }}%"></div>
+                </div>
+                <p class="occ-detail">{{ reserved_slots }} / {{ total_slots }} créneaux réservés aujourd'hui</p>
+            </div>
+
+            <!-- Top terrains -->
+            <div class="admin-card">
+                <h2>🏆 Top terrains</h2>
+                {% for t in top_terrains %}
+                <div class="top-item">
+                    <div class="top-rank {% if forloop.first %}gold{% endif %}">{{ forloop.counter }}</div>
+                    <div class="top-name">{{ t.nom }}</div>
+                    <div class="top-count">{{ t.nb_resa }} rés.</div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Football vs Padel -->
+            <div class="admin-card">
+                <h2>⚽ Football vs 🎾 Padel</h2>
+                <div class="sport-row">
+                    <div class="sport-header">
+                        <span>⚽ Football</span>
+                        <span>{{ resa_football }} rés. · {{ pct_football }}%</span>
+                    </div>
+                    <div class="progress-track">
+                        <div class="progress-fill" style="width: {{ pct_football }}%"></div>
+                    </div>
+                </div>
+                <div class="sport-row">
+                    <div class="sport-header">
+                        <span>🎾 Padel</span>
+                        <span>{{ resa_padel }} rés. · {{ pct_padel }}%</span>
+                    </div>
+                    <div class="progress-track">
+                        <div class="progress-fill padel" style="width: {{ pct_padel }}%"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Bottom grid -->
+    <div class="bottom-grid">
+
+        <!-- CA by commune -->
+        <div class="admin-card">
+            <h2>📍 CA par commune (ce mois)</h2>
+            {% for c in communes_data %}
+            <div class="commune-item">
+                <div class="commune-header">
+                    <span class="commune-name">{{ c.nom }}</span>
+                    <span class="commune-total">{{ c.total }}€</span>
+                </div>
+                <div class="progress-track">
+                    <div class="progress-fill" style="width: {{ c.pct }}%"></div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Recent users -->
+        <div class="admin-card">
+            <h2>👤 Derniers inscrits</h2>
+            {% for u in recent_users %}
+            <div class="user-item">
+                <div class="user-avatar">{{ u.username|first|upper }}</div>
+                <div>
+                    <div class="user-name">{{ u.get_full_name|default:u.username }}</div>
+                    <div class="user-date">{{ u.date_joined|date:"j M Y" }}</div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="empty-sm">Aucun membre inscrit.</div>
+            {% endfor %}
+        </div>
+
+        <!-- 7-day revenue chart -->
+        <div class="admin-card">
+            <h2>📊 Revenus — 7 derniers jours</h2>
+            <div class="bar-chart">
+                {% for d in revenus_7j %}
+                <div class="bar-item">
+                    <div class="bar-wrap">
+                        <div class="bar" style="height: {{ d.pct }}%"></div>
+                    </div>
+                    <div class="bar-label">{{ d.date }}</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
