@@ -108,6 +108,19 @@
     color: var(--gris);
 }
 
+.thumb-foot { background: #e8f5ed; }
+.thumb-padel { background: #e8f0fb; }
+
+.sport-badge {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+.badge-foot { background: #e8f5ed; color: #1a5c35; }
+.badge-padel { background: #e8f0fb; color: #3a1a8c; }
+
 .empty-state {
     text-align: center;
     padding: 5rem 2rem;
@@ -198,19 +211,20 @@
     <form method="get" action="{% url 'terrains' %}" class="search-form">
         <div class="search-field">
             <label for="sport">{% trans "Type de sport" %}</label>
-            <select name="sport" id="sport">
+            <select name="sport" id="sport" onchange="this.form.submit()">
                 <option value="">{% trans "Tous les sports" %}</option>
                 <option value="Football" {% if sport_filtre == 'Football' %}selected{% endif %}>⚽ Football</option>
                 <option value="Padel" {% if sport_filtre == 'Padel' %}selected{% endif %}>🎾 Padel</option>
-                <option value="Tennis" {% if sport_filtre == 'Tennis' %}selected{% endif %}>🎾 Tennis</option>
-                <option value="Basketball" {% if sport_filtre == 'Basketball' %}selected{% endif %}>🏀 Basketball</option>
-                <option value="Volleyball" {% if sport_filtre == 'Volleyball' %}selected{% endif %}>🏐 Volleyball</option>
-                <option value="Badminton" {% if sport_filtre == 'Badminton' %}selected{% endif %}>🏸 Badminton</option>
             </select>
         </div>
         <div class="search-field">
-            <label for="commune">{% trans "Ville / Commune" %}</label>
-            <input type="text" name="commune" id="commune" value="{{ commune_filtre }}" placeholder="{% trans 'Ex : Bruxelles, Liège...' %}">
+            <label for="commune">{% trans "Commune" %}</label>
+            <select name="commune" id="commune" onchange="this.form.submit()">
+                <option value="">{% trans "Toutes les communes" %}</option>
+                <option value="Anderlecht" {% if commune_filtre == 'Anderlecht' %}selected{% endif %}>Anderlecht</option>
+                <option value="Forest" {% if commune_filtre == 'Forest' %}selected{% endif %}>Forest</option>
+                <option value="Molenbeek-Saint-Jean" {% if commune_filtre == 'Molenbeek-Saint-Jean' %}selected{% endif %}>Molenbeek-Saint-Jean</option>
+            </select>
         </div>
         <div class="search-actions">
             <button type="submit" class="btn btn-primary">🔍 {% trans "Rechercher" %}</button>
@@ -231,14 +245,21 @@
         <div class="terrains-grid">
             {% for terrain in terrains %}
             <a href="{% url 'terrain_detail' terrain.pk %}" class="terrain-card">
-                <div class="terrain-thumb">🏟️</div>
+                <div class="terrain-thumb {% if 'Padel' in terrain.nom %}thumb-padel{% else %}thumb-foot{% endif %}">
+                    {% if "Padel" in terrain.nom %}🎾{% else %}⚽{% endif %}
+                </div>
                 <div class="terrain-body">
+                    <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.4rem;">
+                        {% if "Padel" in terrain.nom %}
+                            <span class="sport-badge badge-padel">🎾 Padel</span>
+                        {% else %}
+                            <span class="sport-badge badge-foot">⚽ Football</span>
+                        {% endif %}
+                    </div>
                     <h3>{{ terrain.nom }}</h3>
                     <p class="terrain-loc">📍 {{ terrain.localisation }}</p>
                     {% if terrain.description %}
                         <p class="terrain-desc">{{ terrain.description|truncatechars:100 }}</p>
-                    {% else %}
-                        <p class="terrain-desc" style="color:#bbb;">{% trans "Terrain de football indoor de qualité, éclairage LED et vestiaires." %}</p>
                     {% endif %}
                     <div class="terrain-footer">
                         <span class="price-label">{{ terrain.prix_heure }}€ <small>{% trans "/ heure" %}</small></span>
