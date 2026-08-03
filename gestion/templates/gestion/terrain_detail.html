@@ -9,7 +9,6 @@
     color: var(--blanc);
     padding: 4rem 2rem;
 }
-
 .detail-header-inner {
     max-width: 1100px;
     margin: 0 auto;
@@ -17,7 +16,6 @@
     gap: 3rem;
     align-items: center;
 }
-
 .terrain-icon-large {
     width: 120px;
     height: 120px;
@@ -29,79 +27,86 @@
     font-size: 4rem;
     flex-shrink: 0;
 }
-
-.detail-header h1 {
-    font-size: 2.4rem;
-    font-weight: 800;
-    margin-bottom: 0.5rem;
-}
-
-.detail-header .loc {
-    color: #8ab89a;
-    font-size: 1.05rem;
-    margin-bottom: 1rem;
-}
-
-.detail-header .price-big {
-    font-size: 2rem;
-    font-weight: 800;
-    color: var(--or);
-}
-
-.detail-header .price-big small {
-    font-size: 1rem;
-    font-weight: 400;
-    color: #8ab89a;
-}
+.detail-header h1 { font-size: 2.4rem; font-weight: 800; margin-bottom: 0.5rem; }
+.detail-header .loc { color: #8ab89a; font-size: 1.05rem; margin-bottom: 1rem; }
+.detail-header .price-big { font-size: 2rem; font-weight: 800; color: var(--or); }
+.detail-header .price-big small { font-size: 1rem; font-weight: 400; color: #8ab89a; }
 
 .detail-body {
     max-width: 1100px;
     margin: 3rem auto;
     padding: 0 2rem;
     display: grid;
-    grid-template-columns: 1fr 380px;
+    grid-template-columns: 1fr 360px;
     gap: 2rem;
     align-items: start;
 }
 
-.creneaux-section h2 {
-    font-size: 1.5rem;
-    font-weight: 800;
-    color: var(--vert-nuit);
-    margin-bottom: 1.5rem;
-}
+.creneaux-section h2 { font-size: 1.5rem; font-weight: 800; color: var(--vert-nuit); margin-bottom: 1.2rem; }
 
-.creneaux-list {
+/* Day tabs */
+.day-tabs-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 4px; }
+.day-tabs { display: flex; gap: 0.5rem; min-width: max-content; }
+.day-tab {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
-}
-
-.creneau-item {
-    background: var(--blanc);
-    border: 2px solid #e8f0eb;
-    border-radius: 12px;
-    padding: 1rem 1.25rem;
-    display: flex;
     align-items: center;
-    justify-content: space-between;
-    transition: border-color 0.2s;
-}
-
-.creneau-item:hover { border-color: var(--vert-gazon); }
-
-.creneau-date {
-    font-weight: 700;
+    padding: 0.6rem 1rem;
+    border-radius: 10px;
+    border: 2px solid #e2e8f0;
+    background: var(--blanc);
+    text-decoration: none;
     color: var(--vert-nuit);
-    font-size: 0.95rem;
+    min-width: 60px;
+    transition: all 0.2s;
 }
+.day-tab:hover { border-color: var(--vert-gazon); background: #f0faf5; }
+.day-tab.active { background: var(--vert-gazon); border-color: var(--vert-gazon); color: white; }
+.dt-day { font-size: 0.7rem; text-transform: uppercase; opacity: 0.7; letter-spacing: 0.04em; }
+.dt-num { font-size: 1.5rem; font-weight: 800; line-height: 1; }
+.dt-mon { font-size: 0.7rem; opacity: 0.7; }
+.day-tab.active .dt-day, .day-tab.active .dt-mon { opacity: 0.9; }
 
-.creneau-heure {
-    color: var(--gris);
-    font-size: 0.9rem;
-    margin-top: 0.2rem;
+.slots-date-label { margin: 1.2rem 0 0.8rem; font-size: 0.95rem; font-weight: 600; color: var(--gris); }
+
+/* Slot grid */
+.slots-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.6rem;
 }
-
+.slot {
+    border-radius: 10px;
+    padding: 0.85rem 0.4rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    text-decoration: none;
+    transition: all 0.2s;
+    text-align: center;
+}
+.slot-time { font-size: 1.1rem; font-weight: 800; }
+.slot-end { font-size: 0.7rem; opacity: 0.7; }
+.slot-label { font-size: 0.72rem; font-weight: 600; }
+.slot.available {
+    background: #e8f5ed;
+    border: 2px solid var(--vert-gazon);
+    color: #1a5c35;
+    cursor: pointer;
+}
+.slot.available:hover {
+    background: var(--vert-gazon);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(26,140,78,0.25);
+}
+.slot.reserved {
+    background: #f5f5f5;
+    border: 2px solid #e0e0e0;
+    color: #bbb;
+    cursor: not-allowed;
+}
 .empty-creneaux {
     background: var(--blanc);
     border-radius: 12px;
@@ -109,10 +114,10 @@
     text-align: center;
     color: var(--gris);
 }
-
 .empty-creneaux .icon { font-size: 3rem; margin-bottom: 1rem; }
 .empty-creneaux h3 { color: var(--vert-nuit); margin-bottom: 0.5rem; }
 
+/* Info card */
 .info-card {
     background: var(--blanc);
     border-radius: 14px;
@@ -121,51 +126,31 @@
     position: sticky;
     top: 90px;
 }
-
-.info-card h3 {
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: var(--vert-nuit);
-    margin-bottom: 1.2rem;
-    padding-bottom: 0.8rem;
-    border-bottom: 2px solid var(--gris-clair);
-}
-
-.info-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.6rem 0;
-    border-bottom: 1px solid #f5f5f5;
-    font-size: 0.95rem;
-}
-
+.info-card h3 { font-size: 1.1rem; font-weight: 700; color: var(--vert-nuit); margin-bottom: 1.2rem; padding-bottom: 0.8rem; border-bottom: 2px solid var(--gris-clair); }
+.info-row { display: flex; justify-content: space-between; align-items: center; padding: 0.6rem 0; border-bottom: 1px solid #f5f5f5; font-size: 0.95rem; }
 .info-row:last-of-type { border-bottom: none; }
 .info-row .label { color: var(--gris); }
 .info-row .value { font-weight: 600; color: var(--vert-nuit); }
 .info-row .price-val { font-weight: 800; color: var(--vert-gazon); font-size: 1.1rem; }
-
-.cta-note {
-    background: #e8f5ed;
-    border-radius: 10px;
-    padding: 1rem;
-    margin-top: 1.2rem;
-    color: #1a5c35;
-    font-size: 0.88rem;
-    line-height: 1.6;
-}
+.cta-note { background: #e8f5ed; border-radius: 10px; padding: 1rem; margin-top: 1.2rem; color: #1a5c35; font-size: 0.88rem; line-height: 1.6; }
 
 @media (max-width: 900px) {
     .detail-header-inner { flex-direction: column; gap: 1.5rem; }
     .detail-body { grid-template-columns: 1fr; }
     .info-card { position: static; }
+    .slots-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 480px) {
+    .slots-grid { grid-template-columns: repeat(2, 1fr); }
 }
 {% endblock %}
 
 {% block content %}
 <div class="detail-header">
     <div class="detail-header-inner">
-        <div class="terrain-icon-large">⚽</div>
+        <div class="terrain-icon-large">
+            {% if "Padel" in terrain.nom %}🎾{% else %}⚽{% endif %}
+        </div>
         <div>
             <h1>{{ terrain.nom }}</h1>
             <p class="loc">📍 {{ terrain.localisation }}</p>
@@ -177,22 +162,43 @@
 <div class="detail-body">
     <div>
         <div class="creneaux-section">
-            <h2>{% trans "Créneaux disponibles" %}</h2>
+            <h2>📅 {% trans "Créneaux disponibles" %}</h2>
+
+            <div class="day-tabs-scroll">
+                <div class="day-tabs">
+                    {% for d in dates %}
+                    <a href="?date={{ d|date:'Y-m-d' }}"
+                       class="day-tab {% if d == selected_date %}active{% endif %}">
+                        <span class="dt-day">{{ d|date:"D" }}</span>
+                        <span class="dt-num">{{ d|date:"j" }}</span>
+                        <span class="dt-mon">{{ d|date:"M" }}</span>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <p class="slots-date-label">{{ selected_date|date:"l j F Y" }}</p>
 
             {% if creneaux %}
-                <div class="creneaux-list">
+                <div class="slots-grid">
                     {% for creneau in creneaux %}
-                    <div class="creneau-item">
-                        <div>
-                            <div class="creneau-date">📅 {{ creneau.date|date:"l j F Y" }}</div>
-                            <div class="creneau-heure">🕐 {{ creneau.heure_debut|time:"H:i" }} – {{ creneau.heure_fin|time:"H:i" }}</div>
-                        </div>
+                    {% if creneau.disponible %}
                         {% if user.is_authenticated %}
-                            <a href="{% url 'reserver' creneau.pk %}" class="btn btn-primary">{% trans "Réserver" %}</a>
+                        <a href="{% url 'reserver' creneau.pk %}" class="slot available">
                         {% else %}
-                            <a href="{% url 'connexion' %}?next={% url 'terrain_detail' terrain.pk %}" class="btn btn-secondary">{% trans "Connexion requise" %}</a>
+                        <a href="{% url 'connexion' %}?next={{ request.path }}" class="slot available">
                         {% endif %}
-                    </div>
+                            <span class="slot-time">{{ creneau.heure_debut|time:"H:i" }}</span>
+                            <span class="slot-end">→ {{ creneau.heure_fin|time:"H:i" }}</span>
+                            <span class="slot-label">✅ {% trans "Disponible" %}</span>
+                        </a>
+                    {% else %}
+                        <div class="slot reserved">
+                            <span class="slot-time">{{ creneau.heure_debut|time:"H:i" }}</span>
+                            <span class="slot-end">→ {{ creneau.heure_fin|time:"H:i" }}</span>
+                            <span class="slot-label">🔒 {% trans "Réservé" %}</span>
+                        </div>
+                    {% endif %}
                     {% endfor %}
                 </div>
             {% else %}
@@ -224,11 +230,9 @@
                 <span class="label">{% trans "Disponibilité" %}</span>
                 <span class="badge badge-green">{% trans "Disponible" %}</span>
             </div>
-
             {% if terrain.description %}
             <p style="margin-top:1.2rem; color:var(--gris); font-size:0.9rem; line-height:1.6;">{{ terrain.description }}</p>
             {% endif %}
-
             <div class="cta-note">
                 {% trans "✅ Réservation instantanée · Confirmation par e-mail · Annulation possible" %}
             </div>
