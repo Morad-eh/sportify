@@ -340,3 +340,12 @@ msgstr "Geen terrein komt overeen met uw zoekopdracht."
 
 msgid "Réinitialiser la recherche"
 msgstr "Zoekopdracht herstellen"
+
+msgid "Commune"
+msgstr "Gemeente"
+
+msgid "Toutes les communes"
+msgstr "Alle gemeenten"
+
+msgid "Réservé"
+msgstr "Geboekt"

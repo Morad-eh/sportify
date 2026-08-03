@@ -340,3 +340,12 @@ msgstr "No field matches your search."
 
 msgid "Réinitialiser la recherche"
 msgstr "Reset search"
+
+msgid "Commune"
+msgstr "Municipality"
+
+msgid "Toutes les communes"
+msgstr "All municipalities"
+
+msgid "Réservé"
+msgstr "Booked"
