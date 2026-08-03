@@ -1,0 +1,428 @@
+{% extends 'gestion/base.html' %}
+{% load i18n %}
+
+{% block title %}Réserver un terrain — Sportify{% endblock %}
+
+{% block extra_css %}
+/* ── Page header ─────────────────────────── */
+.page-header {
+    background: linear-gradient(135deg, var(--vert-nuit), #1a4a2e);
+    color: var(--blanc);
+    padding: 2.5rem 2rem;
+}
+.page-header-inner { max-width: 1200px; margin: 0 auto; }
+.page-header h1 { font-size: 1.8rem; font-weight: 800; }
+.page-header p { color: #8ab89a; margin-top: 0.3rem; }
+
+/* ── Body ───────────────────────────────── */
+.cal-page { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+
+/* ── Complex section ───────────────────── */
+.complex-section { margin-bottom: 2.5rem; }
+.complex-title {
+    display: flex; align-items: center; gap: 0.6rem;
+    font-size: 1.1rem; font-weight: 800; color: var(--vert-nuit);
+    margin-bottom: 1rem; padding-bottom: 0.6rem;
+    border-bottom: 2px solid #e8f0eb;
+}
+.complex-title span { font-size: 0.85rem; color: var(--gris); font-weight: 500; }
+
+/* ── Terrain cards ──────────────────────── */
+.terrain-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+}
+.terrain-card {
+    background: var(--blanc);
+    border-radius: 14px;
+    padding: 1.3rem 1.2rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+    display: flex; flex-direction: column; gap: 0.5rem;
+}
+.terrain-card:hover {
+    border-color: var(--vert-gazon);
+    box-shadow: 0 4px 20px rgba(26,140,78,0.15);
+    transform: translateY(-2px);
+}
+.card-icon { font-size: 2rem; line-height: 1; }
+.card-nom { font-size: 0.95rem; font-weight: 700; color: var(--vert-nuit); }
+.card-sport {
+    display: inline-block;
+    padding: 0.2rem 0.65rem;
+    border-radius: 999px;
+    font-size: 0.75rem; font-weight: 600;
+}
+.sport-foot { background: #d4edda; color: #1a5c35; }
+.sport-padel { background: #ede8ff; color: #5b21b6; }
+.card-prix { font-size: 0.9rem; font-weight: 700; color: var(--vert-gazon); margin-top: 0.2rem; }
+.card-cta {
+    margin-top: 0.4rem;
+    font-size: 0.8rem; color: var(--gris);
+    display: flex; align-items: center; gap: 0.3rem;
+}
+
+/* ── Modal overlay ──────────────────────── */
+.modal-overlay {
+    display: none;
+    position: fixed; inset: 0; z-index: 1000;
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(3px);
+    align-items: center; justify-content: center;
+    padding: 1rem;
+}
+.modal-overlay.open { display: flex; }
+
+.modal-box {
+    background: var(--blanc);
+    border-radius: 20px;
+    width: 100%; max-width: 520px;
+    max-height: 90vh; overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    animation: slideUp 0.25s ease;
+}
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Modal header */
+.modal-head {
+    background: var(--vert-nuit);
+    color: white;
+    padding: 1.2rem 1.5rem;
+    border-radius: 20px 20px 0 0;
+    display: flex; align-items: flex-start; justify-content: space-between;
+}
+.modal-head-info h2 { font-size: 1.1rem; font-weight: 700; }
+.modal-head-prix { font-size: 0.85rem; color: var(--or); font-weight: 600; margin-top: 0.15rem; }
+.modal-close {
+    background: rgba(255,255,255,0.15);
+    border: none; color: white;
+    width: 32px; height: 32px;
+    border-radius: 50%; font-size: 1rem;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: background 0.15s;
+}
+.modal-close:hover { background: rgba(255,255,255,0.3); }
+
+/* Modal body */
+.modal-body { padding: 1.4rem 1.5rem; }
+
+/* Calendar */
+.cal-nav {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 0.9rem;
+}
+.cal-nav-btn {
+    background: var(--gris-clair); border: none;
+    width: 32px; height: 32px; border-radius: 50%;
+    cursor: pointer; font-size: 1rem;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s;
+}
+.cal-nav-btn:hover { background: #d4edda; }
+#cal-month-label { font-weight: 700; color: var(--vert-nuit); font-size: 0.95rem; }
+
+.cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+}
+.cal-day-name {
+    text-align: center; font-size: 0.7rem; font-weight: 700;
+    color: var(--gris); padding: 0.2rem 0; text-transform: uppercase;
+}
+.cal-cell {
+    aspect-ratio: 1;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 8px;
+    font-size: 0.85rem; font-weight: 600;
+    cursor: default; transition: all 0.15s;
+}
+.cal-cell.empty { background: transparent; }
+.cal-cell.past { color: #ccc; }
+.cal-cell.no-dispo { color: #bbb; background: #fafafa; }
+.cal-cell.has-dispo {
+    background: #e8f5ed; color: #1a5c35;
+    cursor: pointer; border: 1.5px solid #a8d5b5;
+}
+.cal-cell.has-dispo:hover { background: var(--vert-gazon); color: white; }
+.cal-cell.selected { background: var(--vert-nuit) !important; color: white !important; border-color: var(--vert-nuit) !important; }
+
+/* Legend */
+.cal-legend {
+    display: flex; gap: 1rem; margin-top: 0.8rem;
+    font-size: 0.75rem; color: var(--gris);
+}
+.leg-dot {
+    display: inline-block; width: 10px; height: 10px;
+    border-radius: 3px; margin-right: 4px;
+}
+.leg-green { background: #e8f5ed; border: 1px solid #a8d5b5; }
+.leg-gray  { background: #fafafa; border: 1px solid #ddd; }
+
+/* Slot section */
+.slot-section {
+    margin-top: 1.2rem;
+    border-top: 2px solid var(--gris-clair);
+    padding-top: 1rem;
+}
+.slot-section-title {
+    font-size: 0.85rem; font-weight: 700; color: var(--vert-nuit);
+    margin-bottom: 0.8rem;
+}
+.slot-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5rem;
+}
+.slot-btn {
+    padding: 0.55rem 0.2rem;
+    border-radius: 8px; font-size: 0.82rem; font-weight: 700;
+    text-align: center; text-decoration: none;
+    border: 2px solid transparent; transition: all 0.15s;
+}
+.slot-btn.available {
+    background: #e8f5ed; color: #1a5c35;
+    border-color: #a8d5b5; cursor: pointer;
+}
+.slot-btn.available:hover { background: var(--vert-gazon); color: white; border-color: var(--vert-gazon); }
+.slot-btn.reserved {
+    background: #f5f5f5; color: #ccc;
+    border-color: #eee; cursor: not-allowed;
+    font-size: 0.75rem;
+}
+.slot-loading, .slot-empty-msg {
+    text-align: center; padding: 1rem; color: var(--gris); font-size: 0.85rem;
+    grid-column: 1 / -1;
+}
+.login-notice {
+    background: #fff8e1;
+    border: 1.5px solid #ffd54f;
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    font-size: 0.82rem; color: #7a5c00;
+    margin-top: 0.8rem;
+    display: flex; align-items: center; gap: 0.5rem;
+}
+.login-notice a { color: var(--vert-gazon); font-weight: 700; }
+
+@media (max-width: 600px) {
+    .terrain-cards { grid-template-columns: repeat(2, 1fr); }
+    .slot-grid { grid-template-columns: repeat(3, 1fr); }
+    .modal-box { max-height: 95vh; }
+}
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="page-header-inner">
+        <h1>📅 {% trans "Réserver un terrain" %}</h1>
+        <p>{% trans "Choisissez un terrain pour voir ses disponibilités" %}</p>
+    </div>
+</div>
+
+<div class="cal-page">
+    {% for group in grouped %}
+    <div class="complex-section">
+        <div class="complex-title">
+            🏟️ {{ group.complexe }}
+            <span>📍 {{ group.commune }}</span>
+        </div>
+        <div class="terrain-cards">
+            {% for terrain in group.terrains %}
+            <div class="terrain-card"
+                 onclick="openModal(
+                     {{ terrain.id }},
+                     '{{ terrain.nom|escapejs }}',
+                     '{% if "Padel" in terrain.nom %}Padel{% else %}Football{% endif %}',
+                     {{ terrain.prix_heure }}
+                 )">
+                <div class="card-icon">{% if "Padel" in terrain.nom %}🎾{% else %}⚽{% endif %}</div>
+                <div class="card-nom">{{ terrain.nom }}</div>
+                <div>
+                    <span class="card-sport {% if "Padel" in terrain.nom %}sport-padel{% else %}sport-foot{% endif %}">
+                        {% if "Padel" in terrain.nom %}Padel{% else %}Football{% endif %}
+                    </span>
+                </div>
+                <div class="card-prix">{{ terrain.prix_heure }}€ / heure</div>
+                <div class="card-cta">📆 Voir les créneaux →</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="booking-modal" onclick="handleOverlayClick(event)">
+    <div class="modal-box">
+        <div class="modal-head">
+            <div class="modal-head-info">
+                <h2 id="modal-title"></h2>
+                <div class="modal-head-prix" id="modal-prix"></div>
+            </div>
+            <button class="modal-close" onclick="closeModal()">✕</button>
+        </div>
+        <div class="modal-body">
+            <!-- Calendar navigation -->
+            <div class="cal-nav">
+                <button class="cal-nav-btn" onclick="prevMonth()">‹</button>
+                <span id="cal-month-label"></span>
+                <button class="cal-nav-btn" onclick="nextMonth()">›</button>
+            </div>
+            <div id="cal-body"></div>
+            <div class="cal-legend">
+                <span><span class="leg-dot leg-green"></span>Disponible</span>
+                <span><span class="leg-dot leg-gray"></span>Complet / indisponible</span>
+            </div>
+
+            <!-- Slots (hidden until date selected) -->
+            <div class="slot-section" id="slot-section" style="display:none;">
+                <div class="slot-section-title" id="slot-section-title">Créneaux disponibles</div>
+                <div class="slot-grid" id="slot-grid"></div>
+                {% if not is_auth %}
+                <div class="login-notice">
+                    ⚠️ <span>Connectez-vous pour réserver — <a href="{% url 'connexion' %}">Se connecter</a></span>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+const DISPO = {{ dispo_json|safe }};
+const TODAY = '{{ today }}';
+const IS_AUTH = {{ is_auth|yesno:"true,false" }};
+const MONTHS = ['Janvier','Février','Mars','Avril','Mai','Juin',
+                'Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+const DAYS_HDR = ['Lu','Ma','Me','Je','Ve','Sa','Di'];
+
+let activeTerrain = null;
+let curYear = 0, curMonth = 0, selDate = null;
+
+function openModal(id, nom, sport, prix) {
+    activeTerrain = { id, nom, sport, prix };
+    const now = new Date();
+    curYear = now.getFullYear();
+    curMonth = now.getMonth();
+    selDate = null;
+
+    document.getElementById('modal-title').textContent = (sport === 'Padel' ? '🎾 ' : '⚽ ') + nom;
+    document.getElementById('modal-prix').textContent = prix + '€ / heure';
+    document.getElementById('slot-section').style.display = 'none';
+    document.getElementById('slot-grid').innerHTML = '';
+
+    renderCal(curYear, curMonth);
+    document.getElementById('booking-modal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+    document.getElementById('booking-modal').classList.remove('open');
+    document.body.style.overflow = '';
+}
+
+function handleOverlayClick(e) {
+    if (e.target === document.getElementById('booking-modal')) closeModal();
+}
+
+function renderCal(year, month) {
+    curYear = year; curMonth = month;
+    document.getElementById('cal-month-label').textContent = MONTHS[month] + ' ' + year;
+
+    const dispoSet = new Set((DISPO[String(activeTerrain.id)] || []));
+    const firstDow = new Date(year, month, 1).getDay();
+    const startOffset = (firstDow + 6) % 7;
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    let html = '<div class="cal-grid">';
+    DAYS_HDR.forEach(d => { html += `<div class="cal-day-name">${d}</div>`; });
+    for (let i = 0; i < startOffset; i++) html += '<div class="cal-cell empty"></div>';
+
+    for (let day = 1; day <= daysInMonth; day++) {
+        const mm = String(month + 1).padStart(2, '0');
+        const dd = String(day).padStart(2, '0');
+        const dateStr = `${year}-${mm}-${dd}`;
+        const isPast = dateStr < TODAY;
+        const hasDispo = dispoSet.has(dateStr);
+        const isSel = dateStr === selDate;
+
+        let cls = 'cal-cell';
+        if (isPast) cls += ' past';
+        else if (hasDispo) cls += ' has-dispo';
+        else cls += ' no-dispo';
+        if (isSel) cls += ' selected';
+
+        const click = (!isPast && hasDispo) ? `onclick="selectDate('${dateStr}')"` : '';
+        html += `<div class="${cls}" ${click}>${day}</div>`;
+    }
+    html += '</div>';
+    document.getElementById('cal-body').innerHTML = html;
+}
+
+function prevMonth() {
+    let m = curMonth - 1, y = curYear;
+    if (m < 0) { m = 11; y--; }
+    // Don't go before current month
+    const now = new Date();
+    if (y < now.getFullYear() || (y === now.getFullYear() && m < now.getMonth())) return;
+    renderCal(y, m);
+}
+
+function nextMonth() {
+    let m = curMonth + 1, y = curYear;
+    if (m > 11) { m = 0; y++; }
+    renderCal(y, m);
+}
+
+function selectDate(dateStr) {
+    selDate = dateStr;
+    renderCal(curYear, curMonth);
+
+    const title = document.getElementById('slot-section-title');
+    const grid = document.getElementById('slot-grid');
+    const section = document.getElementById('slot-section');
+
+    // Format date for display
+    const [y, m, d] = dateStr.split('-');
+    title.textContent = `Créneaux — ${d} ${MONTHS[parseInt(m) - 1]} ${y}`;
+    grid.innerHTML = '<div class="slot-loading">Chargement…</div>';
+    section.style.display = 'block';
+
+    fetch(`/api/creneaux/?terrain=${activeTerrain.id}&date=${dateStr}`)
+        .then(r => r.json())
+        .then(data => renderSlots(data.slots))
+        .catch(() => {
+            grid.innerHTML = '<div class="slot-empty-msg">Erreur de chargement.</div>';
+        });
+}
+
+function renderSlots(slots) {
+    const grid = document.getElementById('slot-grid');
+    if (!slots.length) {
+        grid.innerHTML = '<div class="slot-empty-msg">Aucun créneau pour cette date.</div>';
+        return;
+    }
+    let html = '';
+    slots.forEach(s => {
+        if (s.dispo) {
+            const href = IS_AUTH
+                ? `/reserver/${s.id}/`
+                : `/connexion/?next=/reserver/${s.id}/`;
+            html += `<a href="${href}" class="slot-btn available">${s.label}</a>`;
+        } else {
+            html += `<div class="slot-btn reserved">${s.label}</div>`;
+        }
+    });
+    grid.innerHTML = html;
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+</script>
+{% endblock %}
