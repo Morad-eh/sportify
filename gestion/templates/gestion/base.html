@@ -215,10 +215,12 @@
             </button>
             <ul class="nav-links" id="nav-links">
                 <li><a href="{% url 'terrains' %}">{% trans "Terrains" %}</a></li>
+                <li><a href="{% url 'calendrier' %}">📅 {% trans "Calendrier" %}</a></li>
                 {% if user.is_authenticated %}
                     <li><a href="{% url 'dashboard' %}">{% trans "Mon espace" %}</a></li>
                     <li><a href="{% url 'profil' %}">{% trans "Mon profil" %}</a></li>
                     {% if user.is_staff %}
+                        <li><a href="{% url 'admin_dashboard' %}">📊 Dashboard</a></li>
                         <li><a href="/admin/">{% trans "Administration" %}</a></li>
                     {% endif %}
                     <li>
