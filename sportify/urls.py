@@ -16,10 +16,26 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/', include('gestion.api_urls')),
     path('i18n/', include('django.conf.urls.i18n')),
+    path('mot-de-passe-oublie/', auth_views.PasswordResetView.as_view(
+        template_name='gestion/password_reset.html',
+        email_template_name='gestion/password_reset_email.txt',
+        success_url='/mot-de-passe-oublie/envoye/',
+    ), name='password_reset'),
+    path('mot-de-passe-oublie/envoye/', auth_views.PasswordResetDoneView.as_view(
+        template_name='gestion/password_reset_done.html',
+    ), name='password_reset_done'),
+    path('reinitialiser/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(
+        template_name='gestion/password_reset_confirm.html',
+        success_url='/reinitialiser/termine/',
+    ), name='password_reset_confirm'),
+    path('reinitialiser/termine/', auth_views.PasswordResetCompleteView.as_view(
+        template_name='gestion/password_reset_complete.html',
+    ), name='password_reset_complete'),
     path('', include('gestion.urls')),
 ]

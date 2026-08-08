@@ -147,6 +147,12 @@
                 <button type="submit" class="btn btn-primary btn-block">{% trans "Se connecter" %}</button>
             </form>
 
+            <p style="text-align:center; margin-top:1rem;">
+                <a href="{% url 'password_reset' %}" style="color:var(--gris); font-size:0.88rem; text-decoration:none;">
+                    🔑 {% trans "Mot de passe oublié ?" %}
+                </a>
+            </p>
+
             <p class="auth-footer">
                 {% trans "Pas encore de compte ?" %} <a href="{% url 'inscription' %}">{% trans "S'inscrire gratuitement" %}</a>
             </p>
