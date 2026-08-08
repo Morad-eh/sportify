@@ -140,8 +140,22 @@
     .info-card { position: static; }
     .slots-grid { grid-template-columns: repeat(3, 1fr); }
 }
-@media (max-width: 480px) {
-    .slots-grid { grid-template-columns: repeat(2, 1fr); }
+@media (max-width: 600px) {
+    .detail-header { padding: 1.5rem 1rem; }
+    .detail-header-inner { gap: 1rem; }
+    .terrain-icon-large { width: 64px; height: 64px; font-size: 2.2rem; border-radius: 14px; }
+    .detail-header h1 { font-size: 1.3rem; }
+    .detail-header .loc { font-size: 0.88rem; margin-bottom: 0.6rem; }
+    .detail-header .price-big { font-size: 1.4rem; }
+    .detail-body { margin: 1.2rem auto; padding: 0 1rem; gap: 1rem; }
+    .creneaux-section h2 { font-size: 1.1rem; }
+    .slots-grid { grid-template-columns: repeat(2, 1fr); gap: 0.4rem; }
+    .slot { padding: 0.65rem 0.3rem; }
+    .slot-time { font-size: 0.95rem; }
+    .slot-end { font-size: 0.65rem; }
+    .slot-label { font-size: 0.65rem; }
+    .day-tab { padding: 0.5rem 0.7rem; min-width: 52px; }
+    .dt-num { font-size: 1.2rem; }
 }
 {% endblock %}
 
