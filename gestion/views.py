@@ -358,6 +358,131 @@ def admin_dashboard(request):
 
 
 @login_required
+def telecharger_facture(request, reservation_id):
+    from reportlab.pdfgen import canvas
+    from reportlab.lib.pagesizes import A4
+    from reportlab.lib import colors
+    from io import BytesIO
+
+    reservation = get_object_or_404(Reservation, pk=reservation_id, utilisateur=request.user)
+
+    buffer = BytesIO()
+    p = canvas.Canvas(buffer, pagesize=A4)
+    w, h = A4
+
+    # ── Fond header vert
+    p.setFillColor(colors.HexColor('#0D2E1A'))
+    p.rect(0, h - 110, w, 110, fill=1, stroke=0)
+
+    # ── Logo Sportify
+    p.setFont('Helvetica-Bold', 28)
+    p.setFillColor(colors.HexColor('#1A8C4E'))
+    p.drawString(50, h - 55, 'Sport')
+    p.setFillColor(colors.HexColor('#F5A623'))
+    p.drawString(50 + p.stringWidth('Sport', 'Helvetica-Bold', 28), h - 55, 'ify')
+
+    p.setFont('Helvetica', 11)
+    p.setFillColor(colors.HexColor('#8ab89a'))
+    p.drawString(50, h - 78, 'Réservation de terrains sportifs — Bruxelles')
+
+    # ── Numéro facture (droite)
+    p.setFont('Helvetica-Bold', 13)
+    p.setFillColor(colors.white)
+    num = f'FACTURE #{reservation.id:04d}'
+    p.drawRightString(w - 50, h - 55, num)
+    p.setFont('Helvetica', 10)
+    p.setFillColor(colors.HexColor('#8ab89a'))
+    p.drawRightString(w - 50, h - 75, f'Émise le {reservation.date_reservation.strftime("%d/%m/%Y")}')
+
+    # ── Section client
+    y = h - 150
+    p.setFont('Helvetica-Bold', 11)
+    p.setFillColor(colors.HexColor('#0D2E1A'))
+    p.drawString(50, y, 'CLIENT')
+    p.setFont('Helvetica', 11)
+    p.setFillColor(colors.HexColor('#1a1a1a'))
+    nom = reservation.utilisateur.get_full_name() or reservation.utilisateur.username
+    p.drawString(50, y - 18, nom)
+    p.drawString(50, y - 36, reservation.utilisateur.email or '—')
+
+    # ── Section détails réservation
+    y2 = h - 150
+    p.setFont('Helvetica-Bold', 11)
+    p.setFillColor(colors.HexColor('#0D2E1A'))
+    p.drawString(300, y2, 'RÉSERVATION')
+    p.setFont('Helvetica', 11)
+    p.setFillColor(colors.HexColor('#1a1a1a'))
+    p.drawString(300, y2 - 18, f'#{reservation.id:04d} — {reservation.get_statut_display()}')
+    p.drawString(300, y2 - 36, f'Payé le {reservation.date_reservation.strftime("%d/%m/%Y")}')
+
+    # ── Séparateur
+    y3 = h - 220
+    p.setStrokeColor(colors.HexColor('#e8f0eb'))
+    p.setLineWidth(1.5)
+    p.line(50, y3, w - 50, y3)
+
+    # ── Tableau détails
+    y4 = y3 - 30
+    p.setFillColor(colors.HexColor('#f4f6f4'))
+    p.rect(50, y4 - 8, w - 100, 26, fill=1, stroke=0)
+    p.setFont('Helvetica-Bold', 10)
+    p.setFillColor(colors.HexColor('#6B7280'))
+    p.drawString(60, y4 + 6, 'DESCRIPTION')
+    p.drawRightString(w - 60, y4 + 6, 'MONTANT')
+
+    rows = [
+        ('Terrain', reservation.creneau.terrain.nom),
+        ('Complexe / Commune', reservation.creneau.terrain.localisation),
+        ('Date', reservation.creneau.date.strftime('%A %d %B %Y')),
+        ('Horaire', f'{reservation.creneau.heure_debut.strftime("%H:%M")} → {reservation.creneau.heure_fin.strftime("%H:%M")}'),
+        ('Mode de paiement', 'Carte bancaire (Stripe)'),
+    ]
+
+    y5 = y4 - 20
+    for label, val in rows:
+        p.setFont('Helvetica', 10)
+        p.setFillColor(colors.HexColor('#6B7280'))
+        p.drawString(60, y5, label)
+        p.setFillColor(colors.HexColor('#1a1a1a'))
+        p.drawString(200, y5, val)
+        y5 -= 22
+
+    # ── Ligne total
+    p.setStrokeColor(colors.HexColor('#e8f0eb'))
+    p.line(50, y5 - 6, w - 50, y5 - 6)
+    y5 -= 28
+    p.setFont('Helvetica-Bold', 13)
+    p.setFillColor(colors.HexColor('#0D2E1A'))
+    p.drawString(60, y5, 'TOTAL PAYÉ')
+    p.setFillColor(colors.HexColor('#1A8C4E'))
+    p.drawRightString(w - 60, y5, f'{reservation.montant_total} €')
+
+    # ── Badge statut
+    y5 -= 40
+    p.setFillColor(colors.HexColor('#e8f5ed'))
+    p.roundRect(60, y5 - 6, 120, 22, 4, fill=1, stroke=0)
+    p.setFont('Helvetica-Bold', 10)
+    p.setFillColor(colors.HexColor('#1a5c35'))
+    p.drawString(70, y5 + 4, '✓ Paiement confirmé')
+
+    # ── Footer
+    p.setFillColor(colors.HexColor('#f4f6f4'))
+    p.rect(0, 0, w, 60, fill=1, stroke=0)
+    p.setFont('Helvetica', 9)
+    p.setFillColor(colors.HexColor('#6B7280'))
+    p.drawCentredString(w / 2, 36, 'Sportify — Réservation de terrains sportifs à Bruxelles')
+    p.drawCentredString(w / 2, 20, 'Ce document fait office de reçu de paiement.')
+
+    p.showPage()
+    p.save()
+    buffer.seek(0)
+
+    from django.http import FileResponse
+    filename = f'facture_sportify_{reservation.id:04d}.pdf'
+    return FileResponse(buffer, as_attachment=True, filename=filename, content_type='application/pdf')
+
+
+@login_required
 def modifier_reservation(request, reservation_id):
     reservation = get_object_or_404(Reservation, pk=reservation_id, utilisateur=request.user)
     if reservation.statut != 'confirmee' or reservation.creneau.date < timezone.now().date():

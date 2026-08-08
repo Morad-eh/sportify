@@ -187,12 +187,18 @@
                             {% endif %}
                         </td>
                         <td>
+                            <div style="display:flex; gap:0.3rem; flex-wrap:wrap;">
                             {% if res.statut == 'confirmee' and res.creneau.date >= today %}
-                                <a href="{% url 'modifier_reservation' res.id %}" class="btn" style="padding:0.3rem 0.7rem; font-size:0.8rem; background:var(--vert-gazon); color:#fff; margin-right:0.3rem;">{% trans "Modifier" %}</a>
+                                <a href="{% url 'modifier_reservation' res.id %}" class="btn" style="padding:0.3rem 0.7rem; font-size:0.8rem; background:var(--vert-gazon); color:#fff;">{% trans "Modifier" %}</a>
                                 <a href="{% url 'annuler_reservation' res.id %}" class="btn" style="padding:0.3rem 0.7rem; font-size:0.8rem; background:#e53e3e; color:#fff;">{% trans "Annuler" %}</a>
-                            {% else %}
+                            {% endif %}
+                            {% if res.statut == 'confirmee' %}
+                                <a href="{% url 'telecharger_facture' res.id %}" class="btn" style="padding:0.3rem 0.7rem; font-size:0.8rem; background:#f5a623; color:#0d2e1a;" title="Télécharger la facture PDF">🧾 {% trans "Facture" %}</a>
+                            {% endif %}
+                            {% if res.statut != 'confirmee' and res.creneau.date < today %}
                                 <span style="color:var(--gris); font-size:0.85rem;">—</span>
                             {% endif %}
+                            </div>
                         </td>
                     </tr>
                     {% endfor %}

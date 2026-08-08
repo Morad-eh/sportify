@@ -18,6 +18,7 @@ referencing==0.37.0
 requests==2.34.2
 rpds-py==2026.5.1
 sqlparse==0.5.5
+reportlab==5.0.0
 stripe==15.2.1
 typing_extensions==4.15.0
 tzdata==2026.2

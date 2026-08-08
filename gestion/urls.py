@@ -19,4 +19,5 @@ urlpatterns = [
     path('calendrier/', views.calendrier, name='calendrier'),
     path('admin-sportify/', views.admin_dashboard, name='admin_dashboard'),
     path('api/creneaux/', views.api_creneaux, name='api_creneaux'),
+    path('reservations/<int:reservation_id>/facture/', views.telecharger_facture, name='telecharger_facture'),
 ]
