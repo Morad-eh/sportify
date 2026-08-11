@@ -251,10 +251,7 @@ def annuler_reservation(request, reservation_id):
         except Exception:
             pass
 
-        if montant_rembourse > 0:
-            messages.success(request, f'Réservation annulée. Remboursement de {montant_rembourse}€ ({pct_remboursement}%) sous 5 à 10 jours ouvrables.')
-        else:
-            messages.info(request, 'Réservation annulée. Aucun remboursement (annulation moins de 24h avant le créneau).')
+        messages.success(request, 'Annulation confirmée. Un email de confirmation vous a été envoyé.')
         return redirect('dashboard')
 
     return render(request, 'gestion/annuler_reservation.html', {
