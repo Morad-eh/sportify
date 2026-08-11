@@ -269,13 +269,14 @@
     <!-- Main grid -->
     <div class="main-grid">
 
-        <!-- Today's reservations -->
+        <!-- Month reservations -->
         <div class="admin-card">
-            <h2>📅 Réservations du jour</h2>
-            {% if reservations_du_jour %}
+            <h2>📅 Réservations du mois</h2>
+            {% if reservations_du_mois %}
             <table class="admin-table">
                 <thead>
                     <tr>
+                        <th>Date</th>
                         <th>Terrain</th>
                         <th>Horaire</th>
                         <th>Membre</th>
@@ -284,12 +285,19 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for r in reservations_du_jour %}
-                    <tr>
+                    {% for r in reservations_du_mois %}
+                    <tr {% if r.statut == 'annulee' %}style="opacity:0.6;"{% endif %}>
+                        <td style="white-space:nowrap;">{{ r.creneau.date|date:"d/m" }}{% if r.creneau.date == today %} <span style="background:#e8f5ed;color:#1a5c35;font-size:0.7rem;font-weight:700;padding:1px 6px;border-radius:99px;">Aujourd'hui</span>{% endif %}</td>
                         <td>{{ r.creneau.terrain.nom }}</td>
                         <td>{{ r.creneau.heure_debut|time:"H:i" }} → {{ r.creneau.heure_fin|time:"H:i" }}</td>
                         <td>{{ r.utilisateur.username }}</td>
-                        <td><strong>{{ r.montant_total }}€</strong></td>
+                        <td>
+                            {% if r.statut == 'annulee' %}
+                                <strong style="text-decoration:line-through;color:var(--gris);">{{ r.montant_total }}€</strong>
+                            {% else %}
+                                <strong>{{ r.montant_total }}€</strong>
+                            {% endif %}
+                        </td>
                         <td>
                             <span class="badge {% if r.statut == 'confirmee' %}badge-green{% elif r.statut == 'annulee' %}badge-red{% else %}badge-yellow{% endif %}">
                                 {{ r.get_statut_display }}
@@ -300,7 +308,7 @@
                 </tbody>
             </table>
             {% else %}
-            <div class="empty-sm">Aucune réservation pour aujourd'hui.</div>
+            <div class="empty-sm">Aucune réservation ce mois-ci.</div>
             {% endif %}
         </div>
 
