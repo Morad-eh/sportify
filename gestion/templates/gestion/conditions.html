@@ -1,0 +1,119 @@
+{% extends 'gestion/base.html' %}
+{% load i18n %}
+
+{% block title %}Conditions d'utilisation — Sportify{% endblock %}
+
+{% block extra_css %}
+.legal-page { max-width: 820px; margin: 3rem auto; padding: 0 1.5rem 4rem; }
+.legal-page h1 { font-size: 2rem; font-weight: 800; color: var(--vert-nuit); margin-bottom: 0.4rem; }
+.legal-meta { color: var(--gris); font-size: 0.88rem; margin-bottom: 2rem; border-bottom: 2px solid var(--gris-clair); padding-bottom: 1rem; }
+.legal-page h2 { font-size: 1.15rem; font-weight: 700; color: var(--vert-nuit); margin: 2rem 0 0.6rem; }
+.legal-page p, .legal-page li { color: #333; font-size: 0.95rem; line-height: 1.7; margin-bottom: 0.5rem; }
+.legal-page ul { padding-left: 1.5rem; margin-bottom: 0.8rem; }
+.legal-highlight { background: #f0f7f3; border-left: 4px solid var(--vert-gazon); padding: 1rem 1.2rem; border-radius: 0 8px 8px 0; margin: 1rem 0; }
+{% endblock %}
+
+{% block content %}
+<div class="legal-page">
+    <h1>Conditions d'utilisation</h1>
+    <p class="legal-meta">Dernière mise à jour : 10 août 2026 &mdash; Sportify, Bruxelles (Belgique)</p>
+
+    <div class="legal-highlight">
+        <p>En créant un compte et en utilisant la plateforme Sportify, vous acceptez pleinement et sans réserve les présentes conditions d'utilisation. Veuillez les lire attentivement avant toute inscription.</p>
+    </div>
+
+    <h2>1. Identification de l'éditeur</h2>
+    <p>La plateforme Sportify est éditée par <strong>Sportify</strong>, société basée à Bruxelles, Belgique — N° TVA : BE 0123.456.789. Pour toute question : <a href="mailto:contact@sportify.be" style="color:var(--vert-gazon);">contact@sportify.be</a></p>
+
+    <h2>2. Description du service</h2>
+    <p>Sportify est une plateforme de réservation en ligne de terrains de sport en intérieur à Bruxelles. Elle permet aux utilisateurs inscrits de :</p>
+    <ul>
+        <li>Consulter les disponibilités des terrains (football en salle, padel)</li>
+        <li>Réserver un créneau horaire et procéder au paiement en ligne</li>
+        <li>Gérer, modifier ou annuler leurs réservations selon les conditions prévues</li>
+        <li>Télécharger leurs factures</li>
+    </ul>
+
+    <h2>3. Conditions d'accès</h2>
+    <p>L'utilisation du service est réservée aux personnes physiques majeures (18 ans ou plus) ou aux mineurs agissant sous la responsabilité d'un parent ou tuteur légal. L'inscription est gratuite. Le paiement est requis pour confirmer toute réservation.</p>
+
+    <h2>4. Création de compte</h2>
+    <p>L'utilisateur s'engage à fournir des informations exactes, complètes et à jour lors de son inscription. Il est responsable de la confidentialité de ses identifiants de connexion et de toute activité effectuée depuis son compte.</p>
+
+    <h2>5. Réservations et paiements</h2>
+    <p>Toute réservation est soumise au paiement intégral du montant du créneau via notre prestataire de paiement sécurisé <strong>Stripe</strong>. La réservation est confirmée dès réception du paiement. Les prix sont affichés toutes taxes comprises (TTC).</p>
+
+    <h2>6. Politique d'annulation et de remboursement</h2>
+    <div class="legal-highlight">
+        <p><strong>Annulation plus de 48h avant le créneau :</strong> remboursement intégral (100%)</p>
+        <p><strong>Annulation entre 24h et 48h avant le créneau :</strong> remboursement partiel (50%)</p>
+        <p><strong>Annulation moins de 24h avant le créneau :</strong> aucun remboursement</p>
+    </div>
+    <p>Les remboursements sont effectués automatiquement sur le moyen de paiement utilisé lors de la réservation, dans un délai de 5 à 10 jours ouvrables. Le créneau annulé est immédiatement remis en ligne.</p>
+
+    <h2>7. Modification de réservation</h2>
+    <p>La modification d'une réservation n'est possible que jusqu'à 24h avant le créneau réservé. Au-delà de ce délai, aucune modification n'est acceptée.</p>
+
+    <h2>8. Obligations de l'utilisateur</h2>
+    <p>En accédant aux installations, l'utilisateur s'engage à respecter les règles suivantes :</p>
+
+    <p><strong>Comportement général</strong></p>
+    <ul>
+        <li>Se présenter à l'heure du créneau réservé. Tout retard n'entraîne pas de prolongation.</li>
+        <li>Adopter un comportement respectueux envers le personnel, les autres joueurs et les tiers.</li>
+        <li>Toute forme de violence physique ou verbale, d'insulte, de harcèlement ou de discrimination entraîne l'expulsion immédiate sans remboursement et peut faire l'objet de poursuites judiciaires.</li>
+        <li>Ne pas sous-louer ou céder sa réservation à un tiers sans accord préalable de Sportify.</li>
+    </ul>
+
+    <p><strong>Alcool, drogues et substances interdites</strong></p>
+    <ul>
+        <li>Il est <strong>strictement interdit</strong> d'accéder aux terrains sous l'emprise de l'alcool, de drogues ou de toute substance psychoactive.</li>
+        <li>La consommation d'alcool ou de substances illicites est interdite dans l'enceinte des complexes sportifs.</li>
+        <li>Tout utilisateur présentant des signes d'ivresse ou d'intoxication se verra refuser l'accès au terrain, sans droit au remboursement.</li>
+        <li>Le tabac et les cigarettes électroniques sont interdits à l'intérieur des installations.</li>
+    </ul>
+
+    <p><strong>Respect du matériel et des installations</strong></p>
+    <ul>
+        <li>L'utilisateur est tenu de manipuler le matériel mis à disposition (buts, filets, ballons, éclairage) avec soin.</li>
+        <li>Toute dégradation volontaire ou par négligence grave des équipements, revêtements de sol, vestiaires ou locaux communs engage la responsabilité financière de l'utilisateur.</li>
+        <li>Les dommages constatés seront facturés au titulaire de la réservation sur base des tarifs de réparation en vigueur.</li>
+        <li>Il est interdit de déplacer ou de modifier l'installation des équipements sans autorisation du gestionnaire.</li>
+        <li>Les chaussures à crampons vissés sont interdites sur les terrains synthétiques. Des chaussures indoor propres et adaptées sont obligatoires.</li>
+    </ul>
+
+    <p><strong>Hygiène et tenue</strong></p>
+    <ul>
+        <li>Une tenue sportive appropriée est obligatoire. L'accès en jeans, chaussures de ville ou pieds nus est interdit sur les terrains.</li>
+        <li>Les vestiaires et douches doivent être laissés propres après utilisation.</li>
+        <li>Il est interdit d'introduire de la nourriture sur les terrains. Les boissons sont autorisées uniquement dans des contenants fermés.</li>
+    </ul>
+
+    <p><strong>Sécurité</strong></p>
+    <ul>
+        <li>L'utilisateur joue sous sa propre responsabilité. Il est conseillé de réaliser un échauffement avant toute activité physique.</li>
+        <li>Tout accident ou incident doit être immédiatement signalé au personnel sur place.</li>
+        <li>Les personnes souffrant de contre-indications médicales pratiquent le sport sous leur entière responsabilité.</li>
+        <li>Sportify décline toute responsabilité pour les blessures survenant lors de l'utilisation des terrains, sauf faute grave prouvée de sa part.</li>
+    </ul>
+
+    <h2>9. Responsabilité</h2>
+    <p>Sportify agit en qualité d'intermédiaire entre les utilisateurs et les gestionnaires de terrains. Sportify ne peut être tenu responsable des dommages corporels ou matériels survenus lors de l'utilisation des terrains, ni des interruptions de service liées à des causes extérieures (force majeure, maintenance).</p>
+
+    <h2>10. Propriété intellectuelle</h2>
+    <p>L'ensemble des éléments de la plateforme (logo, design, code, textes) est la propriété exclusive de Sportify et est protégé par le droit belge et européen de la propriété intellectuelle. Toute reproduction sans autorisation est interdite.</p>
+
+    <h2>11. Suspension et suppression de compte</h2>
+    <p>Sportify se réserve le droit de suspendre ou supprimer tout compte en cas de non-respect des présentes conditions, sans préavis ni indemnité. L'utilisateur peut supprimer son compte à tout moment depuis son espace profil.</p>
+
+    <h2>12. Modification des conditions</h2>
+    <p>Sportify se réserve le droit de modifier les présentes conditions à tout moment. Les utilisateurs seront informés par email en cas de modification substantielle. L'utilisation continue du service après notification vaut acceptation des nouvelles conditions.</p>
+
+    <h2>13. Droit applicable et juridiction</h2>
+    <p>Les présentes conditions sont régies par le <strong>droit belge</strong>. Tout litige relatif à leur interprétation ou exécution relève de la compétence exclusive des <strong>tribunaux de l'arrondissement de Bruxelles</strong>. En cas de litige, une solution amiable sera recherchée en priorité.</p>
+
+    <p style="margin-top:2rem;">
+        <a href="{% url 'confidentialite' %}" style="color:var(--vert-gazon); font-weight:600;">→ Consulter notre politique de confidentialité (RGPD)</a>
+    </p>
+</div>
+{% endblock %}
