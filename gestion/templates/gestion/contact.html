@@ -1,0 +1,162 @@
+{% extends 'gestion/base.html' %}
+{% load i18n %}
+
+{% block title %}Contact — Sportify{% endblock %}
+
+{% block extra_css %}
+.contact-page {
+    max-width: 1000px;
+    margin: 3rem auto;
+    padding: 0 1.5rem 4rem;
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 2rem;
+    align-items: start;
+}
+.contact-form-card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+    padding: 2.5rem;
+}
+.contact-form-card h1 { font-size: 1.7rem; font-weight: 800; color: var(--vert-nuit); margin-bottom: 0.3rem; }
+.contact-form-card .subtitle { color: var(--gris); font-size: 0.92rem; margin-bottom: 2rem; }
+
+.form-group { margin-bottom: 1.2rem; }
+.form-group label { display: block; font-weight: 600; font-size: 0.88rem; color: var(--vert-nuit); margin-bottom: 0.4rem; }
+.form-input { width: 100%; padding: 0.8rem 1rem; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 0.92rem; font-family: 'Inter', sans-serif; transition: border-color 0.2s; outline: none; color: #1a1a1a; }
+.form-input:focus { border-color: var(--vert-gazon); }
+textarea.form-input { resize: vertical; min-height: 150px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+.contact-info-card {
+    background: var(--vert-nuit);
+    border-radius: 20px;
+    padding: 2rem;
+    color: white;
+}
+.contact-info-card h2 { font-size: 1.1rem; font-weight: 700; margin-bottom: 1.5rem; color: white; }
+.info-item { display: flex; align-items: flex-start; gap: 0.8rem; margin-bottom: 1.5rem; }
+.info-icon { font-size: 1.3rem; flex-shrink: 0; margin-top: 0.1rem; }
+.info-text strong { display: block; font-size: 0.85rem; color: #8ab89a; font-weight: 600; margin-bottom: 0.2rem; }
+.info-text span { font-size: 0.9rem; color: #d0e8d8; }
+
+.info-divider { border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 1.5rem 0; }
+
+.complexes-links { display: flex; flex-direction: column; gap: 0.6rem; }
+.complex-link { display: flex; align-items: center; gap: 0.6rem; font-size: 0.88rem; color: #8ab89a; text-decoration: none; padding: 0.5rem 0.7rem; border-radius: 8px; transition: background 0.15s; }
+.complex-link:hover { background: rgba(255,255,255,0.08); color: white; }
+
+@media (max-width: 768px) {
+    .contact-page { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+}
+{% endblock %}
+
+{% block content %}
+<div style="background: linear-gradient(135deg, var(--vert-nuit), #1a4a2e); padding: 3rem 2rem; text-align:center; color:white; margin-bottom:0;">
+    <h1 style="font-size:2rem; font-weight:800; margin-bottom:0.4rem;">Contactez-nous</h1>
+    <p style="color:#8ab89a;">Une question ? Un problème ? On vous répond sous 48h.</p>
+</div>
+
+<div class="contact-page">
+
+    <div class="contact-form-card">
+        <h1>Envoyer un message</h1>
+        <p class="subtitle">Remplissez le formulaire ci-dessous et nous vous répondrons rapidement.</p>
+
+        <form method="post" novalidate>
+            {% csrf_token %}
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="nom">Nom complet *</label>
+                    <input type="text" name="nom" id="nom" class="form-input" placeholder="Jean Dupont" required
+                        value="{% if user.is_authenticated %}{{ user.get_full_name }}{% endif %}">
+                </div>
+                <div class="form-group">
+                    <label for="email">Adresse e-mail *</label>
+                    <input type="email" name="email" id="email" class="form-input" placeholder="jean@exemple.be" required
+                        value="{% if user.is_authenticated %}{{ user.email }}{% endif %}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="sujet">Sujet *</label>
+                <select name="sujet" id="sujet" class="form-input" required>
+                    <option value="">— Choisissez un sujet —</option>
+                    <option value="Réservation">Question sur une réservation</option>
+                    <option value="Remboursement">Demande de remboursement</option>
+                    <option value="Problème technique">Problème technique</option>
+                    <option value="Terrains">Information sur les terrains</option>
+                    <option value="Facturation">Facturation / paiement</option>
+                    <option value="Autre">Autre</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="message">Message *</label>
+                <textarea name="message" id="message" class="form-input" placeholder="Décrivez votre demande en détail…" required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width:100%; padding:0.9rem; font-size:1rem;">
+                ✉️ Envoyer le message
+            </button>
+        </form>
+    </div>
+
+    <div>
+        <div class="contact-info-card">
+            <h2>Informations de contact</h2>
+
+            <div class="info-item">
+                <div class="info-icon">✉️</div>
+                <div class="info-text">
+                    <strong>Email</strong>
+                    <span>contact@sportify.be</span>
+                </div>
+            </div>
+
+            <div class="info-item">
+                <div class="info-icon">⏱️</div>
+                <div class="info-text">
+                    <strong>Délai de réponse</strong>
+                    <span>Sous 48h ouvrables</span>
+                </div>
+            </div>
+
+            <div class="info-item">
+                <div class="info-icon">📍</div>
+                <div class="info-text">
+                    <strong>Présence</strong>
+                    <span>Bruxelles, Belgique</span>
+                </div>
+            </div>
+
+            <hr class="info-divider">
+
+            <h2>Nos complexes</h2>
+            <div class="complexes-links">
+                <a href="{% url 'nos_complexes' %}" class="complex-link">
+                    🏟️ Royal Foot Indoor — Anderlecht
+                </a>
+                <a href="{% url 'nos_complexes' %}" class="complex-link">
+                    ⚽ Fitfive Forest — Forest
+                </a>
+                <a href="{% url 'nos_complexes' %}" class="complex-link">
+                    🎾 City Five — Molenbeek-Saint-Jean
+                </a>
+            </div>
+
+            <hr class="info-divider">
+
+            <div style="font-size:0.8rem; color:#6a9a7a;">
+                <strong style="color:#8ab89a;">Sportify</strong><br>
+                N° TVA : BE 0123.456.789<br>
+                Bruxelles, Belgique
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
