@@ -7,156 +7,106 @@
 .detail-header {
     background: linear-gradient(135deg, var(--vert-nuit), #1a4a2e);
     color: var(--blanc);
-    padding: 4rem 2rem;
+    padding: 3rem 2rem;
 }
 .detail-header-inner {
-    max-width: 1100px;
-    margin: 0 auto;
-    display: flex;
-    gap: 3rem;
-    align-items: center;
+    max-width: 900px; margin: 0 auto;
+    display: flex; gap: 2rem; align-items: center;
 }
 .terrain-icon-large {
-    width: 120px;
-    height: 120px;
-    background: rgba(26,140,78,0.25);
-    border-radius: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 4rem;
-    flex-shrink: 0;
+    width: 100px; height: 100px;
+    background: rgba(26,140,78,0.25); border-radius: 18px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 3.5rem; flex-shrink: 0;
 }
-.detail-header h1 { font-size: 2.4rem; font-weight: 800; margin-bottom: 0.5rem; }
-.detail-header .loc { color: #8ab89a; font-size: 1.05rem; margin-bottom: 1rem; }
-.detail-header .price-big { font-size: 2rem; font-weight: 800; color: var(--or); }
-.detail-header .price-big small { font-size: 1rem; font-weight: 400; color: #8ab89a; }
+.detail-header h1 { font-size: 2rem; font-weight: 800; margin-bottom: 0.4rem; }
+.detail-header .loc { color: #8ab89a; font-size: 1rem; margin-bottom: 0.8rem; }
+.detail-header .price-big { font-size: 1.8rem; font-weight: 800; color: var(--or); }
+.detail-header .price-big small { font-size: 0.95rem; font-weight: 400; color: #8ab89a; }
 
 .detail-body {
-    max-width: 1100px;
-    margin: 3rem auto;
-    padding: 0 2rem;
-    display: grid;
-    grid-template-columns: 1fr 360px;
-    gap: 2rem;
-    align-items: start;
+    max-width: 900px; margin: 2.5rem auto; padding: 0 2rem;
+    display: grid; grid-template-columns: 1fr 320px; gap: 1.5rem; align-items: start;
 }
-
-.creneaux-section h2 { font-size: 1.5rem; font-weight: 800; color: var(--vert-nuit); margin-bottom: 1.2rem; }
-
-/* Day tabs */
-.day-tabs-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 4px; }
-.day-tabs { display: flex; gap: 0.5rem; min-width: max-content; }
-.day-tab {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 0.6rem 1rem;
-    border-radius: 10px;
-    border: 2px solid #e2e8f0;
-    background: var(--blanc);
-    text-decoration: none;
-    color: var(--vert-nuit);
-    min-width: 60px;
-    transition: all 0.2s;
-}
-.day-tab:hover { border-color: var(--vert-gazon); background: #f0faf5; }
-.day-tab.active { background: var(--vert-gazon); border-color: var(--vert-gazon); color: white; }
-.dt-day { font-size: 0.7rem; text-transform: uppercase; opacity: 0.7; letter-spacing: 0.04em; }
-.dt-num { font-size: 1.5rem; font-weight: 800; line-height: 1; }
-.dt-mon { font-size: 0.7rem; opacity: 0.7; }
-.day-tab.active .dt-day, .day-tab.active .dt-mon { opacity: 0.9; }
-
-.slots-date-label { margin: 1.2rem 0 0.8rem; font-size: 0.95rem; font-weight: 600; color: var(--gris); }
-
-/* Slot grid */
-.slots-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 0.6rem;
-}
-.slot {
-    border-radius: 10px;
-    padding: 0.85rem 0.4rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.25rem;
-    text-decoration: none;
-    transition: all 0.2s;
-    text-align: center;
-}
-.slot-time { font-size: 1.1rem; font-weight: 800; }
-.slot-end { font-size: 0.7rem; opacity: 0.7; }
-.slot-label { font-size: 0.72rem; font-weight: 600; }
-.slot.available {
-    background: #e8f5ed;
-    border: 2px solid var(--vert-gazon);
-    color: #1a5c35;
-    cursor: pointer;
-}
-.slot.available:hover {
-    background: var(--vert-gazon);
-    color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(26,140,78,0.25);
-}
-.slot.reserved {
-    background: #f5f5f5;
-    border: 2px solid #e0e0e0;
-    color: #bbb;
-    cursor: not-allowed;
-}
-.empty-creneaux {
-    background: var(--blanc);
-    border-radius: 12px;
-    padding: 3rem;
-    text-align: center;
-    color: var(--gris);
-}
-.empty-creneaux .icon { font-size: 3rem; margin-bottom: 1rem; }
-.empty-creneaux h3 { color: var(--vert-nuit); margin-bottom: 0.5rem; }
 
 /* Info card */
 .info-card {
-    background: var(--blanc);
-    border-radius: 14px;
-    padding: 1.5rem;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-    position: sticky;
-    top: 90px;
+    background: var(--blanc); border-radius: 16px; padding: 1.5rem;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07); position: sticky; top: 90px;
 }
-.info-card h3 { font-size: 1.1rem; font-weight: 700; color: var(--vert-nuit); margin-bottom: 1.2rem; padding-bottom: 0.8rem; border-bottom: 2px solid var(--gris-clair); }
-.info-row { display: flex; justify-content: space-between; align-items: center; padding: 0.6rem 0; border-bottom: 1px solid #f5f5f5; font-size: 0.95rem; }
+.info-card h3 { font-size: 1rem; font-weight: 700; color: var(--vert-nuit); margin-bottom: 1rem; padding-bottom: 0.7rem; border-bottom: 2px solid var(--gris-clair); }
+.info-row { display: flex; justify-content: space-between; align-items: center; padding: 0.55rem 0; border-bottom: 1px solid #f5f5f5; font-size: 0.92rem; }
 .info-row:last-of-type { border-bottom: none; }
 .info-row .label { color: var(--gris); }
 .info-row .value { font-weight: 600; color: var(--vert-nuit); }
-.info-row .price-val { font-weight: 800; color: var(--vert-gazon); font-size: 1.1rem; }
-.cta-note { background: #e8f5ed; border-radius: 10px; padding: 1rem; margin-top: 1.2rem; color: #1a5c35; font-size: 0.88rem; line-height: 1.6; }
+.price-val { font-weight: 800; color: var(--vert-gazon); font-size: 1.05rem; }
+.cta-note { background: #e8f5ed; border-radius: 10px; padding: 0.9rem; margin-top: 1.2rem; color: #1a5c35; font-size: 0.85rem; line-height: 1.6; }
+.btn-reserve { display: block; width: 100%; text-align: center; margin-top: 1.2rem; padding: 0.95rem; font-size: 1rem; border-radius: 10px; }
 
-@media (max-width: 900px) {
-    .detail-header-inner { flex-direction: column; gap: 1.5rem; }
-    .detail-body { grid-template-columns: 1fr; }
-    .info-card { position: static; }
-    .slots-grid { grid-template-columns: repeat(3, 1fr); }
-}
-@media (max-width: 600px) {
+/* Main section */
+.main-section { background: var(--blanc); border-radius: 16px; padding: 2rem; box-shadow: 0 2px 12px rgba(0,0,0,0.07); }
+.main-section h2 { font-size: 1.3rem; font-weight: 800; color: var(--vert-nuit); margin-bottom: 0.5rem; }
+.main-section p { color: var(--gris); font-size: 0.92rem; line-height: 1.6; margin-bottom: 1.5rem; }
+.dispo-preview { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+.dispo-chip { background: #e8f5ed; border: 1.5px solid #a8d5b5; border-radius: 8px; padding: 0.35rem 0.75rem; font-size: 0.82rem; font-weight: 600; color: #1a5c35; }
+.no-dispo-msg { background: #f5f5f5; border-radius: 10px; padding: 1.5rem; text-align: center; color: var(--gris); }
+
+@media (max-width: 700px) {
     .detail-header { padding: 1.5rem 1rem; }
-    .detail-header-inner { gap: 1rem; }
-    .terrain-icon-large { width: 64px; height: 64px; font-size: 2.2rem; border-radius: 14px; }
-    .detail-header h1 { font-size: 1.3rem; }
-    .detail-header .loc { font-size: 0.88rem; margin-bottom: 0.6rem; }
-    .detail-header .price-big { font-size: 1.4rem; }
-    .detail-body { margin: 1.2rem auto; padding: 0 1rem; gap: 1rem; }
-    .creneaux-section h2 { font-size: 1.1rem; }
-    .slots-grid { grid-template-columns: repeat(2, 1fr); gap: 0.4rem; }
-    .slot { padding: 0.65rem 0.3rem; }
-    .slot-time { font-size: 0.95rem; }
-    .slot-end { font-size: 0.65rem; }
-    .slot-label { font-size: 0.65rem; }
-    .day-tab { padding: 0.5rem 0.7rem; min-width: 52px; }
-    .dt-num { font-size: 1.2rem; }
+    .detail-header-inner { flex-direction: column; gap: 1rem; }
+    .terrain-icon-large { width: 70px; height: 70px; font-size: 2.5rem; }
+    .detail-header h1 { font-size: 1.4rem; }
+    .detail-body { grid-template-columns: 1fr; margin: 1.2rem auto; padding: 0 1rem; }
+    .info-card { position: static; }
 }
+
+/* ── Modal (identique calendrier) ─────── */
+.modal-overlay {
+    display: none; position: fixed; inset: 0; z-index: 1000;
+    background: rgba(0,0,0,0.55); backdrop-filter: blur(3px);
+    align-items: center; justify-content: center; padding: 1rem;
+}
+.modal-overlay.open { display: flex; }
+.modal-box {
+    background: var(--blanc); border-radius: 20px;
+    width: 100%; max-width: 520px; max-height: 90vh; overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    animation: slideUp 0.25s ease;
+}
+@keyframes slideUp { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
+.modal-head { background: var(--vert-nuit); color: white; padding: 1.2rem 1.5rem; border-radius: 20px 20px 0 0; display: flex; align-items: flex-start; justify-content: space-between; }
+.modal-head-info h2 { font-size: 1.05rem; font-weight: 700; }
+.modal-head-prix { font-size: 0.85rem; color: var(--or); font-weight: 600; margin-top: 0.15rem; }
+.modal-close { background: rgba(255,255,255,0.15); border: none; color: white; width: 32px; height: 32px; border-radius: 50%; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.modal-close:hover { background: rgba(255,255,255,0.3); }
+.modal-body { padding: 1.4rem 1.5rem; }
+.cal-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.9rem; }
+.cal-nav-btn { background: var(--gris-clair); border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; }
+.cal-nav-btn:hover { background: #d4edda; }
+#cal-month-label { font-weight: 700; color: var(--vert-nuit); font-size: 0.95rem; }
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+.cal-day-name { text-align: center; font-size: 0.7rem; font-weight: 700; color: var(--gris); padding: 0.2rem 0; text-transform: uppercase; }
+.cal-cell { aspect-ratio:1; display:flex; align-items:center; justify-content:center; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:default; transition:all 0.15s; }
+.cal-cell.empty { background: transparent; }
+.cal-cell.past { color: #ccc; }
+.cal-cell.no-dispo { color: #bbb; background: #fafafa; }
+.cal-cell.has-dispo { background: #e8f5ed; color: #1a5c35; cursor: pointer; border: 1.5px solid #a8d5b5; }
+.cal-cell.has-dispo:hover { background: var(--vert-gazon); color: white; }
+.cal-cell.selected { background: var(--vert-nuit) !important; color: white !important; border-color: var(--vert-nuit) !important; }
+.cal-legend { display:flex; gap:1rem; margin-top:0.8rem; font-size:0.75rem; color:var(--gris); }
+.leg-dot { display:inline-block; width:10px; height:10px; border-radius:3px; margin-right:4px; }
+.leg-green { background:#e8f5ed; border:1px solid #a8d5b5; }
+.leg-gray { background:#fafafa; border:1px solid #ddd; }
+.slot-section { margin-top:1.2rem; border-top:2px solid var(--gris-clair); padding-top:1rem; }
+.slot-section-title { font-size:0.85rem; font-weight:700; color:var(--vert-nuit); margin-bottom:0.8rem; }
+.slot-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:0.5rem; }
+.slot-btn { padding:0.55rem 0.2rem; border-radius:8px; font-size:0.82rem; font-weight:700; text-align:center; text-decoration:none; border:2px solid transparent; transition:all 0.15s; display:block; }
+.slot-btn.available { background:#e8f5ed; color:#1a5c35; border-color:#a8d5b5; cursor:pointer; }
+.slot-btn.available:hover { background:var(--vert-gazon); color:white; border-color:var(--vert-gazon); }
+.slot-btn.reserved { background:#f5f5f5; color:#ccc; border-color:#eee; cursor:not-allowed; font-size:0.75rem; }
+.slot-loading, .slot-empty-msg { text-align:center; padding:1rem; color:var(--gris); font-size:0.85rem; grid-column:1/-1; }
+.login-notice { background:#fff8e1; border:1.5px solid #ffd54f; border-radius:10px; padding:0.75rem 1rem; font-size:0.82rem; color:#7a5c00; margin-top:0.8rem; }
+.login-notice a { color:var(--vert-gazon); font-weight:700; }
 {% endblock %}
 
 {% block content %}
@@ -168,89 +118,172 @@
         <div>
             <h1>{{ terrain.nom }}</h1>
             <p class="loc">📍 {{ terrain.localisation }}</p>
-            <span class="price-big">{{ terrain.prix_heure }}€ <small>{% trans "/ heure" %}</small></span>
+            <span class="price-big">{{ terrain.prix_heure }}€ <small>/ heure</small></span>
         </div>
     </div>
 </div>
 
 <div class="detail-body">
-    <div>
-        <div class="creneaux-section">
-            <h2>📅 {% trans "Créneaux disponibles" %}</h2>
-
-            <div class="day-tabs-scroll">
-                <div class="day-tabs">
-                    {% for d in dates %}
-                    <a href="?date={{ d|date:'Y-m-d' }}"
-                       class="day-tab {% if d == selected_date %}active{% endif %}">
-                        <span class="dt-day">{{ d|date:"D" }}</span>
-                        <span class="dt-num">{{ d|date:"j" }}</span>
-                        <span class="dt-mon">{{ d|date:"M" }}</span>
-                    </a>
-                    {% endfor %}
-                </div>
-            </div>
-
-            <p class="slots-date-label">{{ selected_date|date:"l j F Y" }}</p>
-
-            {% if creneaux %}
-                <div class="slots-grid">
-                    {% for creneau in creneaux %}
-                    {% if creneau.disponible %}
-                        {% if user.is_authenticated %}
-                        <a href="{% url 'reserver' creneau.pk %}" class="slot available">
-                        {% else %}
-                        <a href="{% url 'connexion' %}?next={{ request.path }}" class="slot available">
-                        {% endif %}
-                            <span class="slot-time">{{ creneau.heure_debut|time:"H:i" }}</span>
-                            <span class="slot-end">→ {{ creneau.heure_fin|time:"H:i" }}</span>
-                            <span class="slot-label">✅ {% trans "Disponible" %}</span>
-                        </a>
-                    {% else %}
-                        <div class="slot reserved">
-                            <span class="slot-time">{{ creneau.heure_debut|time:"H:i" }}</span>
-                            <span class="slot-end">→ {{ creneau.heure_fin|time:"H:i" }}</span>
-                            <span class="slot-label">🔒 {% trans "Réservé" %}</span>
-                        </div>
-                    {% endif %}
-                    {% endfor %}
-                </div>
-            {% else %}
-                <div class="empty-creneaux">
-                    <div class="icon">📅</div>
-                    <h3>{% trans "Aucun créneau disponible" %}</h3>
-                    <p>{% trans "Revenez prochainement, de nouveaux créneaux seront ajoutés." %}</p>
-                </div>
-            {% endif %}
+    <!-- Main left section -->
+    <div class="main-section">
+        <h2>📅 {% trans "Disponibilités" %}</h2>
+        <p>{% trans "Sélectionnez une date dans le calendrier pour voir et réserver les créneaux disponibles." %}</p>
+        <button onclick="openModal()" class="btn btn-primary" style="padding:0.85rem 2rem; font-size:1rem; border-radius:10px;">
+            📆 {% trans "Voir les créneaux disponibles" %}
+        </button>
+        <div class="cta-note" style="margin-top:1.2rem;">
+            {% trans "✅ Réservation instantanée · Confirmation par e-mail · Annulation possible" %}
         </div>
     </div>
 
-    <div>
-        <div class="info-card">
-            <h3>{% trans "Infos terrain" %}</h3>
-            <div class="info-row">
-                <span class="label">{% trans "Terrain" %}</span>
-                <span class="value">{{ terrain.nom }}</span>
+    <!-- Info card -->
+    <div class="info-card">
+        <h3>{% trans "Infos terrain" %}</h3>
+        <div class="info-row">
+            <span class="label">{% trans "Sport" %}</span>
+            <span class="value">{% if "Padel" in terrain.nom %}🎾 Padel{% else %}⚽ Football{% endif %}</span>
+        </div>
+        <div class="info-row">
+            <span class="label">{% trans "Localisation" %}</span>
+            <span class="value">{{ terrain.localisation }}</span>
+        </div>
+        <div class="info-row">
+            <span class="label">{% trans "Prix" %}</span>
+            <span class="price-val">{{ terrain.prix_heure }}€/h</span>
+        </div>
+        <div class="info-row">
+            <span class="label">{% trans "Disponibilité" %}</span>
+            <span class="badge badge-green">{% trans "Disponible" %}</span>
+        </div>
+        {% if terrain.description %}
+        <p style="margin-top:1rem; color:var(--gris); font-size:0.88rem; line-height:1.6;">{{ terrain.description }}</p>
+        {% endif %}
+        <button onclick="openModal()" class="btn btn-primary btn-reserve">
+            📆 {% trans "Réserver" %}
+        </button>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="booking-modal" onclick="handleOverlayClick(event)">
+    <div class="modal-box">
+        <div class="modal-head">
+            <div class="modal-head-info">
+                <h2>{% if "Padel" in terrain.nom %}🎾{% else %}⚽{% endif %} {{ terrain.nom }}</h2>
+                <div class="modal-head-prix">{{ terrain.prix_heure }}€ / heure</div>
             </div>
-            <div class="info-row">
-                <span class="label">{% trans "Localisation" %}</span>
-                <span class="value">{{ terrain.localisation }}</span>
+            <button class="modal-close" onclick="closeModal()">✕</button>
+        </div>
+        <div class="modal-body">
+            <div class="cal-nav">
+                <button class="cal-nav-btn" onclick="prevMonth()">‹</button>
+                <span id="cal-month-label"></span>
+                <button class="cal-nav-btn" onclick="nextMonth()">›</button>
             </div>
-            <div class="info-row">
-                <span class="label">{% trans "Prix" %}</span>
-                <span class="price-val">{{ terrain.prix_heure }}€/h</span>
+            <div id="cal-body"></div>
+            <div class="cal-legend">
+                <span><span class="leg-dot leg-green"></span>Disponible</span>
+                <span><span class="leg-dot leg-gray"></span>Complet</span>
             </div>
-            <div class="info-row">
-                <span class="label">{% trans "Disponibilité" %}</span>
-                <span class="badge badge-green">{% trans "Disponible" %}</span>
-            </div>
-            {% if terrain.description %}
-            <p style="margin-top:1.2rem; color:var(--gris); font-size:0.9rem; line-height:1.6;">{{ terrain.description }}</p>
-            {% endif %}
-            <div class="cta-note">
-                {% trans "✅ Réservation instantanée · Confirmation par e-mail · Annulation possible" %}
+            <div class="slot-section" id="slot-section" style="display:none;">
+                <div class="slot-section-title" id="slot-section-title"></div>
+                <div class="slot-grid" id="slot-grid"></div>
+                {% if not is_auth %}
+                <div class="login-notice">
+                    ⚠️ <a href="{% url 'connexion' %}">Connectez-vous</a> pour réserver un créneau.
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>
 </div>
+
+<script>
+const DISPO = {{ dispo_json|safe }};
+const TODAY = '{{ today }}';
+const IS_AUTH = {{ is_auth|yesno:"true,false" }};
+const TERRAIN_ID = {{ terrain.id }};
+const MONTHS = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+const DAYS_HDR = ['Lu','Ma','Me','Je','Ve','Sa','Di'];
+
+let curYear = 0, curMonth = 0, selDate = null;
+
+function openModal() {
+    const now = new Date();
+    curYear = now.getFullYear(); curMonth = now.getMonth(); selDate = null;
+    document.getElementById('slot-section').style.display = 'none';
+    document.getElementById('slot-grid').innerHTML = '';
+    renderCal(curYear, curMonth);
+    document.getElementById('booking-modal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
+function closeModal() {
+    document.getElementById('booking-modal').classList.remove('open');
+    document.body.style.overflow = '';
+}
+function handleOverlayClick(e) { if (e.target === document.getElementById('booking-modal')) closeModal(); }
+
+function renderCal(year, month) {
+    curYear = year; curMonth = month;
+    document.getElementById('cal-month-label').textContent = MONTHS[month] + ' ' + year;
+    const dispoSet = new Set(DISPO[String(TERRAIN_ID)] || []);
+    const firstDow = new Date(year, month, 1).getDay();
+    const startOffset = (firstDow + 6) % 7;
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    let html = '<div class="cal-grid">';
+    DAYS_HDR.forEach(d => { html += `<div class="cal-day-name">${d}</div>`; });
+    for (let i = 0; i < startOffset; i++) html += '<div class="cal-cell empty"></div>';
+    for (let day = 1; day <= daysInMonth; day++) {
+        const mm = String(month + 1).padStart(2, '0'), dd = String(day).padStart(2, '0');
+        const dateStr = `${year}-${mm}-${dd}`;
+        const isPast = dateStr < TODAY, hasDispo = dispoSet.has(dateStr), isSel = dateStr === selDate;
+        let cls = 'cal-cell' + (isPast ? ' past' : hasDispo ? ' has-dispo' : ' no-dispo') + (isSel ? ' selected' : '');
+        const click = (!isPast && hasDispo) ? `onclick="selectDate('${dateStr}')"` : '';
+        html += `<div class="${cls}" ${click}>${day}</div>`;
+    }
+    html += '</div>';
+    document.getElementById('cal-body').innerHTML = html;
+}
+
+function prevMonth() {
+    const now = new Date();
+    let m = curMonth - 1, y = curYear;
+    if (m < 0) { m = 11; y--; }
+    if (y < now.getFullYear() || (y === now.getFullYear() && m < now.getMonth())) return;
+    renderCal(y, m);
+}
+function nextMonth() {
+    let m = curMonth + 1, y = curYear;
+    if (m > 11) { m = 0; y++; }
+    renderCal(y, m);
+}
+
+function selectDate(dateStr) {
+    selDate = dateStr;
+    renderCal(curYear, curMonth);
+    const [y, m, d] = dateStr.split('-');
+    document.getElementById('slot-section-title').textContent = `Créneaux — ${d} ${MONTHS[parseInt(m)-1]} ${y}`;
+    document.getElementById('slot-grid').innerHTML = '<div class="slot-loading">Chargement…</div>';
+    document.getElementById('slot-section').style.display = 'block';
+    fetch(`/api/creneaux/?terrain=${TERRAIN_ID}&date=${dateStr}`)
+        .then(r => r.json()).then(data => renderSlots(data.slots))
+        .catch(() => { document.getElementById('slot-grid').innerHTML = '<div class="slot-empty-msg">Erreur.</div>'; });
+}
+
+function renderSlots(slots) {
+    if (!slots.length) { document.getElementById('slot-grid').innerHTML = '<div class="slot-empty-msg">Aucun créneau pour cette date.</div>'; return; }
+    let html = '';
+    slots.forEach(s => {
+        if (s.dispo) {
+            const href = IS_AUTH ? `/reserver/${s.id}/` : `/connexion/?next=/reserver/${s.id}/`;
+            html += `<a href="${href}" class="slot-btn available">${s.label}</a>`;
+        } else {
+            html += `<div class="slot-btn reserved">${s.label}</div>`;
+        }
+    });
+    document.getElementById('slot-grid').innerHTML = html;
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+</script>
 {% endblock %}
