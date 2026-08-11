@@ -1,0 +1,29 @@
+Bonjour {{ prenom }},
+
+Votre réservation est confirmée et votre paiement a bien été reçu. 🎉
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  DÉTAILS DE VOTRE RÉSERVATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Terrain   : {{ terrain_nom }}
+  Complexe  : {{ complexe }}
+  Adresse   : {{ adresse }}
+  Date      : {{ date }}
+  Horaire   : {{ heure_debut }} – {{ heure_fin }}
+  Montant   : {{ montant }}€ TTC
+  Réf.      : #{{ reservation_id }}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+POLITIQUE D'ANNULATION
+  • Annulation +48h avant le créneau → remboursement 100%
+  • Annulation entre 24h et 48h      → remboursement 50%
+  • Annulation moins de 24h          → aucun remboursement
+
+Vous pouvez gérer votre réservation depuis votre espace personnel.
+
+À bientôt sur le terrain !
+L'équipe Sportify
+Réservation de terrains sportifs — Bruxelles
+N° TVA : BE 0123.456.789
