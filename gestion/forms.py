@@ -8,6 +8,11 @@ class InscriptionForm(UserCreationForm):
     first_name = forms.CharField(max_length=50, required=True, label='Prénom')
     last_name = forms.CharField(max_length=50, required=True, label='Nom')
     telephone = forms.CharField(max_length=20, required=False, label='Téléphone')
+    conditions = forms.BooleanField(
+        required=True,
+        label='conditions',
+        error_messages={'required': "Vous devez accepter les conditions d'utilisation et la politique de confidentialité."},
+    )
 
     class Meta:
         model = Utilisateur
@@ -15,8 +20,9 @@ class InscriptionForm(UserCreationForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        for field in self.fields.values():
-            field.widget.attrs['class'] = 'form-input'
+        for name, field in self.fields.items():
+            if name != 'conditions':
+                field.widget.attrs['class'] = 'form-input'
 
 
 class ProfilForm(forms.ModelForm):
