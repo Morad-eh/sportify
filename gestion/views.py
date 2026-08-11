@@ -34,31 +34,23 @@ def liste_terrains(request):
 
 
 def detail_terrain(request, pk):
-    from datetime import timedelta, date as date_type
+    from datetime import timedelta
+
     terrain = get_object_or_404(Terrain, pk=pk, disponible=True)
     today = timezone.now().date()
+    end_date = today + timedelta(days=30)
 
-    date_str = request.GET.get('date')
-    try:
-        selected_date = date_type.fromisoformat(date_str) if date_str else today
-        if selected_date < today:
-            selected_date = today
-    except (ValueError, TypeError):
-        selected_date = today
-
-    dates = [today + timedelta(days=i) for i in range(14)]
-
-    creneaux = sorted(
-        terrain.creneaux.filter(date=selected_date),
-        key=lambda c: c.heure_debut.hour if c.heure_debut.hour >= 12 else c.heure_debut.hour + 24,
+    dispo_dates = list(
+        terrain.creneaux.filter(disponible=True, date__gte=today, date__lte=end_date)
+        .values_list('date', flat=True).distinct()
     )
+    dispo_json = json.dumps({str(terrain.id): [d.isoformat() for d in dispo_dates]})
 
     return render(request, 'gestion/terrain_detail.html', {
         'terrain': terrain,
-        'creneaux': creneaux,
-        'dates': dates,
-        'selected_date': selected_date,
-        'today': today,
+        'dispo_json': dispo_json,
+        'today': today.isoformat(),
+        'is_auth': request.user.is_authenticated,
     })
 
 
@@ -141,6 +133,9 @@ def supprimer_compte(request):
 
 @login_required
 def reserver(request, creneau_id):
+    if request.user.is_staff:
+        messages.error(request, "Les administrateurs ne peuvent pas effectuer de réservations.")
+        return redirect('terrains')
     creneau = get_object_or_404(Creneau, pk=creneau_id, disponible=True)
     return render(request, 'gestion/reservation_confirm.html', {
         'creneau': creneau,
@@ -150,6 +145,8 @@ def reserver(request, creneau_id):
 
 @login_required
 def creer_paiement(request, creneau_id):
+    if request.user.is_staff:
+        return redirect('terrains')
     creneau = get_object_or_404(Creneau, pk=creneau_id, disponible=True)
     stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -176,19 +173,171 @@ def creer_paiement(request, creneau_id):
 
 @login_required
 def annuler_reservation(request, reservation_id):
+    from datetime import datetime as dt
+    from zoneinfo import ZoneInfo
+
     reservation = get_object_or_404(Reservation, pk=reservation_id, utilisateur=request.user)
     if reservation.statut != 'confirmee' or reservation.creneau.date < timezone.now().date():
         messages.error(request, 'Cette réservation ne peut pas être annulée.')
         return redirect('dashboard')
+
+    brussels = ZoneInfo('Europe/Brussels')
+    now_brussels = timezone.now().astimezone(brussels)
+    creneau_dt = dt.combine(reservation.creneau.date, reservation.creneau.heure_debut).replace(tzinfo=brussels)
+    heures_avant = (creneau_dt - now_brussels).total_seconds() / 3600
+
+    if heures_avant >= 48:
+        pct_remboursement = 100
+    elif heures_avant >= 24:
+        pct_remboursement = 50
+    else:
+        pct_remboursement = 0
+
+    montant_rembourse = round(float(reservation.montant_total) * pct_remboursement / 100, 2)
+
     if request.method == 'POST':
         creneau = reservation.creneau
+
+        # Remboursement Stripe
+        paiement = reservation.paiements.first()
+        stripe_ok = False
+        if paiement and paiement.stripe_payment_id and montant_rembourse > 0:
+            try:
+                stripe.api_key = settings.STRIPE_SECRET_KEY
+                refund_kwargs = {'payment_intent': paiement.stripe_payment_id}
+                if pct_remboursement < 100:
+                    refund_kwargs['amount'] = int(montant_rembourse * 100)
+                stripe.Refund.create(**refund_kwargs)
+                paiement.statut = 'rembourse'
+                paiement.save()
+                stripe_ok = True
+            except Exception:
+                stripe_ok = False
+
         reservation.statut = 'annulee'
         reservation.save()
         creneau.disponible = True
         creneau.save()
-        messages.success(request, 'Votre réservation a été annulée.')
+
+        # Email client
+        try:
+            client_email = reservation.utilisateur.email
+            if client_email:
+                sujet_client = f"Annulation de votre réservation — {creneau.terrain.nom}"
+                from django.template.loader import render_to_string
+                corps_client = render_to_string('gestion/email_annulation_client.txt', {
+                    'reservation': reservation,
+                    'creneau': creneau,
+                    'pct_remboursement': pct_remboursement,
+                    'montant_rembourse': montant_rembourse,
+                })
+                send_mail(sujet_client, corps_client, settings.DEFAULT_FROM_EMAIL, [client_email])
+        except Exception:
+            pass
+
+        # Email admin
+        try:
+            admin_email = settings.EMAIL_HOST_USER
+            if admin_email:
+                sujet_admin = f"[Sportify] Annulation — {reservation.utilisateur.username} — {creneau.terrain.nom}"
+                from django.template.loader import render_to_string
+                corps_admin = render_to_string('gestion/email_annulation_admin.txt', {
+                    'reservation': reservation,
+                    'creneau': creneau,
+                    'pct_remboursement': pct_remboursement,
+                    'montant_rembourse': montant_rembourse,
+                })
+                send_mail(sujet_admin, corps_admin, settings.DEFAULT_FROM_EMAIL, [admin_email])
+        except Exception:
+            pass
+
+        if montant_rembourse > 0:
+            messages.success(request, f'Réservation annulée. Remboursement de {montant_rembourse}€ ({pct_remboursement}%) sous 5 à 10 jours ouvrables.')
+        else:
+            messages.info(request, 'Réservation annulée. Aucun remboursement (annulation moins de 24h avant le créneau).')
         return redirect('dashboard')
-    return render(request, 'gestion/annuler_reservation.html', {'reservation': reservation})
+
+    return render(request, 'gestion/annuler_reservation.html', {
+        'reservation': reservation,
+        'pct_remboursement': pct_remboursement,
+        'montant_rembourse': montant_rembourse,
+        'heures_avant': int(heures_avant),
+    })
+
+
+def conditions(request):
+    return render(request, 'gestion/conditions.html')
+
+
+def confidentialite(request):
+    return render(request, 'gestion/confidentialite.html')
+
+
+def nos_complexes(request):
+    complexes_info = [
+        {
+            'nom': 'Royal Foot Indoor',
+            'commune': 'Anderlecht',
+            'adresse': 'Anderlecht, 1070 Bruxelles',
+            'emoji': '🏟️',
+            'couleur': '#1A8C4E',
+            'horaires': 'Lun–Ven : 10h–23h · Sam–Dim : 9h–23h',
+            'sports': ['Football en salle'],
+            'equipements': ['Vestiaires & douches', 'Parking gratuit', 'Bar & buvette', 'Éclairage LED'],
+        },
+        {
+            'nom': 'Fitfive Forest',
+            'commune': 'Forest',
+            'adresse': 'Forest, 1190 Bruxelles',
+            'emoji': '⚽',
+            'couleur': '#0D2E1A',
+            'horaires': 'Lun–Ven : 9h–23h · Sam–Dim : 8h–23h',
+            'sports': ['Football en salle'],
+            'equipements': ['Vestiaires & douches', 'Accès PMR', 'Cafétéria', 'Wi-Fi gratuit'],
+        },
+        {
+            'nom': 'City Five',
+            'commune': 'Molenbeek-Saint-Jean',
+            'adresse': 'Molenbeek-Saint-Jean, 1080 Bruxelles',
+            'emoji': '🎾',
+            'couleur': '#7c3aed',
+            'horaires': 'Lun–Ven : 10h–23h · Sam–Dim : 9h–22h',
+            'sports': ['Football en salle', 'Padel'],
+            'equipements': ['Vestiaires & douches', 'Location de matériel', 'Snack bar', 'Parking'],
+        },
+    ]
+    terrains = Terrain.objects.filter(disponible=True).order_by('localisation', 'nom')
+    terrains_par_commune = {}
+    for t in terrains:
+        terrains_par_commune.setdefault(t.localisation, []).append(t)
+    for c in complexes_info:
+        c['terrains'] = terrains_par_commune.get(c['commune'], [])
+    return render(request, 'gestion/nos_complexes.html', {'complexes': complexes_info})
+
+
+def contact(request):
+    if request.method == 'POST':
+        nom = request.POST.get('nom', '').strip()
+        email_contact = request.POST.get('email', '').strip()
+        sujet = request.POST.get('sujet', '').strip()
+        message_body = request.POST.get('message', '').strip()
+        if nom and email_contact and sujet and message_body:
+            try:
+                corps = f"Message reçu via le formulaire de contact Sportify.\n\nDe : {nom} <{email_contact}>\nSujet : {sujet}\n\n{message_body}"
+                send_mail(
+                    f'[Contact Sportify] {sujet}',
+                    corps,
+                    settings.DEFAULT_FROM_EMAIL,
+                    [settings.EMAIL_HOST_USER],
+                    reply_to=[email_contact],
+                )
+                messages.success(request, 'Votre message a bien été envoyé. Nous vous répondrons sous 48h.')
+            except Exception:
+                messages.error(request, 'Une erreur est survenue. Veuillez réessayer ou nous contacter directement par email.')
+        else:
+            messages.error(request, 'Veuillez remplir tous les champs.')
+        return redirect('contact')
+    return render(request, 'gestion/contact.html')
 
 
 def calendrier(request):
@@ -234,10 +383,14 @@ def calendrier(request):
 
 
 def api_creneaux(request):
-    from datetime import date as date_type
+    from datetime import date as date_type, time as time_type
+    from zoneinfo import ZoneInfo
 
     terrain_id = request.GET.get('terrain')
     date_str = request.GET.get('date')
+    exclude_id = request.GET.get('exclude')
+    only_available = request.GET.get('only') == '1'
+
     if not terrain_id or not date_str:
         return JsonResponse({'slots': []})
 
@@ -247,8 +400,25 @@ def api_creneaux(request):
     except (ValueError, TypeError):
         return JsonResponse({'slots': []})
 
+    brussels = ZoneInfo('Europe/Brussels')
+    now_brussels = timezone.now().astimezone(brussels)
+    today_brussels = now_brussels.date()
+
+    if d < today_brussels:
+        return JsonResponse({'slots': []})
+
     slot_hours = [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 0]
-    creneaux_map = {c.heure_debut.hour: c for c in terrain.creneaux.filter(date=d)}
+    qs = terrain.creneaux.filter(date=d)
+    if exclude_id:
+        qs = qs.exclude(pk=exclude_id)
+    if only_available:
+        qs = qs.filter(disponible=True)
+    # Pour aujourd'hui, exclure les créneaux déjà passés
+    if d == today_brussels:
+        current_time = time_type(now_brussels.hour, now_brussels.minute)
+        qs = qs.filter(heure_debut__gte=current_time)
+
+    creneaux_map = {c.heure_debut.hour: c for c in qs}
     slots = []
     for h in slot_hours:
         c = creneaux_map.get(h)
@@ -269,15 +439,15 @@ def admin_dashboard(request):
     month_start = today.replace(day=1)
 
     reservations_aujourd_hui = Reservation.objects.filter(
-        creneau__date=today, statut='confirmee'
+        creneau__date=today, statut='confirmee', utilisateur__is_staff=False
     ).count()
 
     revenue_today = Reservation.objects.filter(
-        creneau__date=today, statut='confirmee'
+        creneau__date=today, statut='confirmee', utilisateur__is_staff=False
     ).aggregate(total=Sum('montant_total'))['total'] or 0
 
     revenue_month = Reservation.objects.filter(
-        creneau__date__gte=month_start, statut='confirmee'
+        creneau__date__gte=month_start, statut='confirmee', utilisateur__is_staff=False
     ).aggregate(total=Sum('montant_total'))['total'] or 0
 
     total_users = Utilisateur.objects.filter(is_staff=False).count()
@@ -286,9 +456,9 @@ def admin_dashboard(request):
     reserved_slots = Creneau.objects.filter(date=today, disponible=False).count()
     taux_occupation = round(reserved_slots / total_slots * 100) if total_slots > 0 else 0
 
-    reservations_du_jour = Reservation.objects.filter(
-        creneau__date=today
-    ).select_related('creneau__terrain', 'utilisateur').order_by('creneau__heure_debut')
+    reservations_du_mois = Reservation.objects.filter(
+        creneau__date__gte=month_start, utilisateur__is_staff=False
+    ).select_related('creneau__terrain', 'utilisateur').order_by('creneau__date', 'creneau__heure_debut')
 
     top_terrains = Terrain.objects.annotate(
         nb_resa=Count('creneaux__reservations', filter=Q(creneaux__reservations__statut='confirmee'))
@@ -302,6 +472,7 @@ def admin_dashboard(request):
         r = float(Reservation.objects.filter(
             creneau__date__gte=month_start,
             statut='confirmee',
+            utilisateur__is_staff=False,
             creneau__terrain__localisation__icontains=commune,
         ).aggregate(total=Sum('montant_total'))['total'] or 0)
         revenus_communes_raw[commune] = r
@@ -314,10 +485,10 @@ def admin_dashboard(request):
     ]
 
     resa_football = Reservation.objects.filter(
-        statut='confirmee', creneau__terrain__nom__icontains='Football'
+        statut='confirmee', utilisateur__is_staff=False, creneau__terrain__nom__icontains='Football'
     ).count()
     resa_padel = Reservation.objects.filter(
-        statut='confirmee', creneau__terrain__nom__icontains='Padel'
+        statut='confirmee', utilisateur__is_staff=False, creneau__terrain__nom__icontains='Padel'
     ).count()
     total_sport = resa_football + resa_padel
     pct_football = round(resa_football / total_sport * 100) if total_sport > 0 else 50
@@ -328,7 +499,7 @@ def admin_dashboard(request):
     for i in range(6, -1, -1):
         d = today - timedelta(days=i)
         r = float(Reservation.objects.filter(
-            creneau__date=d, statut='confirmee'
+            creneau__date=d, statut='confirmee', utilisateur__is_staff=False
         ).aggregate(total=Sum('montant_total'))['total'] or 0)
         revenus_7j.append({'date': d.strftime('%a'), 'total': r})
         if r > max_rev:
@@ -344,7 +515,7 @@ def admin_dashboard(request):
         'taux_occupation': taux_occupation,
         'reserved_slots': reserved_slots,
         'total_slots': total_slots,
-        'reservations_du_jour': reservations_du_jour,
+        'reservations_du_mois': reservations_du_mois,
         'top_terrains': top_terrains,
         'recent_users': recent_users,
         'communes_data': communes_data,
@@ -384,6 +555,9 @@ def telecharger_facture(request, reservation_id):
     p.setFont('Helvetica', 11)
     p.setFillColor(colors.HexColor('#8ab89a'))
     p.drawString(50, h - 78, 'Réservation de terrains sportifs — Bruxelles')
+    p.setFont('Helvetica', 10)
+    p.setFillColor(colors.HexColor('#8ab89a'))
+    p.drawString(50, h - 95, 'N° TVA : BE 0123.456.789')
 
     # ── Numéro facture (droite)
     p.setFont('Helvetica-Bold', 13)
@@ -484,16 +658,30 @@ def telecharger_facture(request, reservation_id):
 
 @login_required
 def modifier_reservation(request, reservation_id):
+    from datetime import timedelta, datetime as dt, time as time_type
+    from zoneinfo import ZoneInfo
+
+    brussels = ZoneInfo('Europe/Brussels')
+    now_brussels = timezone.now().astimezone(brussels)
+    today_brussels = now_brussels.date()
+
     reservation = get_object_or_404(Reservation, pk=reservation_id, utilisateur=request.user)
-    if reservation.statut != 'confirmee' or reservation.creneau.date < timezone.now().date():
+
+    if reservation.statut != 'confirmee':
         messages.error(request, 'Cette réservation ne peut pas être modifiée.')
         return redirect('dashboard')
+
+    # Limite : modification impossible moins de 24h avant le créneau
+    reservation_dt = dt.combine(
+        reservation.creneau.date,
+        reservation.creneau.heure_debut,
+    ).replace(tzinfo=brussels)
+    if (reservation_dt - now_brussels).total_seconds() < 86400:
+        messages.error(request, 'La modification n\'est plus possible moins de 24h avant votre créneau.')
+        return redirect('dashboard')
+
     terrain = reservation.creneau.terrain
-    creneaux = Creneau.objects.filter(
-        terrain=terrain,
-        disponible=True,
-        date__gte=timezone.now().date(),
-    ).exclude(pk=reservation.creneau.pk).order_by('date', 'heure_debut')
+
     if request.method == 'POST':
         nouveau_id = request.POST.get('creneau_id')
         nouveau_creneau = get_object_or_404(Creneau, pk=nouveau_id, terrain=terrain, disponible=True)
@@ -506,10 +694,27 @@ def modifier_reservation(request, reservation_id):
         reservation.save()
         messages.success(request, f'Réservation modifiée : {nouveau_creneau.date} de {nouveau_creneau.heure_debut} à {nouveau_creneau.heure_fin}.')
         return redirect('dashboard')
+
+    end_date = today_brussels + timedelta(days=30)
+    current_time = time_type(now_brussels.hour, now_brussels.minute)
+
+    from django.db.models import Q
+    dispo_dates = list(
+        Creneau.objects.filter(
+            terrain=terrain, disponible=True,
+        ).exclude(pk=reservation.creneau.pk).filter(
+            Q(date__gt=today_brussels, date__lte=end_date) |
+            Q(date=today_brussels, heure_debut__gte=current_time)
+        ).values_list('date', flat=True).distinct()
+    )
+    dispo_json = json.dumps({str(terrain.id): [d.isoformat() for d in dispo_dates]})
+
     return render(request, 'gestion/reservation_modifier.html', {
         'reservation': reservation,
-        'creneaux': creneaux,
         'terrain': terrain,
+        'dispo_json': dispo_json,
+        'today': today_brussels.isoformat(),
+        'exclude_id': reservation.creneau.pk,
     })
 
 
@@ -545,18 +750,26 @@ def paiement_succes(request):
             messages.success(request, f'Paiement confirmé ! Terrain : {creneau.terrain.nom}, le {creneau.date}.')
             if request.user.email:
                 try:
+                    from django.template.loader import render_to_string
+                    complexes_map = {
+                        'Anderlecht': 'Royal Foot Indoor',
+                        'Forest': 'Fitfive Forest',
+                        'Molenbeek-Saint-Jean': 'City Five',
+                    }
+                    corps_confirm = render_to_string('gestion/email_confirmation_reservation.txt', {
+                        'prenom': request.user.get_full_name() or request.user.username,
+                        'terrain_nom': creneau.terrain.nom,
+                        'complexe': complexes_map.get(creneau.terrain.localisation, creneau.terrain.localisation),
+                        'adresse': creneau.terrain.localisation + ', Bruxelles',
+                        'date': creneau.date.strftime('%A %d %B %Y'),
+                        'heure_debut': creneau.heure_debut.strftime('%H:%M'),
+                        'heure_fin': creneau.heure_fin.strftime('%H:%M'),
+                        'montant': creneau.terrain.prix_heure,
+                        'reservation_id': reservation.id,
+                    })
                     send_mail(
-                        subject='✅ Confirmation de réservation — Sportify',
-                        message=(
-                            f'Bonjour {request.user.get_full_name() or request.user.username},\n\n'
-                            f'Votre réservation est confirmée !\n\n'
-                            f'📍 Terrain : {creneau.terrain.nom}\n'
-                            f'🗓️  Date    : {creneau.date}\n'
-                            f'🕐 Horaire : {creneau.heure_debut} – {creneau.heure_fin}\n'
-                            f'💰 Montant : {creneau.terrain.prix_heure}€\n\n'
-                            f'Merci de votre confiance.\n'
-                            f"L'équipe Sportify 🏟️"
-                        ),
+                        subject=f'✅ Confirmation de réservation — {creneau.terrain.nom}',
+                        message=corps_confirm,
                         from_email=settings.DEFAULT_FROM_EMAIL,
                         recipient_list=[request.user.email],
                         fail_silently=True,
