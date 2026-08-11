@@ -43,10 +43,32 @@
             <p>🏟️ {% trans "Terrain" %} : <strong>{{ reservation.creneau.terrain.nom }}</strong></p>
             <p>📅 {% trans "Date" %} : <strong>{{ reservation.creneau.date|date:"d/m/Y" }}</strong></p>
             <p>🕐 {% trans "Horaire" %} : <strong>{{ reservation.creneau.heure_debut|time:"H:i" }} – {{ reservation.creneau.heure_fin|time:"H:i" }}</strong></p>
-            <p>💶 {% trans "Montant" %} : <strong>{{ reservation.montant_total }}€</strong></p>
+            <p>💶 {% trans "Montant payé" %} : <strong>{{ reservation.montant_total }}€</strong></p>
         </div>
 
-        <p style="font-size:0.85rem; color:#e53e3e;">{% trans "Note : le remboursement se fait sur demande par email à l'équipe Sportify." %}</p>
+        {% if pct_remboursement == 100 %}
+        <div style="background:#d4edda; border:1.5px solid #28a745; border-radius:10px; padding:1rem 1.2rem; margin:1rem 0; text-align:left;">
+            <p style="color:#155724; font-weight:700; margin-bottom:0.3rem;">✅ Remboursement intégral</p>
+            <p style="color:#155724; font-size:0.9rem;">Vous serez remboursé(e) de <strong>{{ montant_rembourse }}€</strong> (100%) sous 5 à 10 jours ouvrables.</p>
+            <p style="color:#155724; font-size:0.82rem; margin-top:0.4rem;">Annulation effectuée plus de 48h avant le créneau.</p>
+        </div>
+        {% elif pct_remboursement == 50 %}
+        <div style="background:#fff3cd; border:1.5px solid #ffc107; border-radius:10px; padding:1rem 1.2rem; margin:1rem 0; text-align:left;">
+            <p style="color:#856404; font-weight:700; margin-bottom:0.3rem;">⚠️ Remboursement partiel (50%)</p>
+            <p style="color:#856404; font-size:0.9rem;">Vous serez remboursé(e) de <strong>{{ montant_rembourse }}€</strong> sur {{ reservation.montant_total }}€ sous 5 à 10 jours ouvrables.</p>
+            <p style="color:#856404; font-size:0.82rem; margin-top:0.4rem;">Annulation entre 24h et 48h avant le créneau (délai restant : ~{{ heures_avant }}h).</p>
+        </div>
+        {% else %}
+        <div style="background:#f8d7da; border:1.5px solid #dc3545; border-radius:10px; padding:1rem 1.2rem; margin:1rem 0; text-align:left;">
+            <p style="color:#721c24; font-weight:700; margin-bottom:0.3rem;">❌ Aucun remboursement</p>
+            <p style="color:#721c24; font-size:0.9rem;">L'annulation moins de 24h avant le créneau ne donne pas droit au remboursement (délai restant : ~{{ heures_avant }}h).</p>
+        </div>
+        {% endif %}
+
+        <div style="background:#f4f6f4; border-radius:8px; padding:0.75rem 1rem; margin-bottom:0.5rem; text-align:left;">
+            <p style="font-size:0.78rem; color:var(--gris); font-weight:600; margin-bottom:0.3rem;">POLITIQUE D'ANNULATION SPORTIFY</p>
+            <p style="font-size:0.78rem; color:var(--gris);">✅ +48h avant → 100% remboursé &nbsp;|&nbsp; ⚠️ 24h–48h → 50% &nbsp;|&nbsp; ❌ &lt;24h → aucun remboursement</p>
+        </div>
 
         <div class="btn-row">
             <a href="{% url 'dashboard' %}" class="btn" style="background:var(--gris-clair); color:var(--vert-nuit);">{% trans "Retour" %}</a>
