@@ -214,10 +214,15 @@
                 <span></span><span></span><span></span>
             </button>
             <ul class="nav-links" id="nav-links">
-                <li><a href="{% url 'terrains' %}">{% trans "Terrains" %}</a></li>
-                <li><a href="{% url 'calendrier' %}">📅 {% trans "Calendrier" %}</a></li>
+                {% if not user.is_staff %}
+                    <li><a href="{% url 'terrains' %}">{% trans "Terrains" %}</a></li>
+                    <li><a href="{% url 'nos_complexes' %}">{% trans "Nos complexes" %}</a></li>
+                {% endif %}
+                <li><a href="{% url 'contact' %}">{% trans "Contact" %}</a></li>
                 {% if user.is_authenticated %}
-                    <li><a href="{% url 'dashboard' %}">{% trans "Mon espace" %}</a></li>
+                    {% if not user.is_staff %}
+                        <li><a href="{% url 'dashboard' %}">{% trans "Mon espace" %}</a></li>
+                    {% endif %}
                     <li><a href="{% url 'profil' %}">{% trans "Mon profil" %}</a></li>
                     {% if user.is_staff %}
                         <li><a href="{% url 'admin_dashboard' %}">📊 Dashboard</a></li>
@@ -266,10 +271,18 @@
     <footer>
         <p><strong>Sportify</strong> &mdash; {% trans "Réserve ton match. Joue. Profite." %}</p>
         <p style="margin-top:0.6rem">
-            <a href="{% url 'terrains' %}">{% trans "Terrains" %}</a> &middot;
-            <a href="{% url 'inscription' %}">{% trans "S'inscrire" %}</a> &middot;
-            <a href="{% url 'connexion' %}">{% trans "Connexion" %}</a>
+            <a href="{% url 'terrains' %}">{% trans "Terrains" %}</a>
+            {% if not user.is_authenticated %}
+                &middot; <a href="{% url 'inscription' %}">{% trans "S'inscrire" %}</a>
+                &middot; <a href="{% url 'connexion' %}">{% trans "Connexion" %}</a>
+            {% endif %}
         </p>
+        <p style="margin-top:0.5rem; font-size:0.8rem;">
+            <a href="{% url 'conditions' %}">{% trans "Conditions d'utilisation" %}</a> &middot;
+            <a href="{% url 'confidentialite' %}">{% trans "Politique de confidentialité" %}</a> &middot;
+            {% trans "RGPD — Belgique" %}
+        </p>
+        <p style="margin-top:0.4rem; font-size:0.75rem; color:#aaa;">© 2026 Sportify — N° TVA : BE 0123.456.789 — Bruxelles, Belgique</p>
     </footer>
 </body>
 </html>
