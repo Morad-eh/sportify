@@ -1,0 +1,34 @@
+ANNULATION DE RÉSERVATION — ACTION REQUISE
+
+Un client vient d'annuler sa réservation.
+Le créneau est immédiatement remis en ligne et disponible à la réservation.
+
+--- DÉTAILS ---
+Client    : {{ reservation.utilisateur.get_full_name|default:reservation.utilisateur.username }} ({{ reservation.utilisateur.username }})
+Email     : {{ reservation.utilisateur.email }}
+Terrain   : {{ creneau.terrain.nom }}
+Adresse   : {{ creneau.terrain.localisation }}
+Date      : {{ creneau.date|date:"d/m/Y" }}
+Horaire   : {{ creneau.heure_debut|time:"H:i" }} – {{ creneau.heure_fin|time:"H:i" }}
+Montant encaissé : {{ reservation.montant_total }}€
+
+--- REMBOURSEMENT APPLIQUÉ ---
+{% if pct_remboursement == 100 %}
+Remboursement INTÉGRAL : {{ montant_rembourse }}€ (annulation +48h avant)
+Traitement automatique via Stripe.
+{% elif pct_remboursement == 50 %}
+Remboursement PARTIEL : {{ montant_rembourse }}€ sur {{ reservation.montant_total }}€ (annulation entre 24h et 48h avant)
+Traitement automatique via Stripe.
+Gain net pour Sportify : {{ reservation.montant_total|floatformat:2 }}€ moins {{ montant_rembourse }}€.
+{% else %}
+Aucun remboursement (annulation moins de 24h avant).
+Montant conservé : {{ reservation.montant_total }}€
+{% endif %}
+
+--- STATUT DU CRÉNEAU ---
+Le créneau {{ creneau.date|date:"d/m/Y" }} à {{ creneau.heure_debut|time:"H:i" }} est maintenant DISPONIBLE.
+Un autre client peut encore réserver ce créneau.
+
+---
+Dashboard Admin : https://sportify.com/admin-sportify/
+Stripe Dashboard : https://dashboard.stripe.com/

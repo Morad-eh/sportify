@@ -1,0 +1,35 @@
+Bonjour {{ reservation.utilisateur.get_full_name|default:reservation.utilisateur.username }},
+
+Votre réservation a bien été annulée.
+
+--- DÉTAILS DE LA RÉSERVATION ANNULÉE ---
+Terrain   : {{ creneau.terrain.nom }}
+Adresse   : {{ creneau.terrain.localisation }}
+Date      : {{ creneau.date|date:"d/m/Y" }}
+Horaire   : {{ creneau.heure_debut|time:"H:i" }} – {{ creneau.heure_fin|time:"H:i" }}
+Montant payé : {{ reservation.montant_total }}€
+
+--- REMBOURSEMENT ---
+{% if pct_remboursement == 100 %}
+Bonne nouvelle ! Vous bénéficiez d'un remboursement intégral de {{ montant_rembourse }}€.
+Le montant sera crédité sur votre moyen de paiement sous 5 à 10 jours ouvrables.
+{% elif pct_remboursement == 50 %}
+Vous bénéficiez d'un remboursement partiel de {{ montant_rembourse }}€ (50% du montant).
+En effet, votre annulation a été effectuée entre 24h et 48h avant le créneau.
+Le montant sera crédité sur votre moyen de paiement sous 5 à 10 jours ouvrables.
+{% else %}
+Aucun remboursement ne sera effectué.
+Votre annulation a été effectuée moins de 24h avant le créneau réservé,
+conformément à notre politique d'annulation.
+{% endif %}
+
+--- POLITIQUE D'ANNULATION SPORTIFY ---
+• Annulation +48h avant le créneau : remboursement à 100%
+• Annulation entre 24h et 48h      : remboursement à 50%
+• Annulation moins de 24h          : aucun remboursement
+
+Pour toute question, répondez à cet email.
+
+L'équipe Sportify
+Réservation de terrains sportifs — Bruxelles
+N° TVA : BE 0123.456.789
