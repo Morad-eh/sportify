@@ -131,18 +131,36 @@
         main { flex: 1; }
 
         footer {
-            background: #f9f9f9;
-            color: #888888;
+            background: linear-gradient(135deg, #0d2e1a 0%, #1a4a2e 100%);
+            color: #8ab89a;
             text-align: center;
-            padding: 1.5rem 2rem;
+            padding: 2.5rem 2rem 1.8rem;
             font-size: 0.85rem;
             margin-top: auto;
-            border-top: 1px solid #e0e0e0;
+            border-top: 4px solid #f5a623;
         }
-
-        footer strong { color: #333; }
-        footer a { color: #555; text-decoration: none; }
-        footer a:hover { text-decoration: underline; }
+        footer .footer-brand {
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+        footer .footer-brand .sport { color: #ffffff; }
+        footer .footer-brand .ify { color: #f5a623; }
+        footer .footer-tagline {
+            color: #6a9a7a;
+            font-size: 0.82rem;
+            margin-top: 0.2rem;
+            margin-bottom: 1.2rem;
+        }
+        footer .footer-links { margin-bottom: 0.7rem; }
+        footer a { color: #a8d5b5; text-decoration: none; font-weight: 500; transition: color 0.15s; }
+        footer a:hover { color: #f5a623; }
+        footer .footer-sep { color: #3a6a4a; margin: 0 0.5rem; }
+        footer .footer-legal { font-size: 0.78rem; color: #4a7a5a; margin-top: 0.5rem; }
+        footer .footer-divider {
+            border: none; border-top: 1px solid rgba(255,255,255,0.08);
+            margin: 1.2rem auto; max-width: 300px;
+        }
 
         .container {
             max-width: 1200px;
@@ -223,9 +241,33 @@
                     {% if not user.is_staff %}
                         <li><a href="{% url 'dashboard' %}">{% trans "Mon espace" %}</a></li>
                     {% endif %}
-                    <li><a href="{% url 'profil' %}">{% trans "Mon profil" %}</a></li>
+                    <li>
+                        <a href="{% url 'profil' %}" style="display:flex; align-items:center; gap:0.5rem;">
+                            <span style="display:inline-flex; align-items:center; justify-content:center;
+                                width:30px; height:30px; border-radius:50%;
+                                background:{% if user.is_staff %}var(--or){% else %}var(--vert-gazon){% endif %};
+                                color:{% if user.is_staff %}var(--vert-nuit){% else %}var(--blanc){% endif %};
+                                font-weight:700; font-size:0.82rem; flex-shrink:0;">
+                                {{ user.get_full_name|first|upper|default:user.username|first|upper }}
+                            </span>
+                            <span style="color:#e2ead8; font-size:0.88rem; font-weight:600; max-width:110px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+                                {% if user.get_full_name %}{{ user.get_full_name }}{% else %}{{ user.username }}{% endif %}{% if user.is_staff %} <span style="color:var(--or); font-size:0.75rem;">(Admin)</span>{% endif %}
+                            </span>
+                        </a>
+                    </li>
                     {% if user.is_staff %}
-                        <li><a href="{% url 'admin_dashboard' %}">📊 Dashboard</a></li>
+                        <li>
+                            <a href="{% url 'admin_dashboard' %}" style="position:relative; display:inline-flex; align-items:center; gap:0.4rem;">
+                                📊 Dashboard
+                                {% if alerte_total > 0 %}
+                                <span style="display:inline-flex; align-items:center; justify-content:center;
+                                    background:#e53e3e; color:#fff; font-size:0.68rem; font-weight:800;
+                                    min-width:18px; height:18px; border-radius:99px; padding:0 4px; line-height:1;">
+                                    {{ alerte_total }}
+                                </span>
+                                {% endif %}
+                            </a>
+                        </li>
                         <li><a href="/admin/">{% trans "Administration" %}</a></li>
                     {% endif %}
                     <li>
@@ -269,20 +311,78 @@
     </main>
 
     <footer>
-        <p><strong>Sportify</strong> &mdash; {% trans "Réserve ton match. Joue. Profite." %}</p>
-        <p style="margin-top:0.6rem">
+        <div class="footer-brand"><span class="sport">Sport</span><span class="ify">ify</span></div>
+        <p class="footer-tagline">⚽ {% trans "Réserve ton match. Joue. Profite." %} 🎾</p>
+
+        <div class="footer-links">
             <a href="{% url 'terrains' %}">{% trans "Terrains" %}</a>
+            <span class="footer-sep">·</span>
+            <a href="{% url 'nos_complexes' %}">{% trans "Nos complexes" %}</a>
+            <span class="footer-sep">·</span>
+            <a href="{% url 'contact' %}">{% trans "Contact" %}</a>
             {% if not user.is_authenticated %}
-                &middot; <a href="{% url 'inscription' %}">{% trans "S'inscrire" %}</a>
-                &middot; <a href="{% url 'connexion' %}">{% trans "Connexion" %}</a>
+                <span class="footer-sep">·</span>
+                <a href="{% url 'inscription' %}">{% trans "S'inscrire" %}</a>
+                <span class="footer-sep">·</span>
+                <a href="{% url 'connexion' %}">{% trans "Connexion" %}</a>
             {% endif %}
-        </p>
-        <p style="margin-top:0.5rem; font-size:0.8rem;">
-            <a href="{% url 'conditions' %}">{% trans "Conditions d'utilisation" %}</a> &middot;
-            <a href="{% url 'confidentialite' %}">{% trans "Politique de confidentialité" %}</a> &middot;
-            {% trans "RGPD — Belgique" %}
-        </p>
-        <p style="margin-top:0.4rem; font-size:0.75rem; color:#aaa;">© 2026 Sportify — N° TVA : BE 0123.456.789 — Bruxelles, Belgique</p>
+        </div>
+
+        <hr class="footer-divider">
+
+        <div class="footer-links" style="font-size:0.8rem;">
+            <a href="{% url 'conditions' %}">{% trans "Conditions d'utilisation" %}</a>
+            <span class="footer-sep">·</span>
+            <a href="{% url 'confidentialite' %}">{% trans "Politique de confidentialité" %}</a>
+            <span class="footer-sep">·</span>
+            <span style="color:#4a7a5a;">{% trans "RGPD — Belgique" %}</span>
+        </div>
+
+        <p class="footer-legal">© 2026 Sportify — N° TVA : BE 0123.456.789 — Bruxelles, Belgique</p>
     </footer>
+
+<!-- Bannière cookies -->
+<div id="cookie-banner" style="display:none; position:fixed; bottom:0; left:0; right:0; z-index:9999;
+    background:#0d2e1a; color:#fff; padding:1rem 2rem;
+    display:flex; align-items:center; justify-content:space-between; gap:1.5rem; flex-wrap:wrap;
+    box-shadow:0 -4px 20px rgba(0,0,0,0.25);">
+    <div style="flex:1; min-width:220px;">
+        <p style="margin:0; font-size:0.88rem; line-height:1.5;">
+            🍪 <strong>Cookies</strong> — Sportify utilise uniquement des cookies strictement nécessaires
+            (session, sécurité). Aucun cookie publicitaire ou de suivi.
+            <a href="{% url 'confidentialite' %}#cookies" style="color:#f5a623; font-weight:600; margin-left:0.3rem;">En savoir plus</a>
+        </p>
+    </div>
+    <div style="display:flex; gap:0.7rem; flex-shrink:0;">
+        <button onclick="acceptCookies()" style="background:#1a8c4e; color:#fff; border:none; padding:0.55rem 1.3rem;
+            border-radius:8px; font-size:0.88rem; font-weight:700; cursor:pointer;">
+            ✓ Accepter
+        </button>
+        <button onclick="refuserCookies()" style="background:transparent; color:#ccc; border:1.5px solid rgba(255,255,255,0.3);
+            padding:0.55rem 1.1rem; border-radius:8px; font-size:0.88rem; cursor:pointer;">
+            Continuer sans accepter
+        </button>
+    </div>
+</div>
+
+<script>
+(function() {
+    var consent = localStorage.getItem('sportify_cookie_consent');
+    if (!consent) {
+        document.getElementById('cookie-banner').style.display = 'flex';
+    }
+})();
+
+function acceptCookies() {
+    localStorage.setItem('sportify_cookie_consent', 'accepted');
+    document.getElementById('cookie-banner').style.display = 'none';
+}
+
+function refuserCookies() {
+    localStorage.setItem('sportify_cookie_consent', 'refused');
+    document.getElementById('cookie-banner').style.display = 'none';
+}
+</script>
+
 </body>
 </html>
