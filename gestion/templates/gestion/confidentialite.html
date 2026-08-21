@@ -114,7 +114,53 @@
     </div>
 
     <h2>9. Cookies</h2>
-    <p>Sportify utilise uniquement des cookies strictement nécessaires au fonctionnement de la plateforme (session de connexion, protection CSRF). Aucun cookie publicitaire ou de suivi tiers n'est utilisé.</p>
+    <p>Conformément à la directive ePrivacy (2002/58/CE) et au RGPD, Sportify vous informe de l'utilisation des cookies sur cette plateforme.</p>
+
+    <h3 style="font-size:1rem; font-weight:700; color:var(--vert-nuit); margin:1.2rem 0 0.5rem;">9.1 Cookies strictement nécessaires (aucun consentement requis)</h3>
+    <div style="overflow-x:auto;">
+    <table style="width:100%; border-collapse:collapse; font-size:0.88rem; margin-bottom:1rem;">
+        <thead>
+            <tr style="background:var(--gris-clair);">
+                <th style="padding:0.6rem 1rem; text-align:left; font-weight:700; color:var(--vert-nuit);">Nom</th>
+                <th style="padding:0.6rem 1rem; text-align:left; font-weight:700; color:var(--vert-nuit);">Finalité</th>
+                <th style="padding:0.6rem 1rem; text-align:left; font-weight:700; color:var(--vert-nuit);">Durée</th>
+                <th style="padding:0.6rem 1rem; text-align:left; font-weight:700; color:var(--vert-nuit);">Émetteur</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr style="border-bottom:1px solid #f0f0f0;">
+                <td style="padding:0.6rem 1rem;"><code>sessionid</code></td>
+                <td style="padding:0.6rem 1rem;">Maintien de la session utilisateur (connexion)</td>
+                <td style="padding:0.6rem 1rem;">Session / 2 semaines</td>
+                <td style="padding:0.6rem 1rem;">Sportify</td>
+            </tr>
+            <tr style="border-bottom:1px solid #f0f0f0;">
+                <td style="padding:0.6rem 1rem;"><code>csrftoken</code></td>
+                <td style="padding:0.6rem 1rem;">Protection contre les attaques CSRF (sécurité des formulaires)</td>
+                <td style="padding:0.6rem 1rem;">1 an</td>
+                <td style="padding:0.6rem 1rem;">Sportify</td>
+            </tr>
+            <tr style="border-bottom:1px solid #f0f0f0;">
+                <td style="padding:0.6rem 1rem;"><code>sportify_cookie_consent</code></td>
+                <td style="padding:0.6rem 1rem;">Mémorisation de votre choix concernant les cookies</td>
+                <td style="padding:0.6rem 1rem;">1 an</td>
+                <td style="padding:0.6rem 1rem;">Sportify</td>
+            </tr>
+            <tr>
+                <td style="padding:0.6rem 1rem;"><code>django_language</code></td>
+                <td style="padding:0.6rem 1rem;">Mémorisation de la langue sélectionnée</td>
+                <td style="padding:0.6rem 1rem;">Session</td>
+                <td style="padding:0.6rem 1rem;">Sportify</td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+
+    <h3 style="font-size:1rem; font-weight:700; color:var(--vert-nuit); margin:1.2rem 0 0.5rem;">9.2 Cookies tiers</h3>
+    <p>Sportify n'utilise <strong>aucun cookie publicitaire, analytique ou de suivi tiers</strong>. Les paiements sont traités par <strong>Stripe</strong>, qui peut déposer ses propres cookies lors du processus de paiement, conformément à sa <a href="https://stripe.com/fr-be/privacy" target="_blank" style="color:var(--vert-gazon);">politique de confidentialité</a>.</p>
+
+    <h3 style="font-size:1rem; font-weight:700; color:var(--vert-nuit); margin:1.2rem 0 0.5rem;">9.3 Gestion de vos préférences</h3>
+    <p>Vous pouvez à tout moment supprimer les cookies via les paramètres de votre navigateur. La suppression du cookie <code>sessionid</code> entraînera votre déconnexion automatique.</p>
 
     <h2>10. Sécurité</h2>
     <p>Sportify met en œuvre des mesures techniques et organisationnelles appropriées pour protéger vos données contre tout accès non autorisé, perte ou altération : connexion HTTPS, hachage des mots de passe (PBKDF2), accès restreint aux données, paiements traités exclusivement par Stripe (certifié PCI-DSS niveau 1).</p>
