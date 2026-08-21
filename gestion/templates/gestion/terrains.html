@@ -1,5 +1,5 @@
 {% extends 'gestion/base.html' %}
-{% load i18n %}
+{% load i18n static %}
 
 {% block title %}Terrains — Sportify{% endblock %}
 
@@ -52,12 +52,19 @@
 }
 
 .terrain-thumb {
-    height: 150px;
+    height: 160px;
     background: #eeeeee;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 3.5rem;
+    overflow: hidden;
+}
+.terrain-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
 
 .terrain-body {
@@ -120,6 +127,21 @@
 }
 .badge-foot { background: #e8f5ed; color: #1a5c35; }
 .badge-padel { background: #e8f0fb; color: #3a1a8c; }
+
+.commune-section {
+    margin-bottom: 3rem;
+}
+.commune-section + .commune-section {
+    margin-top: 1rem;
+    padding-top: 2.5rem;
+    border-top: 4px solid #1a8c4e;
+}
+.commune-title {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--vert-nuit);
+    margin-bottom: 1.5rem;
+}
 
 .empty-state {
     text-align: center;
@@ -224,11 +246,10 @@
                 <option value="Anderlecht" {% if commune_filtre == 'Anderlecht' %}selected{% endif %}>Anderlecht</option>
                 <option value="Forest" {% if commune_filtre == 'Forest' %}selected{% endif %}>Forest</option>
                 <option value="Molenbeek-Saint-Jean" {% if commune_filtre == 'Molenbeek-Saint-Jean' %}selected{% endif %}>Molenbeek-Saint-Jean</option>
-                <option value="etterbeek" {% if commune_filtre == 'etterbeek' %}selected{% endif %}>etterbeek</option>
             </select>
         </div>
         <div class="search-actions">
-            <button type="submit" class="btn btn-primary">🔍 {% trans "Rechercher" %}</button>
+            <button type="submit" class="btn btn-primary">{% trans "Rechercher" %}</button>
             {% if sport_filtre or commune_filtre %}
                 <a href="{% url 'terrains' %}" class="btn btn-secondary">{% trans "Réinitialiser" %}</a>
             {% endif %}
@@ -242,34 +263,55 @@
 </div>
 
 <div class="terrains-wrapper">
-    {% if terrains %}
-        <div class="terrains-grid">
-            {% for terrain in terrains %}
-            <a href="{% url 'terrain_detail' terrain.pk %}" class="terrain-card">
-                <div class="terrain-thumb {% if 'Padel' in terrain.nom %}thumb-padel{% else %}thumb-foot{% endif %}">
-                    {% if "Padel" in terrain.nom %}🎾{% else %}⚽{% endif %}
-                </div>
-                <div class="terrain-body">
-                    <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.4rem;">
-                        {% if "Padel" in terrain.nom %}
-                            <span class="sport-badge badge-padel">🎾 Padel</span>
+    {% if groupes %}
+        {% for commune, liste in groupes.items %}
+        <div class="commune-section">
+            <h2 class="commune-title">📍 {{ commune }}</h2>
+            <div class="terrains-grid">
+                {% for terrain in liste %}
+                <a href="{% url 'terrain_detail' terrain.pk %}" class="terrain-card">
+                    <div class="terrain-thumb {% if 'Padel' in terrain.nom %}thumb-padel{% else %}thumb-foot{% endif %}">
+                        {% if "Royal Foot" in terrain.nom and "Padel" in terrain.nom %}
+                            <img src="{% static 'gestion/img/terrains/royalfoot_padel.webp' %}" alt="{{ terrain.nom }}">
+                        {% elif "Royal Foot" in terrain.nom %}
+                            <img src="{% static 'gestion/img/terrains/royalfoot_football.webp' %}" alt="{{ terrain.nom }}">
+                        {% elif "Fitfive" in terrain.nom and "Padel" in terrain.nom %}
+                            <img src="{% static 'gestion/img/terrains/fitfive_padel.jpg' %}" alt="{{ terrain.nom }}">
+                        {% elif "Fitfive" in terrain.nom %}
+                            <img src="{% static 'gestion/img/terrains/fitfive_football.jpg' %}" alt="{{ terrain.nom }}">
+                        {% elif "City Five" in terrain.nom and "Padel" in terrain.nom %}
+                            <img src="{% static 'gestion/img/terrains/cityfive_padel.webp' %}" alt="{{ terrain.nom }}">
+                        {% elif "City Five" in terrain.nom %}
+                            <img src="{% static 'gestion/img/terrains/cityfive_football.jpg' %}" alt="{{ terrain.nom }}">
+                        {% elif "Padel" in terrain.nom %}
+                            🎾
                         {% else %}
-                            <span class="sport-badge badge-foot">⚽ Football</span>
+                            ⚽
                         {% endif %}
                     </div>
-                    <h3>{{ terrain.nom }}</h3>
-                    <p class="terrain-loc">📍 {{ terrain.localisation }}</p>
-                    {% if terrain.description %}
-                        <p class="terrain-desc">{{ terrain.description|truncatechars:100 }}</p>
-                    {% endif %}
-                    <div class="terrain-footer">
-                        <span class="price-label">{{ terrain.prix_heure }}€ <small>{% trans "/ heure" %}</small></span>
-                        <span class="badge badge-green">{% trans "Disponible" %}</span>
+                    <div class="terrain-body">
+                        <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.4rem;">
+                            {% if "Padel" in terrain.nom %}
+                                <span class="sport-badge badge-padel">🎾 Padel</span>
+                            {% else %}
+                                <span class="sport-badge badge-foot">⚽ Football</span>
+                            {% endif %}
+                        </div>
+                        <h3>{{ terrain.nom }}</h3>
+                        <p class="terrain-loc">📍 {{ terrain.localisation }}</p>
+                        {% if terrain.description %}
+                            <p class="terrain-desc">{{ terrain.description|truncatechars:100 }}</p>
+                        {% endif %}
+                        <div class="terrain-footer">
+                            <span class="price-label">{{ terrain.prix_heure }}€ <small>{% trans "/ heure" %}</small></span>
+                            <span class="badge badge-green">{% trans "Disponible" %}</span>
+                        </div>
                     </div>
-                </div>
-            </a>
-            {% endfor %}
+                </a>
+                {% endfor %}
+            </div>
         </div>
+        {% endfor %}
     {% else %}
         <div class="empty-state">
             <div class="icon">🔍</div>
