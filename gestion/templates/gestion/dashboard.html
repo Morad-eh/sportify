@@ -111,7 +111,41 @@
 .empty-res .icon { font-size: 3.5rem; margin-bottom: 1rem; }
 .empty-res h3 { font-size: 1.2rem; color: var(--vert-nuit); margin-bottom: 0.5rem; }
 
+.prochain-card {
+    background: linear-gradient(135deg, var(--vert-nuit), #1a4a2e);
+    border-radius: 16px;
+    padding: 1.5rem 1.8rem;
+    margin-bottom: 1.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    box-shadow: 0 4px 20px rgba(13,46,26,0.25);
+}
+.prochain-badge {
+    background: var(--or);
+    color: var(--vert-nuit);
+    font-size: 0.75rem;
+    font-weight: 800;
+    padding: 0.25rem 0.8rem;
+    border-radius: 99px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+    display: inline-block;
+}
+.prochain-titre { font-size: 1.3rem; font-weight: 800; color: white; margin-bottom: 0.3rem; }
+.prochain-detail { color: #8ab89a; font-size: 0.88rem; display: flex; flex-wrap:wrap; gap: 0.8rem; }
+.prochain-detail span { display: flex; align-items: center; gap: 0.3rem; }
+.prochain-actions { display: flex; gap: 0.6rem; flex-wrap: wrap; flex-shrink: 0; }
+
 @media (max-width: 700px) {
+    .prochain-card { flex-direction: column; align-items: flex-start; }
+    .prochain-actions { width: 100%; }
+    .stats-row { grid-template-columns: 1fr 1fr; }
+    .dashboard-header-inner { flex-direction: column; gap: 1rem; align-items: flex-start; }
+    .reservations-table { display: block; overflow-x: auto; }
     .stats-row { grid-template-columns: 1fr 1fr; }
     .dashboard-header-inner { flex-direction: column; gap: 1rem; align-items: flex-start; }
     .reservations-table { display: block; overflow-x: auto; }
@@ -130,6 +164,39 @@
 </div>
 
 <div class="dashboard-body">
+
+    {% if prochaine %}
+    <div class="prochain-card">
+        <div>
+            {% if jours_restants == 0 %}
+                <div class="prochain-badge">⚡ Aujourd'hui</div>
+            {% elif jours_restants == 1 %}
+                <div class="prochain-badge">🔜 Demain</div>
+            {% else %}
+                <div class="prochain-badge">📅 Dans {{ jours_restants }} jours</div>
+            {% endif %}
+            <div class="prochain-titre">{{ prochaine.creneau.terrain.nom }}</div>
+            <div class="prochain-detail">
+                <span>📍 {{ prochaine.creneau.terrain.localisation }}</span>
+                <span>🗓️ {{ prochaine.creneau.date|date:"d/m/Y" }}</span>
+                <span>🕐 {{ prochaine.creneau.heure_debut|time:"H:i" }} – {{ prochaine.creneau.heure_fin|time:"H:i" }}</span>
+                <span>💶 {{ prochaine.montant_total }}€</span>
+            </div>
+        </div>
+        <div class="prochain-actions">
+            {% with d=prochaine.creneau.date hd=prochaine.creneau.heure_debut hf=prochaine.creneau.heure_fin t=prochaine.creneau.terrain %}
+            <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Sportify+—+{{ t.nom|urlencode }}&dates={{ d|date:'Ymd' }}T{{ hd|time:'Hi' }}00/{{ d|date:'Ymd' }}T{{ hf|time:'Hi' }}00&location={{ t.localisation|urlencode }}+Bruxelles&details=Réservation+Sportify+%23{{ prochaine.id }}"
+               target="_blank" class="btn btn-gold" style="font-size:0.85rem; padding:0.55rem 1rem;">
+                📆 Google Calendar
+            </a>
+            {% endwith %}
+            <a href="{% url 'telecharger_ics' prochaine.id %}" class="btn btn-secondary" style="font-size:0.85rem; padding:0.55rem 1rem; border-color:rgba(255,255,255,0.3); color:white;">
+                📥 Apple / Outlook
+            </a>
+        </div>
+    </div>
+    {% endif %}
+
     <div class="stats-row">
         <div class="stat-card">
             <div class="stat-icon">📅</div>
@@ -194,6 +261,16 @@
                             {% endif %}
                             {% if res.statut == 'confirmee' %}
                                 <a href="{% url 'telecharger_facture' res.id %}" class="btn" style="padding:0.3rem 0.7rem; font-size:0.8rem; background:#f5a623; color:#0d2e1a;" title="Télécharger la facture PDF">🧾 {% trans "Facture" %}</a>
+                            {% endif %}
+                            {% if res.statut == 'confirmee' and res.creneau.date >= today %}
+                                <a href="{% url 'telecharger_ics' res.id %}" class="btn" style="padding:0.3rem 0.7rem; font-size:0.8rem; background:#e8f5ed; color:#1a5c35;" title="Ajouter au calendrier">📆</a>
+                            {% endif %}
+                            {% if res.statut == 'confirmee' and res.creneau.date < today %}
+                                {% if res.creneau.terrain.id in terrains_notes %}
+                                    <a href="{% url 'donner_avis' res.creneau.terrain.id %}" class="btn" style="padding:0.3rem 0.7rem; font-size:0.8rem; background:#fff8e1; color:#7a5c00; border:1.5px solid #ffd54f;" title="Modifier mon avis">✏️ Mon avis</a>
+                                {% else %}
+                                    <a href="{% url 'donner_avis' res.creneau.terrain.id %}" class="btn" style="padding:0.3rem 0.7rem; font-size:0.8rem; background:#fff8e1; color:#7a5c00; border:1.5px solid #ffd54f;" title="Donner mon avis">⭐ Avis</a>
+                                {% endif %}
                             {% endif %}
                             {% if res.statut != 'confirmee' and res.creneau.date < today %}
                                 <span style="color:var(--gris); font-size:0.85rem;">—</span>
