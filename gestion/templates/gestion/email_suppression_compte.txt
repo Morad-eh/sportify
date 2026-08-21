@@ -1,0 +1,31 @@
+Bonjour {{ prenom }},
+
+Nous avons bien pris en compte votre demande de suppression de votre compte Sportify associé à l'adresse {{ email }}.
+
+─────────────────────────────────────────
+  VOTRE COMPTE A ÉTÉ DÉSACTIVÉ
+─────────────────────────────────────────
+
+Vous disposez d'un délai de 30 jours pour changer d'avis et réactiver votre compte. Il vous suffit de vous reconnecter sur Sportify avec vos identifiants habituels : votre compte sera automatiquement restauré.
+
+Après ce délai de 30 jours, la réactivation ne sera plus possible.
+
+─────────────────────────────────────────
+  CONSERVATION DE VOS DONNÉES (RGPD)
+─────────────────────────────────────────
+
+Conformément au Règlement Général sur la Protection des Données (RGPD) et à nos obligations légales :
+
+• Vos données personnelles sont conservées pendant 12 mois à compter de la date de suppression, conformément aux exigences légales belges.
+• Vos données de réservation et de facturation peuvent être conservées jusqu'à 7 ans en vertu du Code TVA belge (art. 60).
+• À l'expiration de ces délais, vos données sont définitivement et irrémédiablement supprimées de nos systèmes.
+
+Pour toute question relative à vos données, vous pouvez contacter notre délégué à la protection des données à l'adresse : privacy@sportify.be
+
+─────────────────────────────────────────
+
+Nous vous remercions d'avoir utilisé Sportify.
+
+L'équipe Sportify
+Bruxelles, Belgique
+https://sportify.be

@@ -1,0 +1,19 @@
+Bonjour {{ prenom }},
+
+Bonne nouvelle ! Votre compte Sportify associé à l'adresse {{ email }} a été réactivé avec succès.
+
+─────────────────────────────────────────
+  COMPTE RÉACTIVÉ
+─────────────────────────────────────────
+
+Vous pouvez à nouveau accéder à l'ensemble de vos réservations, votre historique et votre espace personnel sur Sportify.
+
+Si vous n'êtes pas à l'origine de cette réactivation, contactez-nous immédiatement à : privacy@sportify.be
+
+─────────────────────────────────────────
+
+Bienvenue de retour parmi nous !
+
+L'équipe Sportify
+Bruxelles, Belgique
+https://sportify.be
