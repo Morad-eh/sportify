@@ -1,5 +1,5 @@
 {% extends 'gestion/base.html' %}
-{% load i18n %}
+{% load i18n static %}
 
 {% block title %}{{ terrain.nom }} — Sportify{% endblock %}
 
@@ -14,10 +14,14 @@
     display: flex; gap: 2rem; align-items: center;
 }
 .terrain-icon-large {
-    width: 100px; height: 100px;
+    width: 120px; height: 100px;
     background: rgba(26,140,78,0.25); border-radius: 18px;
     display: flex; align-items: center; justify-content: center;
     font-size: 3.5rem; flex-shrink: 0;
+    overflow: hidden;
+}
+.terrain-icon-large img {
+    width: 100%; height: 100%; object-fit: cover; border-radius: 18px;
 }
 .detail-header h1 { font-size: 2rem; font-weight: 800; margin-bottom: 0.4rem; }
 .detail-header .loc { color: #8ab89a; font-size: 1rem; margin-bottom: 0.8rem; }
@@ -59,6 +63,25 @@
     .detail-body { grid-template-columns: 1fr; margin: 1.2rem auto; padding: 0 1rem; }
     .info-card { position: static; }
 }
+
+/* ── Avis ─────────────────────────────── */
+.avis-section { max-width: 900px; margin: 0 auto 2.5rem; padding: 0 2rem; }
+.avis-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.2rem; }
+.avis-header h2 { font-size: 1.2rem; font-weight: 800; color: var(--vert-nuit); margin: 0; }
+.note-globale { display: flex; align-items: center; gap: 0.7rem; }
+.note-stars { font-size: 1.3rem; line-height: 1; color: var(--or); }
+.note-val { font-size: 1.4rem; font-weight: 800; color: var(--vert-nuit); }
+.note-count { font-size: 0.85rem; color: var(--gris); }
+.avis-list { display: flex; flex-direction: column; gap: 0.9rem; }
+.avis-item { background: var(--blanc); border-radius: 14px; padding: 1.2rem 1.5rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+.avis-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem; }
+.avis-author { font-weight: 700; font-size: 0.92rem; color: var(--vert-nuit); }
+.avis-stars { color: var(--or); font-size: 1rem; }
+.avis-date { font-size: 0.78rem; color: var(--gris); }
+.avis-comment { font-size: 0.9rem; color: #2d3748; line-height: 1.55; }
+.avis-empty { background: var(--blanc); border-radius: 14px; padding: 2rem; text-align: center; color: var(--gris); font-size: 0.92rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+.mon-avis-card { background: #e8f5ed; border: 1.5px solid #a8d5b5; border-radius: 14px; padding: 1rem 1.4rem; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.mon-avis-card .stars { color: var(--or); font-size: 1.05rem; }
 
 /* ── Modal (identique calendrier) ─────── */
 .modal-overlay {
@@ -107,13 +130,35 @@
 .slot-loading, .slot-empty-msg { text-align:center; padding:1rem; color:var(--gris); font-size:0.85rem; grid-column:1/-1; }
 .login-notice { background:#fff8e1; border:1.5px solid #ffd54f; border-radius:10px; padding:0.75rem 1rem; font-size:0.82rem; color:#7a5c00; margin-top:0.8rem; }
 .login-notice a { color:var(--vert-gazon); font-weight:700; }
+.slot-btn.selected { background:var(--vert-nuit) !important; color:white !important; border-color:var(--vert-nuit) !important; }
+.multi-recap { margin-top:1rem; background:#e8f5ed; border-radius:10px; padding:0.9rem 1rem; display:none; }
+.multi-recap-row { display:flex; justify-content:space-between; align-items:center; }
+.multi-recap-info { font-size:0.88rem; color:var(--vert-nuit); font-weight:600; }
+.multi-recap-total { font-size:1.1rem; font-weight:800; color:var(--vert-gazon); }
+.btn-reserver-multi { display:block; width:100%; text-align:center; margin-top:0.7rem; padding:0.8rem; font-size:0.95rem; border-radius:10px; }
 {% endblock %}
 
 {% block content %}
 <div class="detail-header">
     <div class="detail-header-inner">
         <div class="terrain-icon-large">
-            {% if "Padel" in terrain.nom %}🎾{% else %}⚽{% endif %}
+            {% if "Royal Foot" in terrain.nom and "Padel" in terrain.nom %}
+                <img src="{% static 'gestion/img/terrains/royalfoot_padel.webp' %}" alt="{{ terrain.nom }}">
+            {% elif "Royal Foot" in terrain.nom %}
+                <img src="{% static 'gestion/img/terrains/royalfoot_football.webp' %}" alt="{{ terrain.nom }}">
+            {% elif "Fitfive" in terrain.nom and "Padel" in terrain.nom %}
+                <img src="{% static 'gestion/img/terrains/fitfive_padel.jpg' %}" alt="{{ terrain.nom }}">
+            {% elif "Fitfive" in terrain.nom %}
+                <img src="{% static 'gestion/img/terrains/fitfive_football.jpg' %}" alt="{{ terrain.nom }}">
+            {% elif "City Five" in terrain.nom and "Padel" in terrain.nom %}
+                <img src="{% static 'gestion/img/terrains/cityfive_padel.webp' %}" alt="{{ terrain.nom }}">
+            {% elif "City Five" in terrain.nom %}
+                <img src="{% static 'gestion/img/terrains/cityfive_football.jpg' %}" alt="{{ terrain.nom }}">
+            {% elif "Padel" in terrain.nom %}
+                🎾
+            {% else %}
+                ⚽
+            {% endif %}
         </div>
         <div>
             <h1>{{ terrain.nom }}</h1>
@@ -164,6 +209,65 @@
     </div>
 </div>
 
+<!-- Avis -->
+<div class="avis-section">
+    <div class="avis-header">
+        <h2>⭐ Avis clients</h2>
+        {% if note_moyenne %}
+        <div class="note-globale">
+            <span class="note-stars">
+                {% for i in "12345" %}{% if forloop.counter <= note_moyenne|floatformat:"0" %}★{% else %}☆{% endif %}{% endfor %}
+            </span>
+            <span class="note-val">{{ note_moyenne|floatformat:1 }}</span>
+            <span class="note-count">({{ avis_list.count }} avis)</span>
+        </div>
+        {% endif %}
+    </div>
+
+    {% if is_auth and not request.user.is_staff %}
+        {% if mon_avis %}
+        <div class="mon-avis-card">
+            <div>
+                <strong style="font-size:0.88rem; color:var(--vert-nuit);">Votre avis</strong>
+                <div class="stars">{% for i in "12345" %}{% if forloop.counter <= mon_avis.note %}★{% else %}☆{% endif %}{% endfor %}</div>
+                {% if mon_avis.commentaire %}<p style="font-size:0.85rem; color:#2d3748; margin:0.3rem 0 0;">{{ mon_avis.commentaire }}</p>{% endif %}
+                {% if mon_avis.statut == 'en_attente' %}
+                    <p style="font-size:0.78rem; color:#7a5c00; background:#fff8e1; padding:0.25rem 0.6rem; border-radius:6px; margin-top:0.4rem; display:inline-block;">⏳ En attente de validation</p>
+                {% elif mon_avis.statut == 'refuse' %}
+                    <p style="font-size:0.78rem; color:#c53030; background:#fff5f5; padding:0.25rem 0.6rem; border-radius:6px; margin-top:0.4rem; display:inline-block;">✕ Non publié par l'administration</p>
+                {% endif %}
+            </div>
+            <a href="{% url 'donner_avis' terrain.pk %}" class="btn btn-secondary" style="font-size:0.82rem; padding:0.4rem 0.9rem;">✏️ Modifier</a>
+        </div>
+        {% else %}
+        <div style="margin-bottom:1rem;">
+            <a href="{% url 'donner_avis' terrain.pk %}" class="btn btn-primary" style="font-size:0.88rem; padding:0.55rem 1.2rem;">⭐ Donner mon avis</a>
+        </div>
+        {% endif %}
+    {% endif %}
+
+    {% if avis_list %}
+    <div class="avis-list">
+        {% for av in avis_list %}
+        <div class="avis-item">
+            <div class="avis-top">
+                <span class="avis-author">{{ av.utilisateur.get_full_name|default:av.utilisateur.username }}</span>
+                <span class="avis-stars">{% for i in "12345" %}{% if forloop.counter <= av.note %}★{% else %}☆{% endif %}{% endfor %}</span>
+                <span class="avis-date">{{ av.date_avis|date:"d/m/Y" }}</span>
+            </div>
+            {% if av.commentaire %}
+            <p class="avis-comment">{{ av.commentaire }}</p>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="avis-empty">
+        Aucun avis pour l'instant. Soyez le premier à partager votre expérience !
+    </div>
+    {% endif %}
+</div>
+
 <!-- Modal -->
 <div class="modal-overlay" id="booking-modal" onclick="handleOverlayClick(event)">
     <div class="modal-box">
@@ -187,12 +291,17 @@
             </div>
             <div class="slot-section" id="slot-section" style="display:none;">
                 <div class="slot-section-title" id="slot-section-title"></div>
+                <p style="font-size:0.78rem; color:var(--gris); margin-bottom:0.6rem;">Cliquez sur un ou plusieurs créneaux consécutifs pour les sélectionner.</p>
                 <div class="slot-grid" id="slot-grid"></div>
-                {% if not is_auth %}
-                <div class="login-notice">
-                    ⚠️ <a href="{% url 'connexion' %}">Connectez-vous</a> pour réserver un créneau.
+                <div class="multi-recap" id="multi-recap">
+                    <div class="multi-recap-row">
+                        <span class="multi-recap-info" id="recap-info"></span>
+                        <span class="multi-recap-total" id="recap-total"></span>
+                    </div>
+                    <a href="#" id="btn-reserver" class="btn btn-gold btn-reserver-multi">
+                        📆 Réserver
+                    </a>
                 </div>
-                {% endif %}
             </div>
         </div>
     </div>
@@ -263,6 +372,8 @@ function selectDate(dateStr) {
     renderCal(curYear, curMonth);
     const [y, m, d] = dateStr.split('-');
     document.getElementById('slot-section-title').textContent = `Créneaux — ${d} ${MONTHS[parseInt(m)-1]} ${y}`;
+    selectedIds = [];
+    document.getElementById('multi-recap').style.display = 'none';
     document.getElementById('slot-grid').innerHTML = '<div class="slot-loading">Chargement…</div>';
     document.getElementById('slot-section').style.display = 'block';
     fetch(`/api/creneaux/?terrain=${TERRAIN_ID}&date=${dateStr}`)
@@ -270,18 +381,63 @@ function selectDate(dateStr) {
         .catch(() => { document.getElementById('slot-grid').innerHTML = '<div class="slot-empty-msg">Erreur.</div>'; });
 }
 
+let allSlots = [];
+let selectedIds = [];
+const PRIX_HEURE = parseFloat('{{ terrain.prix_heure }}');
+
 function renderSlots(slots) {
+    allSlots = slots;
+    selectedIds = [];
     if (!slots.length) { document.getElementById('slot-grid').innerHTML = '<div class="slot-empty-msg">Aucun créneau pour cette date.</div>'; return; }
+    buildSlotGrid();
+    updateMultiRecap();
+}
+
+function buildSlotGrid() {
     let html = '';
-    slots.forEach(s => {
+    allSlots.forEach(s => {
         if (s.dispo) {
-            const href = IS_AUTH ? `/reserver/${s.id}/` : `/connexion/?next=/reserver/${s.id}/`;
-            html += `<a href="${href}" class="slot-btn available">${s.label}</a>`;
+            const isSel = selectedIds.includes(s.id);
+            html += `<div class="slot-btn available${isSel ? ' selected' : ''}" onclick="toggleSlot(${s.id})">${s.label}</div>`;
         } else {
             html += `<div class="slot-btn reserved">${s.label}</div>`;
         }
     });
-    document.getElementById('slot-grid').innerHTML = html;
+    document.getElementById('slot-grid').innerHTML = IS_AUTH ? html : html + `<div class="login-notice">⚠️ <a href="/connexion/">Connectez-vous</a> pour réserver.</div>`;
+}
+
+function toggleSlot(id) {
+    if (!IS_AUTH) return;
+    if (selectedIds.includes(id)) {
+        selectedIds = selectedIds.filter(x => x !== id);
+    } else {
+        selectedIds.push(id);
+        selectedIds.sort((a, b) => {
+            const ai = allSlots.findIndex(s => s.id === a);
+            const bi = allSlots.findIndex(s => s.id === b);
+            return ai - bi;
+        });
+    }
+    buildSlotGrid();
+    updateMultiRecap();
+}
+
+function updateMultiRecap() {
+    const recap = document.getElementById('multi-recap');
+    const n = selectedIds.length;
+    if (n === 0) { recap.style.display = 'none'; return; }
+    recap.style.display = 'block';
+    const total = (n * PRIX_HEURE).toFixed(2);
+    document.getElementById('recap-info').textContent = `${n} créneau${n > 1 ? 'x' : ''} sélectionné${n > 1 ? 's' : ''}`;
+    document.getElementById('recap-total').textContent = `${total}€`;
+    const btn = document.getElementById('btn-reserver');
+    if (n === 1) {
+        btn.href = `/reserver/${selectedIds[0]}/`;
+        btn.onclick = null;
+    } else {
+        btn.href = `/reserver/?creneaux=${selectedIds.join(',')}`;
+        btn.onclick = null;
+    }
 }
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
