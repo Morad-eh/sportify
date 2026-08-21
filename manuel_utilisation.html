@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Manuel d'utilisation — Sportify</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 40px;
+            color: #1a1a1a;
+            line-height: 1.7;
+        }
+        .cover {
+            text-align: center;
+            padding: 60px 0 40px;
+            border-bottom: 3px solid #1A8C4E;
+            margin-bottom: 40px;
+        }
+        .logo { font-size: 3rem; font-weight: 900; }
+        .logo-sport { color: #1A8C4E; }
+        .logo-ify { color: #F5A623; }
+        .cover h2 { color: #0D2E1A; font-size: 1.5rem; font-weight: 400; margin-top: 0.5rem; }
+        .cover .meta { color: #6B7280; margin-top: 2rem; font-size: 0.95rem; }
+
+        h1 { color: #0D2E1A; font-size: 1.6rem; border-left: 5px solid #1A8C4E; padding-left: 14px; margin-top: 2.5rem; }
+        h2 { color: #1A8C4E; font-size: 1.15rem; margin-top: 1.5rem; }
+        p, li { font-size: 0.97rem; }
+        ol, ul { padding-left: 1.5rem; }
+        li { margin-bottom: 0.3rem; }
+
+        .step {
+            background: #f0f7f3;
+            border-left: 4px solid #1A8C4E;
+            padding: 1rem 1.2rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1rem 0;
+        }
+        .step ol { margin: 0; padding-left: 1.2rem; }
+
+        .note {
+            background: #fff8f0;
+            border-left: 4px solid #F5A623;
+            padding: 0.8rem 1.2rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+            color: #6B7280;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+        }
+        th {
+            background: #0D2E1A;
+            color: white;
+            padding: 0.7rem 1rem;
+            text-align: left;
+        }
+        td {
+            padding: 0.6rem 1rem;
+            border-bottom: 1px solid #e5e5e5;
+        }
+        tr:nth-child(even) td { background: #f9f9f9; }
+        code {
+            background: #f0f0f0;
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-family: monospace;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 2px solid #e5e5e5;
+            color: #6B7280;
+            font-size: 0.85rem;
+            font-style: italic;
+        }
+
+        @media print {
+            body { margin: 20px; padding: 0 20px; }
+            .cover { padding: 20px 0; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="cover">
+    <div class="logo"><span class="logo-sport">Sport</span><span class="logo-ify">ify</span></div>
+    <h2>Manuel d'utilisation</h2>
+    <div class="meta">
+        Application web de réservation de terrains de sport indoor<br>
+        Version 1.1 — Beta &nbsp;|&nbsp; Juin 2026<br>
+        Morad EL Halimi
+    </div>
+</div>
+
+<h1>1. Introduction</h1>
+<p>Sportify est une application web de réservation de terrains de sport indoor. Elle permet aux membres de consulter les terrains disponibles, de réserver un créneau et de payer en ligne de manière sécurisée via Stripe.</p>
+<p>L'application est accessible à l'adresse : <code>https://ehsportify.pythonanywhere.com</code></p>
+
+<h1>2. Créer un compte</h1>
+<div class="step">
+    <ol>
+        <li>Clique sur <strong>S'inscrire</strong> en haut à droite de la page</li>
+        <li>Remplis les champs : prénom, nom, email, nom d'utilisateur, téléphone, mot de passe</li>
+        <li>Clique sur <strong>S'inscrire</strong></li>
+        <li>Tu es automatiquement connecté et redirigé vers ton tableau de bord</li>
+    </ol>
+</div>
+
+<h1>3. Se connecter</h1>
+<div class="step">
+    <ol>
+        <li>Clique sur <strong>Connexion</strong> en haut à droite</li>
+        <li>Entre ton nom d'utilisateur et ton mot de passe</li>
+        <li>Clique sur <strong>Se connecter</strong></li>
+    </ol>
+</div>
+
+<h1>4. Consulter les terrains</h1>
+<div class="step">
+    <ol>
+        <li>Clique sur <strong>Terrains</strong> dans la barre de navigation</li>
+        <li>La liste de tous les terrains disponibles s'affiche (nom, localisation, prix à l'heure)</li>
+        <li>Clique sur un terrain pour voir ses détails et ses créneaux disponibles</li>
+    </ol>
+</div>
+
+<h1>5. Réserver un créneau</h1>
+<div class="step">
+    <ol>
+        <li>Sur la page de détail d'un terrain, consulte les créneaux disponibles</li>
+        <li>Clique sur <strong>Réserver</strong> à côté du créneau souhaité</li>
+        <li>Une page de confirmation s'affiche avec le récapitulatif (terrain, date, horaire, prix)</li>
+    </ol>
+</div>
+
+<h1>6. Payer en ligne (Stripe)</h1>
+<div class="step">
+    <ol>
+        <li>Sur la page de confirmation, clique sur <strong>Procéder au paiement</strong></li>
+        <li>Tu es redirigé vers la page de paiement sécurisé Stripe</li>
+        <li>Entre les informations de ta carte bancaire</li>
+        <li>Clique sur <strong>Payer</strong></li>
+        <li>En cas de succès, un email de confirmation t'est envoyé et ta réservation apparaît dans ton tableau de bord</li>
+    </ol>
+</div>
+<div class="note">
+    Pour tester en environnement de développement, utilise la carte de test Stripe : <code>4242 4242 4242 4242</code>, date future, CVC quelconque.
+</div>
+
+<h1>7. Consulter ses réservations</h1>
+<div class="step">
+    <ol>
+        <li>Clique sur <strong>Mon espace</strong> dans la navigation</li>
+        <li>Ton tableau de bord affiche toutes tes réservations avec leur statut (Confirmée, Annulée)</li>
+        <li>Les statistiques en haut indiquent le nombre total de réservations et l'année d'inscription</li>
+    </ol>
+</div>
+
+<h1>8. Modifier une réservation</h1>
+<div class="step">
+    <ol>
+        <li>Dans le tableau de bord, repère une réservation avec le statut <strong>Confirmée</strong> et une date future</li>
+        <li>Clique sur le bouton vert <strong>Modifier</strong></li>
+        <li>Une liste des créneaux disponibles pour le même terrain s'affiche</li>
+        <li>Sélectionne un nouveau créneau en cliquant dessus</li>
+        <li>Clique sur <strong>Confirmer la modification</strong></li>
+    </ol>
+</div>
+<div class="note">
+    La modification est gratuite et instantanée. Le créneau d'origine est automatiquement remis en ligne.
+</div>
+
+<h1>9. Annuler une réservation</h1>
+<div class="step">
+    <ol>
+        <li>Dans le tableau de bord, clique sur le bouton rouge <strong>Annuler</strong></li>
+        <li>Une page de confirmation s'affiche avec les détails de la réservation</li>
+        <li>Clique sur <strong>Confirmer l'annulation</strong></li>
+        <li>Le créneau est libéré et la réservation passe au statut "Annulée"</li>
+    </ol>
+</div>
+<div class="note">
+    Le remboursement se fait sur demande par email à l'équipe Sportify. Seules les réservations à date future peuvent être annulées.
+</div>
+
+<h1>10. Gérer son profil</h1>
+<div class="step">
+    <ol>
+        <li>Clique sur <strong>Mon profil</strong> dans la navigation</li>
+        <li>Tu peux modifier : prénom, nom, email, téléphone</li>
+        <li>Clique sur <strong>Enregistrer</strong> pour sauvegarder les modifications</li>
+    </ol>
+</div>
+
+<h1>11. Changer la langue</h1>
+<div class="step">
+    <ol>
+        <li>Dans la barre de navigation, clique sur le sélecteur <strong>FR / EN / NL</strong></li>
+        <li>Sélectionne la langue souhaitée</li>
+        <li>L'interface s'affiche immédiatement dans la langue choisie</li>
+    </ol>
+</div>
+<p>Langues disponibles : <strong>Français</strong>, <strong>English</strong>, <strong>Nederlands</strong></p>
+
+<h1>12. Supprimer son compte</h1>
+<div class="step">
+    <ol>
+        <li>Accède à <strong>Mon profil</strong></li>
+        <li>Clique sur <strong>Supprimer mon compte</strong></li>
+        <li>Confirme la suppression sur la page suivante</li>
+        <li>Ton compte et toutes tes données sont définitivement supprimés</li>
+    </ol>
+</div>
+<div class="note">
+    Cette action est irréversible. Toutes les réservations associées au compte seront également supprimées.
+</div>
+
+<h1>13. API REST — Documentation (développeurs)</h1>
+<p>Sportify expose une API REST publique accessible à l'adresse <code>/api/v1/</code>. La documentation interactive est disponible sur <code>https://ehsportify.pythonanywhere.com/api/v1/docs/</code>.</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>Endpoint</th>
+            <th>Méthode</th>
+            <th>Description</th>
+            <th>Auth</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr><td><code>/api/v1/terrains/</code></td><td>GET</td><td>Liste des terrains</td><td>Non</td></tr>
+        <tr><td><code>/api/v1/terrains/{id}/</code></td><td>GET</td><td>Détail d'un terrain</td><td>Non</td></tr>
+        <tr><td><code>/api/v1/creneaux/</code></td><td>GET</td><td>Créneaux disponibles</td><td>Non</td></tr>
+        <tr><td><code>/api/v1/auth/register/</code></td><td>POST</td><td>Créer un compte</td><td>Non</td></tr>
+        <tr><td><code>/api/v1/auth/login/</code></td><td>POST</td><td>Connexion + token JWT</td><td>Non</td></tr>
+        <tr><td><code>/api/v1/reservations/</code></td><td>GET/POST</td><td>Mes réservations</td><td>JWT</td></tr>
+        <tr><td><code>/api/v1/reservations/{id}/</code></td><td>PUT/DELETE</td><td>Modifier / Annuler</td><td>JWT</td></tr>
+        <tr><td><code>/api/v1/users/me/</code></td><td>GET/PUT</td><td>Mon profil</td><td>JWT</td></tr>
+        <tr><td><code>/api/v1/paiements/</code></td><td>GET</td><td>Mes paiements</td><td>JWT</td></tr>
+    </tbody>
+</table>
+
+<div class="note">
+    Les endpoints publics (terrains, créneaux) sont limités à 100 requêtes par heure sans authentification. Les endpoints protégés nécessitent un token JWT dans le header : <code>Authorization: Bearer &lt;token&gt;</code>
+</div>
+
+<div class="footer">
+    Sportify &mdash; Réserve ton match. Joue. Profite.<br>
+    Morad EL Halimi &mdash; TFE 2025-2026
+</div>
+
+</body>
+</html>
