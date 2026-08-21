@@ -10,6 +10,7 @@ class Utilisateur(AbstractUser):
     ]
     telephone = models.CharField(max_length=20, blank=True)
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='membre')
+    date_suppression_demandee = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return self.get_full_name() or self.username
@@ -60,6 +61,7 @@ class Reservation(models.Model):
     date_reservation = models.DateTimeField(auto_now_add=True)
     statut = models.CharField(max_length=20, choices=STATUT_CHOICES, default='en_attente')
     montant_total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    groupe_id = models.CharField(max_length=36, blank=True, db_index=True)
 
     class Meta:
         ordering = ['-date_reservation']
@@ -84,6 +86,27 @@ class Paiement(models.Model):
 
     def __str__(self):
         return f"Paiement #{self.id} — {self.statut}"
+
+
+class Avis(models.Model):
+    STATUT_CHOICES = [
+        ('en_attente', 'En attente'),
+        ('approuve', 'Approuvé'),
+        ('refuse', 'Refusé'),
+    ]
+    utilisateur = models.ForeignKey(Utilisateur, on_delete=models.CASCADE, related_name='avis')
+    terrain = models.ForeignKey(Terrain, on_delete=models.CASCADE, related_name='avis')
+    note = models.PositiveSmallIntegerField()
+    commentaire = models.TextField(blank=True)
+    date_avis = models.DateTimeField(auto_now_add=True)
+    statut = models.CharField(max_length=20, choices=STATUT_CHOICES, default='en_attente')
+
+    class Meta:
+        unique_together = ('utilisateur', 'terrain')
+        ordering = ['-date_avis']
+
+    def __str__(self):
+        return f"Avis {self.note}⭐ — {self.utilisateur.username} sur {self.terrain.nom}"
 
 
 class Notification(models.Model):
