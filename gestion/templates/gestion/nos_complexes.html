@@ -1,5 +1,5 @@
 {% extends 'gestion/base.html' %}
-{% load i18n %}
+{% load i18n static %}
 
 {% block title %}Nos complexes — Sportify{% endblock %}
 
@@ -23,6 +23,19 @@
     overflow: hidden;
     display: grid;
     grid-template-columns: 280px 1fr;
+}
+.complex-banner {
+    grid-column: 1 / -1;
+    height: 200px;
+    overflow: hidden;
+    position: relative;
+}
+.complex-banner img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+}
+.complex-banner-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(13,46,26,0.55) 0%, transparent 60%);
 }
 .complex-sidebar {
     padding: 2rem 1.8rem;
@@ -79,6 +92,22 @@
 <div class="complexes-body">
     {% for c in complexes %}
     <div class="complex-card">
+        {% if "Royal Foot" in c.nom %}
+        <div class="complex-banner">
+            <img src="{% static 'gestion/img/terrains/royalfoot_football.webp' %}" alt="{{ c.nom }}">
+            <div class="complex-banner-overlay"></div>
+        </div>
+        {% elif "Fitfive" in c.nom %}
+        <div class="complex-banner">
+            <img src="{% static 'gestion/img/terrains/fitfive_football.jpg' %}" alt="{{ c.nom }}">
+            <div class="complex-banner-overlay"></div>
+        </div>
+        {% elif "City Five" in c.nom %}
+        <div class="complex-banner">
+            <img src="{% static 'gestion/img/terrains/cityfive_football.jpg' %}" alt="{{ c.nom }}">
+            <div class="complex-banner-overlay"></div>
+        </div>
+        {% endif %}
         <div class="complex-sidebar" style="border-top: 5px solid {{ c.couleur }};">
             <div>
                 <div class="complex-emoji">{{ c.emoji }}</div>
