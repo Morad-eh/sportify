@@ -236,11 +236,66 @@
             <h1>📊 Dashboard Admin</h1>
             <p>Sportify — {{ today|date:"l j F Y" }}</p>
         </div>
-        <a href="/admin/" class="btn btn-secondary" style="border-color:rgba(255,255,255,0.3); color:white;">⚙️ Django Admin</a>
+        <div style="display:flex; gap:0.8rem;">
+            <a href="{% url 'admin_utilisateurs' %}" class="btn btn-secondary" style="border-color:rgba(255,255,255,0.3); color:white;">👥 Utilisateurs</a>
+            <a href="{% url 'admin_avis' %}" class="btn btn-secondary" style="border-color:rgba(255,255,255,0.3); color:white;">⭐ Avis</a>
+            <a href="/admin/" class="btn btn-secondary" style="border-color:rgba(255,255,255,0.3); color:white;">⚙️ Django Admin</a>
+        </div>
     </div>
 </div>
 
 <div class="admin-body">
+
+    <!-- Alertes actions en attente -->
+    {% if avis_en_attente > 0 or comptes_desactives > 0 %}
+    <div style="display:flex; flex-wrap:wrap; gap:0.8rem; margin-bottom:1.5rem;">
+
+        {% if avis_en_attente > 0 %}
+        <a href="{% url 'admin_avis' %}" style="text-decoration:none; flex:1; min-width:220px;">
+            <div style="background:#fff8f0; border:2px solid #f5a623; border-radius:14px;
+                        padding:1rem 1.3rem; display:flex; align-items:center; gap:1rem;
+                        transition:box-shadow 0.2s; cursor:pointer;"
+                 onmouseover="this.style.boxShadow='0 4px 16px rgba(245,166,35,0.25)'"
+                 onmouseout="this.style.boxShadow='none'">
+                <div style="background:#f5a623; border-radius:50%; width:42px; height:42px;
+                            display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:1.2rem;">
+                    ⭐
+                </div>
+                <div>
+                    <div style="font-size:1.4rem; font-weight:800; color:#92620a; line-height:1;">{{ avis_en_attente }}</div>
+                    <div style="font-size:0.83rem; font-weight:600; color:#b07d20; margin-top:1px;">
+                        avis {% if avis_en_attente > 1 %}en attente de modération{% else %}en attente de modération{% endif %}
+                    </div>
+                </div>
+                <div style="margin-left:auto; color:#f5a623; font-size:1.1rem;">→</div>
+            </div>
+        </a>
+        {% endif %}
+
+        {% if comptes_desactives > 0 %}
+        <a href="{% url 'admin_utilisateurs' %}" style="text-decoration:none; flex:1; min-width:220px;">
+            <div style="background:#fff5f5; border:2px solid #e53e3e; border-radius:14px;
+                        padding:1rem 1.3rem; display:flex; align-items:center; gap:1rem;
+                        transition:box-shadow 0.2s; cursor:pointer;"
+                 onmouseover="this.style.boxShadow='0 4px 16px rgba(229,62,62,0.2)'"
+                 onmouseout="this.style.boxShadow='none'">
+                <div style="background:#e53e3e; border-radius:50%; width:42px; height:42px;
+                            display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:1.2rem;">
+                    👤
+                </div>
+                <div>
+                    <div style="font-size:1.4rem; font-weight:800; color:#9b1c1c; line-height:1;">{{ comptes_desactives }}</div>
+                    <div style="font-size:0.83rem; font-weight:600; color:#c53030; margin-top:1px;">
+                        compte{% if comptes_desactives > 1 %}s désactivés{% else %} désactivé{% endif %} (suppression en cours)
+                    </div>
+                </div>
+                <div style="margin-left:auto; color:#e53e3e; font-size:1.1rem;">→</div>
+            </div>
+        </a>
+        {% endif %}
+
+    </div>
+    {% endif %}
 
     <!-- Stats -->
     <div class="stats-grid">
@@ -414,5 +469,67 @@
         </div>
 
     </div>
+
+    <!-- Nouvelle rangée de stats -->
+    <div class="bottom-grid" style="margin-top:1.5rem;">
+
+        <!-- Heures de pointe -->
+        <div class="admin-card">
+            <h2>⏰ Heures de pointe</h2>
+            {% if heures_pointe %}
+                {% for h in heures_pointe %}
+                <div style="margin-bottom:0.55rem;">
+                    <div style="display:flex; justify-content:space-between; font-size:0.82rem; margin-bottom:0.2rem;">
+                        <span style="font-weight:600; color:var(--vert-nuit);">{{ h.heure }}</span>
+                        <span style="font-weight:700; color:var(--vert-gazon);">{{ h.nb }} rés.</span>
+                    </div>
+                    <div class="progress-track" style="height:7px;">
+                        <div class="progress-fill" style="width:{{ h.pct }}%;"></div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-sm">Aucune donnée.</div>
+            {% endif %}
+        </div>
+
+        <!-- Réservations par jour -->
+        <div class="admin-card">
+            <h2>📅 Activité par jour de la semaine</h2>
+            <div class="bar-chart" style="height:130px;">
+                {% for j in jours_semaine %}
+                <div class="bar-item">
+                    <div class="bar-wrap">
+                        <div class="bar {% if j.pct == 100 %}{% endif %}" style="height:{{ j.pct }}%; {% if j.pct == 100 %}background:var(--or);{% endif %}"></div>
+                    </div>
+                    <div class="bar-label" style="font-size:0.72rem;">{{ j.jour }}</div>
+                    <div style="font-size:0.68rem; color:var(--gris); margin-top:1px;">{{ j.nb }}</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- CA par terrain ce mois -->
+        <div class="admin-card">
+            <h2>💶 CA par terrain (ce mois)</h2>
+            {% if ca_terrains %}
+                {% for t in ca_terrains %}
+                <div style="margin-bottom:0.7rem;">
+                    <div style="display:flex; justify-content:space-between; font-size:0.82rem; margin-bottom:0.2rem;">
+                        <span style="font-weight:600; color:var(--vert-nuit); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:65%;">{{ t.nom }}</span>
+                        <span style="font-weight:700; color:var(--vert-gazon);">{{ t.total }}€</span>
+                    </div>
+                    <div class="progress-track" style="height:7px;">
+                        <div class="progress-fill" style="width:{{ t.pct }}%;"></div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-sm">Aucune réservation ce mois.</div>
+            {% endif %}
+        </div>
+
+    </div>
+
 </div>
 {% endblock %}
