@@ -1,0 +1,228 @@
+{% extends 'gestion/base.html' %}
+{% load i18n %}
+
+{% block title %}Gestion des utilisateurs — Sportify{% endblock %}
+
+{% block extra_css %}
+.admin-header {
+    background: linear-gradient(135deg, var(--vert-nuit), #1a4a2e);
+    color: var(--blanc);
+    padding: 2.5rem 2rem;
+}
+.admin-header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.admin-header h1 { font-size: 1.8rem; font-weight: 800; }
+.admin-header p { color: #8ab89a; margin-top: 0.3rem; font-size: 0.95rem; }
+
+.admin-body { max-width: 1200px; margin: 2rem auto; padding: 0 2rem 3rem; }
+
+.admin-card {
+    background: var(--blanc);
+    border-radius: 14px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+.admin-card h2 {
+    font-size: 1rem; font-weight: 700; color: var(--vert-nuit);
+    margin-bottom: 1.1rem; padding-bottom: 0.7rem;
+    border-bottom: 2px solid var(--gris-clair);
+}
+
+.search-bar {
+    display: flex;
+    gap: 0.8rem;
+    margin-bottom: 1.2rem;
+}
+.search-input {
+    flex: 1;
+    padding: 0.65rem 1rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 0.92rem;
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    transition: border-color 0.2s;
+}
+.search-input:focus { border-color: var(--vert-gazon); }
+
+.admin-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+.admin-table th {
+    text-align: left; padding: 0.5rem 0.75rem;
+    font-weight: 600; color: var(--gris);
+    border-bottom: 2px solid var(--gris-clair);
+    font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em;
+}
+.admin-table td {
+    padding: 0.7rem 0.75rem;
+    border-bottom: 1px solid #f5f5f5;
+    color: var(--vert-nuit);
+    vertical-align: middle;
+}
+.admin-table tr:last-child td { border-bottom: none; }
+.admin-table tr:hover td { background: #fafafa; }
+.admin-table tr.bloque td { opacity: 0.55; }
+
+.user-avatar {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: var(--vert-gazon); color: white;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.85rem; flex-shrink: 0;
+}
+.user-avatar.bloque { background: #9ca3af; }
+
+.badge {
+    display: inline-block; padding: 0.2rem 0.7rem;
+    border-radius: 999px; font-size: 0.75rem; font-weight: 600;
+}
+.badge-green { background: #d4edda; color: #155724; }
+.badge-red { background: #f8d7da; color: #721c24; }
+
+.btn-sm {
+    padding: 0.35rem 0.9rem; font-size: 0.8rem;
+    border-radius: 7px; font-weight: 600; cursor: pointer;
+    border: none; font-family: 'Inter', sans-serif; text-decoration: none;
+    display: inline-block;
+}
+.btn-block-user { background: #f8d7da; color: #721c24; }
+.btn-block-user:hover { background: #dc3545; color: white; }
+.btn-unblock-user { background: #d4edda; color: #155724; }
+.btn-unblock-user:hover { background: var(--vert-gazon); color: white; }
+
+.stats-row {
+    display: flex; gap: 1rem; margin-bottom: 1.5rem;
+}
+.stat-mini {
+    background: var(--gris-clair); border-radius: 10px;
+    padding: 0.8rem 1.2rem; flex: 1; text-align: center;
+}
+.stat-mini-val { font-size: 1.6rem; font-weight: 800; color: var(--vert-nuit); }
+.stat-mini-lbl { font-size: 0.78rem; color: var(--gris); margin-top: 0.1rem; }
+
+@media (max-width: 768px) {
+    .admin-table thead { display: none; }
+    .admin-table td { display: block; padding: 0.4rem 0.75rem; }
+    .stats-row { flex-wrap: wrap; }
+}
+{% endblock %}
+
+{% block content %}
+<div class="admin-header">
+    <div class="admin-header-inner">
+        <div>
+            <h1>👥 Gestion des utilisateurs</h1>
+            <p>Sportify — {{ utilisateurs.count }} membre{% if utilisateurs.count > 1 %}s{% endif %} inscrits</p>
+        </div>
+        <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary" style="border-color:rgba(255,255,255,0.3); color:white;">← Dashboard</a>
+    </div>
+</div>
+
+<div class="admin-body">
+
+    {% with total=utilisateurs.count actifs=utilisateurs.filter.count %}
+    <div class="stats-row">
+        <div class="stat-mini">
+            <div class="stat-mini-val">{{ utilisateurs.count }}</div>
+            <div class="stat-mini-lbl">Total membres</div>
+        </div>
+        <div class="stat-mini">
+            <div class="stat-mini-val" style="color:var(--vert-gazon);">{{ utilisateurs|length }}</div>
+            <div class="stat-mini-lbl">Actifs</div>
+        </div>
+        <div class="stat-mini">
+            <div class="stat-mini-val" style="color:#dc3545;">
+                {% with bloque_count=0 %}
+                    {% for u in utilisateurs %}{% if not u.is_active %}{% with bloque_count=bloque_count|add:1 %}{% endwith %}{% endif %}{% endfor %}
+                {% endwith %}
+                {{ utilisateurs|length }}
+            </div>
+            <div class="stat-mini-lbl">Bloqués</div>
+        </div>
+    </div>
+    {% endwith %}
+
+    <div class="admin-card">
+        <h2>👥 Liste des membres</h2>
+
+        <div class="search-bar">
+            <input type="text" class="search-input" id="search-users" placeholder="Rechercher par nom, email ou username…" oninput="filterUsers()">
+        </div>
+
+        <table class="admin-table" id="users-table">
+            <thead>
+                <tr>
+                    <th>Membre</th>
+                    <th>Email</th>
+                    <th>Téléphone</th>
+                    <th>Inscrit le</th>
+                    <th>Réservations</th>
+                    <th>Statut</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for u in utilisateurs %}
+                <tr class="user-row {% if not u.is_active %}bloque{% endif %}"
+                    data-search="{{ u.username|lower }} {{ u.get_full_name|lower }} {{ u.email|lower }}">
+                    <td>
+                        <div style="display:flex; align-items:center; gap:0.6rem;">
+                            <div class="user-avatar {% if not u.is_active %}bloque{% endif %}">{{ u.username|first|upper }}</div>
+                            <div>
+                                <div style="font-weight:600; font-size:0.9rem;">{{ u.get_full_name|default:u.username }}</div>
+                                <div style="font-size:0.78rem; color:var(--gris);">@{{ u.username }}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>{{ u.email|default:"—" }}</td>
+                    <td>{{ u.telephone|default:"—" }}</td>
+                    <td>{{ u.date_joined|date:"d/m/Y" }}</td>
+                    <td>
+                        <strong>{{ u.reservations.count }}</strong>
+                        <span style="font-size:0.78rem; color:var(--gris);">rés.</span>
+                    </td>
+                    <td>
+                        {% if u.is_active %}
+                            <span class="badge badge-green">Actif</span>
+                        {% else %}
+                            <span class="badge badge-red">Bloqué</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <form method="post" action="{% url 'bloquer_utilisateur' u.id %}" style="display:inline;">
+                            {% csrf_token %}
+                            {% if u.is_active %}
+                                <button type="submit" class="btn-sm btn-block-user"
+                                    onclick="return confirm('Bloquer {{ u.username }} ? Il ne pourra plus se connecter.')">
+                                    🚫 Bloquer
+                                </button>
+                            {% else %}
+                                <button type="submit" class="btn-sm btn-unblock-user">
+                                    ✅ Débloquer
+                                </button>
+                            {% endif %}
+                        </form>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" style="text-align:center; color:var(--gris); padding:2rem;">Aucun membre inscrit.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+function filterUsers() {
+    const q = document.getElementById('search-users').value.toLowerCase();
+    document.querySelectorAll('.user-row').forEach(row => {
+        row.style.display = row.dataset.search.includes(q) ? '' : 'none';
+    });
+}
+</script>
+{% endblock %}
