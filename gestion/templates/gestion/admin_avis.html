@@ -1,0 +1,189 @@
+{% extends 'gestion/base.html' %}
+{% load i18n %}
+
+{% block title %}Modération des avis — Sportify{% endblock %}
+
+{% block extra_css %}
+.page-header {
+    background: linear-gradient(135deg, var(--vert-nuit), #1a4a2e);
+    color: white; padding: 2.5rem 2rem;
+}
+.page-header-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+.page-header h1 { font-size: 1.8rem; font-weight: 800; }
+.page-header p { color: #8ab89a; margin-top: 0.3rem; }
+
+.page-body { max-width: 1100px; margin: 2rem auto; padding: 0 2rem; }
+
+.section-card {
+    background: var(--blanc); border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06); overflow: hidden; margin-bottom: 2rem;
+}
+.section-card-header {
+    padding: 1.2rem 1.5rem; border-bottom: 2px solid var(--gris-clair);
+    display: flex; align-items: center; justify-content: space-between;
+}
+.section-card-header h2 { font-size: 1.1rem; font-weight: 700; color: var(--vert-nuit); }
+
+.avis-table { width: 100%; border-collapse: collapse; }
+.avis-table th {
+    background: var(--gris-clair); padding: 0.85rem 1.25rem;
+    text-align: left; font-size: 0.78rem; font-weight: 700;
+    color: var(--gris); text-transform: uppercase; letter-spacing: 0.5px;
+}
+.avis-table td { padding: 1rem 1.25rem; border-bottom: 1px solid #f0f4f0; font-size: 0.92rem; vertical-align: top; }
+.avis-table tr:last-child td { border-bottom: none; }
+.avis-table tr:hover td { background: #f9fbf9; }
+
+.stars-display { color: var(--or); font-size: 1rem; }
+.commentaire-cell { max-width: 280px; color: #2d3748; line-height: 1.5; }
+.no-comment { color: var(--gris); font-style: italic; font-size: 0.85rem; }
+
+.action-btns { display: flex; gap: 0.5rem; flex-wrap: nowrap; }
+.btn-approuver { background: #1a8c4e; color: white; border: none; padding: 0.4rem 0.9rem; border-radius: 8px; font-size: 0.82rem; font-weight: 700; cursor: pointer; }
+.btn-approuver:hover { background: #157a42; }
+.btn-refuser { background: #e53e3e; color: white; border: none; padding: 0.4rem 0.9rem; border-radius: 8px; font-size: 0.82rem; font-weight: 700; cursor: pointer; }
+.btn-refuser:hover { background: #c53030; }
+
+.badge-attente { background: #fff8e1; color: #7a5c00; border: 1px solid #ffd54f; padding: 0.2rem 0.7rem; border-radius: 99px; font-size: 0.75rem; font-weight: 700; }
+.badge-approuve { background: #e8f5ed; color: #1a5c35; border: 1px solid #a8d5b5; padding: 0.2rem 0.7rem; border-radius: 99px; font-size: 0.75rem; font-weight: 700; }
+.badge-refuse { background: #fff5f5; color: #c53030; border: 1px solid #fc8181; padding: 0.2rem 0.7rem; border-radius: 99px; font-size: 0.75rem; font-weight: 700; }
+
+.empty-msg { padding: 2.5rem; text-align: center; color: var(--gris); font-size: 0.92rem; }
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="page-header-inner">
+        <div>
+            <h1>⭐ Modération des avis</h1>
+            <p>Approuvez ou refusez les avis laissés par les membres</p>
+        </div>
+        <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary" style="border-color:rgba(255,255,255,0.3); color:white;">← Tableau de bord</a>
+    </div>
+</div>
+
+<div class="page-body">
+
+    <!-- Avis en attente -->
+    <div class="section-card">
+        <div class="section-card-header">
+            <h2>⏳ En attente de validation
+                {% if avis_en_attente %}
+                    <span style="background:#e53e3e; color:white; font-size:0.75rem; padding:0.15rem 0.55rem; border-radius:99px; margin-left:0.5rem;">{{ avis_en_attente|length }}</span>
+                {% endif %}
+            </h2>
+        </div>
+        {% if avis_en_attente %}
+        <table class="avis-table">
+            <thead>
+                <tr>
+                    <th>Membre</th>
+                    <th>Terrain</th>
+                    <th>Note</th>
+                    <th>Commentaire</th>
+                    <th>Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for av in avis_en_attente %}
+                <tr>
+                    <td style="font-weight:600; color:var(--vert-nuit);">{{ av.utilisateur.get_full_name|default:av.utilisateur.username }}</td>
+                    <td style="font-size:0.85rem;">{{ av.terrain.nom }}</td>
+                    <td>
+                        <span class="stars-display">{% for i in "12345" %}{% if forloop.counter <= av.note %}★{% else %}☆{% endif %}{% endfor %}</span>
+                    </td>
+                    <td class="commentaire-cell">
+                        {% if av.commentaire %}
+                            {{ av.commentaire }}
+                        {% else %}
+                            <span class="no-comment">Aucun commentaire</span>
+                        {% endif %}
+                    </td>
+                    <td style="font-size:0.82rem; color:var(--gris);">{{ av.date_avis|date:"d/m/Y" }}</td>
+                    <td>
+                        <div class="action-btns">
+                            <form method="post" action="{% url 'moderer_avis' av.pk %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="approuver">
+                                <button type="submit" class="btn-approuver">✓ Approuver</button>
+                            </form>
+                            <form method="post" action="{% url 'moderer_avis' av.pk %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="refuser">
+                                <button type="submit" class="btn-refuser">✕ Refuser</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="empty-msg">✅ Aucun avis en attente de validation.</div>
+        {% endif %}
+    </div>
+
+    <!-- Avis traités -->
+    <div class="section-card">
+        <div class="section-card-header">
+            <h2>📋 Avis traités</h2>
+        </div>
+        {% if avis_traites %}
+        <table class="avis-table">
+            <thead>
+                <tr>
+                    <th>Membre</th>
+                    <th>Terrain</th>
+                    <th>Note</th>
+                    <th>Commentaire</th>
+                    <th>Date</th>
+                    <th>Statut</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for av in avis_traites %}
+                <tr>
+                    <td style="font-weight:600; color:var(--vert-nuit);">{{ av.utilisateur.get_full_name|default:av.utilisateur.username }}</td>
+                    <td style="font-size:0.85rem;">{{ av.terrain.nom }}</td>
+                    <td>
+                        <span class="stars-display">{% for i in "12345" %}{% if forloop.counter <= av.note %}★{% else %}☆{% endif %}{% endfor %}</span>
+                    </td>
+                    <td class="commentaire-cell">
+                        {% if av.commentaire %}{{ av.commentaire }}{% else %}<span class="no-comment">Aucun commentaire</span>{% endif %}
+                    </td>
+                    <td style="font-size:0.82rem; color:var(--gris);">{{ av.date_avis|date:"d/m/Y" }}</td>
+                    <td>
+                        {% if av.statut == 'approuve' %}
+                            <span class="badge-approuve">✓ Approuvé</span>
+                        {% else %}
+                            <span class="badge-refuse">✕ Refusé</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if av.statut == 'approuve' %}
+                        <form method="post" action="{% url 'moderer_avis' av.pk %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="refuser">
+                            <button type="submit" class="btn-refuser" style="font-size:0.75rem; padding:0.3rem 0.7rem;">✕ Retirer</button>
+                        </form>
+                        {% else %}
+                        <form method="post" action="{% url 'moderer_avis' av.pk %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="approuver">
+                            <button type="submit" class="btn-approuver" style="font-size:0.75rem; padding:0.3rem 0.7rem;">✓ Publier</button>
+                        </form>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="empty-msg">Aucun avis traité pour l'instant.</div>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}
