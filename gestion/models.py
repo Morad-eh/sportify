@@ -106,7 +106,7 @@ class Avis(models.Model):
         ordering = ['-date_avis']
 
     def __str__(self):
-        return f"Avis {self.note}⭐ — {self.utilisateur.username} sur {self.terrain.nom}"
+        return f"Avis {self.note}/5 — {self.utilisateur.username} sur {self.terrain.nom}"
 
 
 class Notification(models.Model):

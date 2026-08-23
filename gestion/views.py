@@ -863,11 +863,11 @@ def telecharger_facture(request, reservation_id):
     p = canvas.Canvas(buffer, pagesize=A4)
     w, h = A4
 
-    # ── Fond header vert
+    # Fond header vert
     p.setFillColor(colors.HexColor('#0D2E1A'))
     p.rect(0, h - 110, w, 110, fill=1, stroke=0)
 
-    # ── Logo Sportify
+    # Logo Sportify
     p.setFont('Helvetica-Bold', 28)
     p.setFillColor(colors.HexColor('#1A8C4E'))
     p.drawString(50, h - 55, 'Sport')
@@ -881,7 +881,7 @@ def telecharger_facture(request, reservation_id):
     p.setFillColor(colors.HexColor('#8ab89a'))
     p.drawString(50, h - 95, 'N° TVA : BE 0123.456.789')
 
-    # ── Numéro facture (droite)
+    # Numero facture (droite)
     p.setFont('Helvetica-Bold', 13)
     p.setFillColor(colors.white)
     num = f'FACTURE #{reservation.id:04d}'
@@ -890,7 +890,7 @@ def telecharger_facture(request, reservation_id):
     p.setFillColor(colors.HexColor('#8ab89a'))
     p.drawRightString(w - 50, h - 75, f'Émise le {reservation.date_reservation.strftime("%d/%m/%Y")}')
 
-    # ── Section client
+    # Section client
     y = h - 150
     p.setFont('Helvetica-Bold', 11)
     p.setFillColor(colors.HexColor('#0D2E1A'))
@@ -901,7 +901,7 @@ def telecharger_facture(request, reservation_id):
     p.drawString(50, y - 18, nom)
     p.drawString(50, y - 36, reservation.utilisateur.email or '—')
 
-    # ── Section détails réservation
+    # Section details reservation
     y2 = h - 150
     p.setFont('Helvetica-Bold', 11)
     p.setFillColor(colors.HexColor('#0D2E1A'))
@@ -911,13 +911,13 @@ def telecharger_facture(request, reservation_id):
     p.drawString(300, y2 - 18, f'#{reservation.id:04d} — {reservation.get_statut_display()}')
     p.drawString(300, y2 - 36, f'Payé le {reservation.date_reservation.strftime("%d/%m/%Y")}')
 
-    # ── Séparateur
+    # Separateur
     y3 = h - 220
     p.setStrokeColor(colors.HexColor('#e8f0eb'))
     p.setLineWidth(1.5)
     p.line(50, y3, w - 50, y3)
 
-    # ── Tableau détails
+    # Tableau details
     y4 = y3 - 30
     p.setFillColor(colors.HexColor('#f4f6f4'))
     p.rect(50, y4 - 8, w - 100, 26, fill=1, stroke=0)
@@ -943,7 +943,7 @@ def telecharger_facture(request, reservation_id):
         p.drawString(200, y5, val)
         y5 -= 22
 
-    # ── Ligne total
+    # Ligne total
     p.setStrokeColor(colors.HexColor('#e8f0eb'))
     p.line(50, y5 - 6, w - 50, y5 - 6)
     y5 -= 28
@@ -953,7 +953,7 @@ def telecharger_facture(request, reservation_id):
     p.setFillColor(colors.HexColor('#1A8C4E'))
     p.drawRightString(w - 60, y5, f'{reservation.montant_total} €')
 
-    # ── Badge statut
+    # Badge statut
     y5 -= 40
     p.setFillColor(colors.HexColor('#e8f5ed'))
     p.roundRect(60, y5 - 6, 120, 22, 4, fill=1, stroke=0)
@@ -961,7 +961,7 @@ def telecharger_facture(request, reservation_id):
     p.setFillColor(colors.HexColor('#1a5c35'))
     p.drawString(70, y5 + 4, '✓ Paiement confirmé')
 
-    # ── Footer
+    # Footer facture
     p.setFillColor(colors.HexColor('#f4f6f4'))
     p.rect(0, 0, w, 60, fill=1, stroke=0)
     p.setFont('Helvetica', 9)
@@ -1111,7 +1111,7 @@ def paiement_succes(request):
                     'reservation_id': premiere_reservation.id,
                 })
                 send_mail(
-                    subject=f'✅ Confirmation de réservation — {terrain.nom}',
+                    subject=f'Confirmation de réservation — {terrain.nom}',
                     message=corps_confirm,
                     from_email=settings.DEFAULT_FROM_EMAIL,
                     recipient_list=[request.user.email],
@@ -1161,7 +1161,7 @@ def paiement_succes(request):
                     'reservation_id': reservation.id,
                 })
                 send_mail(
-                    subject=f'✅ Confirmation de réservation — {creneau.terrain.nom}',
+                    subject=f'Confirmation de réservation — {creneau.terrain.nom}',
                     message=corps_confirm,
                     from_email=settings.DEFAULT_FROM_EMAIL,
                     recipient_list=[request.user.email],
